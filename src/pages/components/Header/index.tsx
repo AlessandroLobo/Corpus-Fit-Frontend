@@ -7,13 +7,13 @@ import {
   ProfilePhoto,
 } from './styles'
 
-import logo from '../../../../public/images/LOG CORPUS FIT PNG.png'
+import logo from '../../../../public/images/LOGO CORPUSFIT-2.png'
 
 export const HeaderPage = () => {
   return (
     <Header>
       <HeaderTitle>
-        <Image src={logo} alt="logo" width={150} />
+        <Image src={logo} alt="logo" width={100} />
         {/* <TextHeader>Academia Corpus</TextHeader> */}
       </HeaderTitle>
       <HeaderInfo>

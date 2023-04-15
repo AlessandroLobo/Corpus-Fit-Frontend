@@ -9,12 +9,11 @@ import {
 
 import logo from '../../../../public/images/LOGO CORPUSFIT-2.png'
 
-export const HeaderPage = () => {
+export const HeaderComponent = () => {
   return (
     <Header>
       <HeaderTitle>
         <Image src={logo} alt="logo" width={100} />
-        {/* <TextHeader>Academia Corpus</TextHeader> */}
       </HeaderTitle>
       <HeaderInfo>
         <NameAndEmail></NameAndEmail>

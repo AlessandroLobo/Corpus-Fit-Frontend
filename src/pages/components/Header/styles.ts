@@ -3,7 +3,7 @@ import { styled } from '@ignite-ui/react'
 export const Header = styled('div', {
   borderRadius: 10,
   maxWidth: '95%',
-  margin: '$4 auto $1',
+  margin: '$4 auto 0 auto',
   padding: '0 $4',
   display: 'flex',
   justifyContent: 'space-between',
@@ -42,7 +42,6 @@ export const ReaderFindRegister = styled('div', {
   marginRight: '50px',
   color: '$ignite300',
 
-  // Adiciona margem direita para o texto "Pesquisa"
   '& > a': {
     marginRight: '30px',
     color: '$gray100',

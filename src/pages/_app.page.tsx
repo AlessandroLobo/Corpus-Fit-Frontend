@@ -1,6 +1,6 @@
 import { globalStyles } from '@/styles/globals'
 import type { AppProps } from 'next/app'
-import { HeaderComponent } from './components/Header'
+import { HeaderComponent } from './components/Navbar'
 
 globalStyles()
 

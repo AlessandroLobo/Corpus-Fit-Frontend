@@ -29,7 +29,7 @@ export const FooterComponent = () => {
           </div>
         </InstagramLogoContainer>
         <FacebookLogoContainer
-          href="https://www.instagram.com/academiacorpusfranca/"
+          href="https://www.facebook.com/corpus.franca/"
           target="blank"
         >
           <div>
@@ -40,7 +40,7 @@ export const FooterComponent = () => {
         </FacebookLogoContainer>
       </Container>
       <FooterRigReservis>
-        <p>© Rig Reservis 2023. Desenvolvido por ALS Systems.</p>
+        <p>© Rig Reservis 2023. Developed by ALS Systems.</p>
       </FooterRigReservis>
     </Footer>
   )

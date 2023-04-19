@@ -16,6 +16,7 @@ export const Footer = styled('footer', {
   left: 0,
   right: 0,
   margin: '0 auto',
+  zIndex: 1000,
 
   // border: '1px solid red',
 
@@ -72,7 +73,7 @@ export const InstagramLogoContainer = styled('a', {
     height: '3rem',
     borderRadius: 10,
     border: 'solid $gray600',
-    transition: 'all 0.3s ease',
+    transition: 'all 0.5s ease-in-out',
 
     ':hover': {
       color: '$white100',
@@ -109,7 +110,7 @@ export const FacebookLogoContainer = styled('a', {
     height: '3rem',
     borderRadius: 10,
     border: 'solid $gray600',
-    transition: 'all 0.3s ease',
+    transition: 'all 0.5s ease-in-out',
 
     ':hover': {
       color: '$white100',

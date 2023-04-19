@@ -1,6 +1,6 @@
-import { FooterComponent } from './components/Footer'
-import { HomePage } from './components/Home'
 import { BackgroundImage } from '../styles/styles'
+import { FooterComponent } from './Footer/index.page'
+import { HomePage } from './Home/index.page'
 
 // import StartYorFitness from '../../public/images/start_your_fitness.png'
 
@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <>
       <BackgroundImage
-        src="/images/image1.jpg"
+        src="/images/model_corda.jpg"
         layout="fill"
         alt="background image"
       />

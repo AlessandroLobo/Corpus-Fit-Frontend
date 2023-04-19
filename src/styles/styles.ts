@@ -9,8 +9,7 @@ export const BackgroundImage = styled(Image, {
   top: 0,
   left: 0,
   zIndex: -1,
-  filter: 'blur(10px) brightness(0.20) grayscale(100%)',
+  filter: 'blur(5px) brightness(0.20) grayscale(100%)',
 
   marginBottom: '500px',
-  // border: '1px solid red',
 })

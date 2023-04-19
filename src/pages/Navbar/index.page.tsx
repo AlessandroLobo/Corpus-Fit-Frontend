@@ -10,20 +10,17 @@ import {
   SignOutButton,
 } from './styles'
 
-import logo from '../../../../public/images/LOGO CORPUSFIT-2.png'
 import HamburguerButton from '@/common/HamburguerButton'
-import { useState, CSSProperties } from 'react'
+import { useState } from 'react'
+import Link from 'next/link'
+import logo from '../../../public/images/LOGO CORPUSFIT-2.png'
 
 export const HeaderComponent = () => {
   const [navToggle, setNavToggle] = useState(true)
 
-  const LinkContainerStyle: CSSProperties = {
-    // transition: 'opacity 1s ease-out, max-height 1s ease-out',
-  }
-
   const navStyle = {
     overflow: 'hidden',
-    maxHeight: navToggle ? '5.25rem' : '20rem',
+    maxHeight: navToggle ? '5.25rem' : '19.8rem',
     transition: 'max-height 0.5s ease-out',
   }
 
@@ -40,18 +37,18 @@ export const HeaderComponent = () => {
         </div>
       </HeaderTitle>
       <Container>
-        <LinkContainer style={LinkContainerStyle}>
-          {' '}
-          {/* Adiciona estilo inline para controlar a visibilidade do LinkContainer */}
-          <a href="/">Home</a>
-          <a href="/">Area do Aluno</a>
-          <a href="/">Treinos</a>
-          <a href="/">Administração</a>
+        <LinkContainer>
+          <Link href="/">Home</Link>
+          <Link href="/">Area do Aluno</Link>
+          <Link href="/">Treinos</Link>
+          <Link href="/">Administração</Link>
         </LinkContainer>
         <HeaderInfo>
-          <NameAndEmail style={LinkContainerStyle}>
+          <NameAndEmail>
             alessandrolobo@hotmail.com
-            <SignOutButton>SignIn</SignOutButton>
+            <SignOutButton onClick={toggleNav}>
+              <Link href={'/Login'}>SignIn</Link>
+            </SignOutButton>
           </NameAndEmail>
           <ProfilePhoto></ProfilePhoto>
         </HeaderInfo>

@@ -8,8 +8,8 @@ export const Nav = styled('nav', {
   justifyContent: 'space-between',
   textAlign: 'left',
   backgroundColor: '$gray800',
-  height: '100px',
-  border: '1px solid $gray500',
+  height: '5.25rem',
+  // border: '1px solid $gray500',
   transition: 'transform 0.5s ease',
 
   '@media (max-width: 767px)': {
@@ -66,7 +66,6 @@ export const LinkContainer = styled('div', {
   justifyContent: 'space-between',
   textAlign: 'right',
   alignItems: 'center',
-  transition: 'max-height 0.5s ease-out',
 
   // border: '1px solid red',
 
@@ -78,6 +77,8 @@ export const LinkContainer = styled('div', {
     '&:hover': {
       color: '#00e7f9',
       textDecoration: 'none',
+      transition: 'color 0.5s ease-in-out',
+      transitionDuration: '0.5s',
     },
 
     '@media (max-width: 767px)': {
@@ -89,10 +90,8 @@ export const LinkContainer = styled('div', {
 
   '@media (max-width: 767px)': {
     gap: '0.6rem',
-
     flexDirection: 'column',
     paddingBottom: '1rem',
-    transition: 'max-height 0.5s ease-out',
     // border: '1px solid red',
   },
 })
@@ -171,9 +170,14 @@ export const SignOutButton = styled('div', {
   height: '30px',
   marginRight: '20px',
 
-  '&:hover': {
-    color: '#00e7f9',
-    cursor: 'pointer',
+  '& > a': {
+    color: '$gray100',
+    textDecoration: 'none',
+
+    '&:hover': {
+      color: '#00e7f9',
+      cursor: 'pointer',
+    },
   },
 
   '@media (max-width: 767px)': {

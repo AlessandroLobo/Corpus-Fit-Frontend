@@ -17,6 +17,8 @@ import { useState } from 'react'
 import Image from 'next/image'
 import logo from '../../../public/images/LOGO CORPUSFIT-2.png'
 import { login, LoginParams } from '../api/Login/index.api'
+import { setCookie } from 'nookies'
+import { useRouter } from 'next/router'
 
 // const params: LoginParams = {
 //   username: values.email,
@@ -41,7 +43,9 @@ const claimUserNameFormshema = z.object({
 type ClaimUserNameFormData = z.infer<typeof claimUserNameFormshema>
 
 function Login() {
-  const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
+
+  const [error] = useState<string | null>(null)
 
   const [loginError, setLoginError] = useState<string | null>(null)
 
@@ -63,6 +67,16 @@ function Login() {
       }
       const response = await login(params)
       console.log('Response----:', response)
+
+      const token = response
+      // Salva o token como cookie seguro no lado do cliente.
+      setCookie(null, 'token', token, {
+        maxAge: 30 * 24 * 60 * 60, // tempo de vida do cookie em segundos
+        path: '/', // caminho do cookie (geralmente é '/')
+        secure: true, // define se o cookie deve ser enviado apenas em conexões HTTPS
+      })
+      router.push('/userDashboard')
+
       setLoginError('')
     } catch (error: any) {
       console.log('Error:+++++', error)

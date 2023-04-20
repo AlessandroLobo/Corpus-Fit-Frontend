@@ -26,6 +26,7 @@ export function login({ email, password }: LoginParams) {
         // Algum erro ocorreu durante a requisição
         console.log('Error', error.message)
       }
+      console.log(error.config)
       throw error // adicione essa linha para lançar o erro novamente
     })
 }

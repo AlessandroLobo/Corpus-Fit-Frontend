@@ -1,13 +1,31 @@
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 
-interface LoginParams {
-  username: string
+export interface LoginParams {
+  email: string
   password: string
 }
 
-export function login({ username, password }: LoginParams) {
-  return axios.post('/api/login', {
-    username,
-    password,
-  })
+export function login({ email, password }: LoginParams) {
+  console.log('Enviando dados de login:', email, password)
+  return axios
+    .post('http://localhost:3333/authenticate', {
+      email,
+      password,
+    })
+    .then((response) => response.data)
+    .catch((error: AxiosError) => {
+      if (error.response) {
+        // O servidor respondeu com um status diferente de 2xx
+        console.log(error.response.data)
+        // console.log(error.response.status)
+        // console.log(error.response.headers)
+      } else if (error.request) {
+        // A requisição foi feita, mas não houve resposta
+        console.log(error.request)
+      } else {
+        // Algum erro ocorreu durante a requisição
+        console.log('Error', error.message)
+      }
+      throw error // adicione essa linha para lançar o erro novamente
+    })
 }

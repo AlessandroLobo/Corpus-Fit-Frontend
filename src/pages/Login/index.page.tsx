@@ -14,9 +14,9 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useState } from 'react'
-import { useRouter } from 'next/router'
 import Image from 'next/image'
 import logo from '../../../public/images/LOGO CORPUSFIT-2.png'
+import { login, LoginParams } from '../api/Login/index.api'
 
 // const params: LoginParams = {
 //   username: values.email,
@@ -41,13 +41,9 @@ const claimUserNameFormshema = z.object({
 type ClaimUserNameFormData = z.infer<typeof claimUserNameFormshema>
 
 function Login() {
-  // const session = useSession()
-
   const [error, setError] = useState<string | null>(null)
 
   const [loginError, setLoginError] = useState<string | null>(null)
-
-  const router = useRouter()
 
   const [showPassword, setShowPassword] = useState(false)
 
@@ -61,19 +57,21 @@ function Login() {
 
   async function onSubmit(values: any) {
     try {
-      console.log('Email:', values.email)
-      console.log('Password:', values.password)
-
       const params: LoginParams = {
-        username: values.email,
+        email: values.email,
         password: values.password,
       }
       const response = await login(params)
-      console.log('Response:', response)
-    } catch (error) {
-      console.log('Error:', error)
+      console.log('Response----:', response)
+      setLoginError('')
+    } catch (error: any) {
+      console.log('Error:+++++', error)
+      if (error?.response) {
+        setLoginError('Email ou senha incorretos')
+      }
     }
   }
+
   return (
     <>
       <Container>

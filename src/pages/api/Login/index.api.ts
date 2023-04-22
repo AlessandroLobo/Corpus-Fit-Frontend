@@ -6,7 +6,6 @@ export interface LoginParams {
 }
 
 export function login({ email, password }: LoginParams) {
-  console.log('Enviando dados de login:', email, password)
   return axios
     .post('http://localhost:3333/authenticate', {
       email,
@@ -17,8 +16,6 @@ export function login({ email, password }: LoginParams) {
       if (error.response) {
         // O servidor respondeu com um status diferente de 2xx
         console.log(error.response.data)
-        // console.log(error.response.status)
-        // console.log(error.response.headers)
       } else if (error.request) {
         // A requisição foi feita, mas não houve resposta
         console.log(error.request)

@@ -20,7 +20,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const token = cookies.CorpusFitToken
 
   const user = validateToken(token!)
-  console.log('getsider', user)
 
   if (!user) {
     return {

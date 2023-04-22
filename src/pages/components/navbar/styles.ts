@@ -161,7 +161,7 @@ export const ProfilePhoto = styled('div', {
   maxHeight: '50px',
 })
 
-export const SignOutButton = styled('div', {
+export const SignButton = styled('div', {
   display: 'flex',
   borderRadius: '8px',
   fontSize: '20px',
@@ -178,6 +178,32 @@ export const SignOutButton = styled('div', {
       color: '#00e7f9',
       cursor: 'pointer',
     },
+  },
+
+  '@media (max-width: 767px)': {
+    flexDirection: 'column',
+    fontSize: '1.2rem',
+    fontWeight: 'bold',
+    alignItems: 'center',
+    height: '80px',
+    padding: '1rem',
+    marginRight: 0,
+    // border: '1px solid red',
+  },
+})
+
+export const SignOutButton = styled('div', {
+  display: 'flex',
+  borderRadius: '8px',
+  fontSize: '20px',
+
+  width: '100px',
+  height: '30px',
+  marginRight: '20px',
+
+  '&:hover': {
+    color: '#00e7f9',
+    cursor: 'pointer',
   },
 
   '@media (max-width: 767px)': {

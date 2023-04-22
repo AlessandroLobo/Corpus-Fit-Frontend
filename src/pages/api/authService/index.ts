@@ -6,13 +6,11 @@ interface TokenData {
 }
 
 export function validateToken(token: string): TokenData | null {
-  console.log('Validating token:', token)
+  // console.log('Validating token:', token)
   try {
-    console.log('JWT_SECRET:', process.env.JWT_SECRET)
     const decoded = verify(token, process.env.JWT_SECRET!, {
       algorithms: ['HS256'],
     } as VerifyOptions) as JwtPayload
-    console.log('Decoded token:', decoded)
     return { user: decoded.email } as TokenData
   } catch (err) {
     console.error('Error validating token:', err)

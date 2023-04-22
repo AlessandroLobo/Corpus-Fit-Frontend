@@ -8,7 +8,6 @@ globalStyles()
 export default function App({
   Component,
   pageProps,
-  email,
 }: AppProps & { email: string }) {
   return (
     <>

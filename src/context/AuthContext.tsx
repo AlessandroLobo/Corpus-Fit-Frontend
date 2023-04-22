@@ -45,8 +45,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
           },
         })
 
-        console.log(response.data) // ou qualquer outra lógica a ser executada com a resposta do servidor
-        setUser(response.data.email)
+        // console.log(response.data) // ou qualquer outra lógica a ser executada com a resposta do servidor
+        setUser(response.data)
       } catch (error) {
         console.error(error)
       }
@@ -55,7 +55,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [token])
 
   async function signIn({ email, password }: LoginParams) {
-    console.log('Enviando dados de login:', email, password)
+    // console.log('Enviando dados de login:', email, password)
     try {
       const response = await axios.post('http://localhost:3333/authenticate', {
         email,

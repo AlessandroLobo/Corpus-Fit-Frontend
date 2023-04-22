@@ -7,6 +7,7 @@ import {
   NameAndEmail,
   Nav,
   ProfilePhoto,
+  SignButton,
   SignOutButton,
 } from './styles'
 
@@ -15,10 +16,10 @@ import { useContext, useState } from 'react'
 import Link from 'next/link'
 import logo from '../../../../public/images/LOGO CORPUSFIT-2.png'
 import { AuthContext } from '@/context/AuthContext'
+import nookies from 'nookies'
 
 export default function Header() {
   const { user } = useContext(AuthContext)
-  console.log(user)
 
   const [navToggle, setNavToggle] = useState(true)
 
@@ -26,6 +27,12 @@ export default function Header() {
     overflow: 'hidden',
     maxHeight: navToggle ? '5.25rem' : '19.8rem',
     transition: 'max-height 0.5s ease-out',
+  }
+
+  function logout() {
+    console.log('função logout')
+    nookies.destroy(null, 'CorpusFitToken', { path: '/' })
+    window.location.reload()
   }
 
   function toggleNav() {
@@ -36,7 +43,7 @@ export default function Header() {
     <Nav style={navStyle}>
       <HeaderTitle>
         <Image src={logo} alt="logo" width={100} />
-        <div onClick={toggleNav}>
+        <div onClick={toggleNav} className="hamburguer-container">
           <HamburguerButton />
         </div>
       </HeaderTitle>
@@ -49,10 +56,18 @@ export default function Header() {
         </LinkContainer>
         <HeaderInfo>
           <NameAndEmail>
-            <p>Olá, {user}!</p>
-            <SignOutButton onClick={toggleNav}>
-              <Link href={'/login'}>SignIn</Link>
-            </SignOutButton>
+            {user ? (
+              <>
+                <p>{user.email}</p>
+                <SignOutButton onClick={logout}>
+                  <SignOutButton>Logout</SignOutButton>
+                </SignOutButton>
+              </>
+            ) : (
+              <SignButton>
+                <Link href={'/login'}>Login</Link>
+              </SignButton>
+            )}
           </NameAndEmail>
           <ProfilePhoto></ProfilePhoto>
         </HeaderInfo>

@@ -11,18 +11,15 @@ import {
 } from './styles'
 
 import HamburguerButton from '@/common/HamburguerButton'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import Link from 'next/link'
-import logo from '../../../public/images/LOGO CORPUSFIT-2.png'
-import { GetServerSidePropsContext } from 'next'
-import { parseCookies } from 'nookies'
-import { validateToken } from '../api/authService'
+import logo from '../../../../public/images/LOGO CORPUSFIT-2.png'
+import { AuthContext } from '@/context/AuthContext'
 
-interface Props {
-  email: string
-}
+export default function Header() {
+  const { user } = useContext(AuthContext)
+  console.log(user)
 
-export const HeaderComponent = ({ email }: Props) => {
   const [navToggle, setNavToggle] = useState(true)
 
   const navStyle = {
@@ -52,7 +49,7 @@ export const HeaderComponent = ({ email }: Props) => {
         </LinkContainer>
         <HeaderInfo>
           <NameAndEmail>
-            <p>Olá, {email}!</p>
+            <p>Olá, {user}!</p>
             <SignOutButton onClick={toggleNav}>
               <Link href={'/login'}>SignIn</Link>
             </SignOutButton>
@@ -62,25 +59,4 @@ export const HeaderComponent = ({ email }: Props) => {
       </Container>
     </Nav>
   )
-}
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const cookies = parseCookies(context)
-  const token = cookies.token
-
-  const user = validateToken(token!)
-
-  if (!user) {
-    return {
-      redirect: {
-        permanent: false,
-      },
-    }
-  }
-
-  const email = user.user
-
-  return {
-    props: { email },
-  }
 }

@@ -17,9 +17,10 @@ const UserDashboard = ({ email }: Props) => {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cookies = parseCookies(context)
-  const token = cookies.token
+  const token = cookies.CorpusFitToken
 
   const user = validateToken(token!)
+  console.log('getsider', user)
 
   if (!user) {
     return {

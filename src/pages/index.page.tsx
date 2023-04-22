@@ -1,5 +1,5 @@
 import { BackgroundImage } from '../styles/styles'
-import { FooterComponent } from './footer/index.page'
+import { FooterComponent } from './components/footer/index.page'
 import { HomePage } from './home/index.page'
 
 // import StartYorFitness from '../../public/images/start_your_fitness.png'

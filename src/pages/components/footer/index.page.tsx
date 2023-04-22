@@ -8,7 +8,7 @@ import {
 } from './styles'
 import { Check, FacebookLogo, InstagramLogo } from '@phosphor-icons/react'
 
-import logo from '../../../public/images/LOGO CORPUSFIT-2.png'
+import logo from '../../../../public/images/LOGO CORPUSFIT-2.png'
 import Image from 'next/image'
 
 export const FooterComponent = () => {

@@ -52,7 +52,7 @@ export default function Header() {
           <Link href="/">Home</Link>
           <Link href="/userDashboard">Area do Aluno</Link>
           <Link href="/">Treinos</Link>
-          <Link href="/">Administração</Link>
+          <Link href="/administration">Administração</Link>
         </LinkContainer>
         <HeaderInfo>
           <NameAndEmail>

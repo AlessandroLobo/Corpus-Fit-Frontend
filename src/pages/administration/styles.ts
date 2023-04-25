@@ -13,6 +13,19 @@ export const Container = styled('main', {
   },
 })
 
+export const TextInfo = styled('div', {
+  display: 'flex',
+  justifyContent: 'center',
+  textAlign: 'center',
+  alignItems: 'center',
+  paddingLeft: '20px',
+  height: '14rem',
+  fontSize: '16px',
+  width: '100%',
+  // height: '100%',
+  // border: '1px solid red'
+})
+
 export const ButonCadContainer = styled(Box, {
   height: '10rem',
   marginTop: '0rem',

@@ -1,6 +1,6 @@
 import { globalStyles } from '@/styles/globals'
 import type { AppProps } from 'next/app'
-import Header from './components/navbar/index.page'
+import Header from './components/Navbar/index.page'
 import { AuthProvider } from '../context/AuthContext'
 
 globalStyles()

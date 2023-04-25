@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import { ModalInfo } from '../components/Modal/modalInfo'
 import {
   Container,
   ContainerList,
@@ -13,16 +15,27 @@ import {
   ButonCadContainer,
 } from './styles'
 import { Barbell, Person, UserPlus } from '@phosphor-icons/react'
+import { StudentRegistration } from '../components/StudentRegistration/index.page'
 
 async function handleSearch() {
   console.log('handelSearch')
 }
 
 export default function Administration() {
+  const [modalOpen, setModalOpen] = useState(false)
+
+  function handleStudentRegistration() {
+    setModalOpen(true)
+    console.log('handleRegisterStudent')
+  }
+
   return (
     <Container>
+      <ModalInfo isOpen={modalOpen} setIsOpen={setModalOpen}>
+        <StudentRegistration />
+      </ModalInfo>
       <ButonCadContainer>
-        <ButtonCad>
+        <ButtonCad onClick={handleStudentRegistration}>
           <UserPlus size={50} />
           Cadastro de Alunos
         </ButtonCad>
@@ -59,6 +72,7 @@ export default function Administration() {
                 <td style={{ width: '40%' }}>NOME:</td>
                 <td style={{ width: '20%' }}>E-MAIL:</td>
                 <td style={{ width: '20%' }}>TELEFONE:</td>
+                <td style={{ width: '20%' }}>VENCIMENTO:</td>
               </tr>
             </Thead>
             <TbodyResult>
@@ -88,6 +102,12 @@ export default function Administration() {
                   />
                 </td>
 
+                <td
+                  // onClick={() => handleEdit(clients.id)}
+                  style={{ width: '10%', paddingLeft: '10px' }}
+                >
+                  {/* {clients.email} */}
+                </td>
                 <td
                   // onClick={() => handleEdit(clients.id)}
                   style={{ width: '10%', paddingLeft: '10px' }}

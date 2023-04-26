@@ -23,6 +23,7 @@ import { cpf } from 'cpf-cnpj-validator'
 import { cepMask, cpfMask, dataMask, phoneMask } from '../../../utils/maskUtils'
 import { api } from '../../../lib/axios'
 import { ModalInfo } from '../Modal/modalInfo'
+import { usePlans } from '@/pages/api/plans/index.api'
 
 interface Genders {
   id: number
@@ -38,6 +39,7 @@ const registerFormSchema = z.object({
     .refine((value) => cpf.isValid(value), 'CPF inválido')
     .transform((value) => value.replace(/[^\d]/g, '')),
   email: z.string().email('Endereço de e-mail inválido'),
+  plan: z.string().nonempty({ message: 'Escolha um Plano' }),
   birthdate: z.string().length(8, 'Digiete uma data valida'),
   peso: z.string().nonempty({ message: 'Entre com um peso valido' }),
   phone: z
@@ -78,6 +80,8 @@ export const StudentRegistration = () => {
 
   const genders: Genders[] = useGenders()
 
+  const { plans, loading } = usePlans()
+
   const [registerError, setRegisterError] = useState<string | null>(null)
 
   const [modalOpen, setModalOpen] = useState(false)
@@ -108,6 +112,10 @@ export const StudentRegistration = () => {
     }
   }
 
+  if (loading) {
+    return <p>Carregando planos...</p>
+  }
+
   async function handleRegister(data: RegisterFormData) {
     console.log(data)
     try {
@@ -115,6 +123,7 @@ export const StudentRegistration = () => {
         name: data.name.toUpperCase(),
         cpf: data.cpf,
         email: data.email,
+        plan: data.plan,
         birthdate: data.birthdate,
         peso: data.peso,
         phone: data.phone,
@@ -148,28 +157,46 @@ export const StudentRegistration = () => {
           </TextInfo>
         </ModalInfo>
         <Form as="form" onSubmit={handleSubmit(handleRegister)}>
-          <label>
-            {registerError && (
-              <FormError>
-                <>{registerError}</>
-              </FormError>
-            )}
-            <Text>Nome:</Text>
+          {registerError && (
+            <FormError>
+              <>{registerError}</>
+            </FormError>
+          )}
+          <FormDataTelSexo>
+            <TextInputContainer>
+              <Text>Nome:</Text>
+              <TextInput
+                {...register('name', {
+                  required: true,
+                })}
+                placeholder="Digite seu nome completo"
+                style={{ width: '70%' }}
+                onBlur={(event) =>
+                  (event.target.value = event.target.value.toUpperCase())
+                }
+              />
+              {errors.name && (
+                <FormError>
+                  <Text>{errors.name?.message}</Text>
+                </FormError>
+              )}
+            </TextInputContainer>
+          </FormDataTelSexo>
+          <TextInputContainer>
+            <Text>E-Mail:</Text>
             <TextInput
-              {...register('name', {
+              {...register('email', {
                 required: true,
               })}
-              placeholder="Digite seu nome completo"
-              onBlur={(event) =>
-                (event.target.value = event.target.value.toUpperCase())
-              }
+              placeholder="Entre com e-Mail completo"
+              style={{ width: '100%' }}
             />
-            {errors.name && (
+            {errors.email && (
               <FormError>
-                <Text>{errors.name?.message}</Text>
+                <Text>{errors.email?.message}</Text>
               </FormError>
             )}
-          </label>
+          </TextInputContainer>
           <FormDataTelSexo>
             <TextInputContainer>
               <Text>CPF:</Text>
@@ -190,18 +217,22 @@ export const StudentRegistration = () => {
                 </FormError>
               )}
             </TextInputContainer>
+
             <TextInputContainer>
-              <Text>E-Mail:</Text>
-              <TextInput
-                {...register('email', {
-                  required: true,
-                })}
-                placeholder="Entre com e-Mail completo"
+              <Text>Plano:</Text>
+              <Select
                 style={{ width: '100%' }}
-              />
-              {errors.email && (
+                {...register('plan', { required: true })}
+              >
+                {plans.map((plan) => (
+                  <option key={plan.id} value={plan.id}>
+                    {plan.name}
+                  </option>
+                ))}
+              </Select>
+              {errors.plan && (
                 <FormError>
-                  <Text>{errors.email?.message}</Text>
+                  <Text>{errors.plan?.message}</Text>
                 </FormError>
               )}
             </TextInputContainer>

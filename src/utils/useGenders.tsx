@@ -7,9 +7,9 @@ import { useState } from 'react'
 // }
 
 export const useGenders = () => {
-  const [genders, setGenders] = useState([
+  const [genders] = useState([
     { id: 0, value: '', label: '' },
-    { id: 1, value: 'Nasculino', label: 'Masculino' },
+    { id: 1, value: 'Masculino', label: 'Masculino' },
     { id: 2, value: 'Feminino', label: 'Feminino' },
     { id: 3, value: 'Nao-binario', label: 'Não-binário' },
     { id: 4, value: 'Agenero', label: 'Agênero' },
@@ -18,6 +18,5 @@ export const useGenders = () => {
     { id: 7, value: 'Outro', label: 'Outro' },
     { id: 8, value: 'Prefiro-nao-dizer', label: 'Prefiro não dizer' },
   ])
-
   return genders
 }

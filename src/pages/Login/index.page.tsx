@@ -16,7 +16,7 @@ import { z } from 'zod'
 import { useContext, useState } from 'react'
 import Image from 'next/image'
 import logo from '../../../public/images/LOGO CORPUSFIT-2.png'
-import { LoginParams } from '../api/Login/index.api'
+import { LoginParams } from '../api/login/index.api'
 
 import { AuthContext } from '@/context/AuthContext'
 

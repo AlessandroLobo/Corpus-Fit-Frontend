@@ -21,9 +21,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { cpf } from 'cpf-cnpj-validator'
 import { cepMask, cpfMask, dataMask, phoneMask } from '../../../utils/maskUtils'
-import { api } from '../../../lib/axios'
 import { ModalInfo } from '../Modal/modalInfo'
 import { usePlans } from '@/pages/api/plans/index.api'
+import { LoginParams, createStudent } from '@/pages/api/createStudent'
 
 interface Genders {
   id: number
@@ -39,6 +39,14 @@ const registerFormSchema = z.object({
     .refine((value) => cpf.isValid(value), 'CPF inválido')
     .transform((value) => value.replace(/[^\d]/g, '')),
   email: z.string().email('Endereço de e-mail inválido'),
+  password: z
+    .string()
+    .min(8, 'A senha deve ter pelo menos 8 caracteres.')
+    .max(50, 'A senha não pode ultrapassar 50 caracteres.')
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      'A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.',
+    ),
   plan: z.string().nonempty({ message: 'Escolha um Plano' }),
   birthdate: z.string().length(8, 'Digiete uma data valida'),
   peso: z.string().nonempty({ message: 'Entre com um peso valido' }),
@@ -68,7 +76,7 @@ export const StudentRegistration = () => {
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerFormSchema),
   })
-  console.log('register:', register)
+  // console.log('register:', register)
 
   const [addressInfo, setAddressInfo] = useState({
     city: '',
@@ -94,10 +102,11 @@ export const StudentRegistration = () => {
       const zipCode = event.currentTarget.value.replace(/\D/g, '').toUpperCase()
       const addressInfo = await getAddress(zipCode)
 
-      console.log('Endereço retornado pela API:', addressInfo)
+      // console.log('Endereço retornado pela API:', addressInfo)
 
       if (!addressInfo) {
         setError('Invalid Zip Code')
+        console.log('addresinfo if------')
         return
       }
       // Atualiza o estado com as informações de endereço retornadas pela API
@@ -119,27 +128,37 @@ export const StudentRegistration = () => {
   async function handleRegister(data: RegisterFormData) {
     console.log(data)
     try {
-      await api.post('/client', {
+      const params: LoginParams = {
         name: data.name.toUpperCase(),
-        cpf: data.cpf,
         email: data.email,
-        plan: data.plan,
-        birthdate: data.birthdate,
-        peso: data.peso,
+        password: data.password,
+        cpf: data.cpf,
+        planId: data.plan,
+        birthDate: data.birthdate,
+        weight: data.peso,
         phone: data.phone,
         gender: data.gender,
-        zipCode: data.zipCode,
+        CEP: data.zipCode,
         city: addressInfo.city, // aqui estamos incluindo o valor de city a partir do estado local
         address: addressInfo.address, // aqui estamos incluindo o valor de address a partir do estado local
         number: data.number,
         state: addressInfo.state, // aqui estamos incluindo o valor de state a partir do estado local
-      })
+      }
+      await createStudent(params)
       setModalOpen(true)
       reset()
       setAddressInfo({ city: '', address: '', state: '' })
     } catch (err: any) {
-      if (err.response && err.response.status === 409) {
-        setRegisterError(err.response.data.message) // Define o erro de registro com a mensagem personalizada retornada pelo servidor
+      if (err.response && err.response.status === 400) {
+        if (
+          err.response.data.message === 'Error creating user: Cpf já cadastrado'
+        ) {
+          setRegisterError('O CPF informado já está cadastrado.')
+        } else {
+          setRegisterError(
+            'Ocorreu um erro ao criar usuário. Por favor, tente novamente mais tarde.',
+          )
+        }
       } else {
         setRegisterError(
           'Ocorreu um erro interno do servidor. Por favor, tente novamente mais tarde.',
@@ -159,7 +178,7 @@ export const StudentRegistration = () => {
         <Form as="form" onSubmit={handleSubmit(handleRegister)}>
           {registerError && (
             <FormError>
-              <>{registerError}</>
+              <Text>{registerError}</Text>
             </FormError>
           )}
           <FormDataTelSexo>
@@ -182,21 +201,35 @@ export const StudentRegistration = () => {
               )}
             </TextInputContainer>
           </FormDataTelSexo>
-          <TextInputContainer>
-            <Text>E-Mail:</Text>
-            <TextInput
-              {...register('email', {
-                required: true,
-              })}
-              placeholder="Entre com e-Mail completo"
-              style={{ width: '100%' }}
-            />
-            {errors.email && (
+          <FormDataTelSexo>
+            <TextInputContainer>
+              <Text>E-Mail:</Text>
+              <TextInput
+                {...register('email', {
+                  required: true,
+                })}
+                placeholder="Entre com e-Mail completo"
+                style={{ width: '100%' }}
+              />
+              {errors.email && (
+                <FormError>
+                  <Text>{errors.email?.message}</Text>
+                </FormError>
+              )}
+            </TextInputContainer>
+            <TextInputContainer>
+              <Text>Password</Text>
+              <TextInput
+                id="password"
+                placeholder="Enter your password"
+                {...register('password')}
+                autoComplete="new-password"
+              />
               <FormError>
-                <Text>{errors.email?.message}</Text>
+                <Text>{errors.password?.message}</Text>
               </FormError>
-            )}
-          </TextInputContainer>
+            </TextInputContainer>
+          </FormDataTelSexo>
           <FormDataTelSexo>
             <TextInputContainer>
               <Text>CPF:</Text>

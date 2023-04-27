@@ -16,6 +16,9 @@ import {
 } from './styles'
 import { Barbell, Person, UserPlus } from '@phosphor-icons/react'
 import { StudentRegistration } from '../components/StudentRegistration/index.page'
+import { parseCookies } from 'nookies'
+import { validateToken } from '../api/authService'
+import { GetServerSidePropsContext } from 'next'
 
 async function handleSearch() {
   console.log('handelSearch')
@@ -121,4 +124,26 @@ export default function Administration() {
       </Form>
     </Container>
   )
+}
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const cookies = parseCookies(context)
+  const token = cookies.CorpusFitToken
+
+  const user = validateToken(token!)
+
+  console.log(user)
+
+  if (!user || user.user !== 'admin@hotmail.com') {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    }
+  }
+  return {
+    props: {
+      someData: 'Some value',
+    },
+  }
 }

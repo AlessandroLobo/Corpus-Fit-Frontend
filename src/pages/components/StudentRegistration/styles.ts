@@ -10,7 +10,7 @@ export const Header = styled('div', {
   textAlign: 'left',
   backgroundColor: '$gray800',
   height: '100px',
-  border: '1px solid red',
+  // border: '1px solid red',
 })
 
 export const HeaderTitle = styled('div', {
@@ -19,7 +19,7 @@ export const HeaderTitle = styled('div', {
   alignItems: 'center',
   paddingLeft: '20px',
   fontSize: '30px',
-  border: '1px solid red',
+  // border: '1px solid red',
 })
 
 export const TextInfo = styled('div', {
@@ -32,7 +32,7 @@ export const TextInfo = styled('div', {
   fontSize: '16px',
   width: '100%',
   // height: '100%',
-  border: '1px solid red',
+  // border: '1px solid red',
 })
 
 export const Text = styled('text', {

@@ -19,17 +19,35 @@ import { StudentRegistration } from '../components/StudentRegistration/index.pag
 import { parseCookies } from 'nookies'
 import { validateToken } from '../api/authService'
 import { GetServerSidePropsContext } from 'next'
+import { getAllStudents } from '../api/getAllStudents/index.api'
 
-async function handleSearch() {
-  console.log('handelSearch')
+interface Student {
+  id: string
+  name: string
+  email: string
+  phone: string
+  expirationDate: string
 }
 
 export default function Administration() {
   const [modalOpen, setModalOpen] = useState(false)
 
+  const [students, setStudents] = useState<Student[]>([])
+
+  const handleSearch = async () => {
+    const searchTerm =
+      (document.querySelector('#search-input') as HTMLInputElement)?.value || ''
+    const students = await getAllStudents(searchTerm, searchTerm)
+    setStudents(students)
+  }
+
   function handleStudentRegistration() {
     setModalOpen(true)
     console.log('handleRegisterStudent')
+  }
+
+  function handleEdit(id: string) {
+    // implement edit functionality here
   }
 
   return (
@@ -68,63 +86,64 @@ export default function Administration() {
             Buscar
           </Button>
 
-          {/* {!!searchResults.length && ( */}
-          <Table>
-            <Thead>
-              <tr>
-                <td style={{ width: '40%' }}>NOME:</td>
-                <td style={{ width: '20%' }}>E-MAIL:</td>
-                <td style={{ width: '20%' }}>TELEFONE:</td>
-                <td style={{ width: '20%' }}>VENCIMENTO:</td>
-              </tr>
-            </Thead>
-            <TbodyResult>
-              {/* {searchResults.map((clients) => ( */}
-              <tr>
-                <td
-                  // onClick={() => handleEdit(clients.id)}
-                  style={{
-                    width: '50%',
-                    paddingLeft: '10px',
-                    textTransform: 'uppercase',
-                  }}
-                >
-                  {/* {clients.name} */}
-                </td>
-                <td
-                  // onClick={() => handleEdit(clients.id)}
-                  style={{ width: '20%' }}
-                >
-                  <input
-                    type="text"
-                    // value={phoneMask(clients.phoneNumber)}
-                    onChange={(event) => {
-                      // const maskedValue = cpfMask(event.target.value)
-                      // Aqui você pode atualizar o valor no estado ou passar para outra função
-                    }}
-                  />
-                </td>
+          {!!students.length && (
+            <Table>
+              <Thead>
+                <tr>
+                  <td style={{ width: '40%' }}>NOME:</td>
+                  <td style={{ width: '20%' }}>E-MAIL:</td>
+                  <td style={{ width: '20%' }}>TELEFONE:</td>
+                  <td style={{ width: '20%' }}>VENCIMENTO:</td>
+                </tr>
+              </Thead>
+              <TbodyResult>
+                {students.map((student) => (
+                  <tr key={student.id}>
+                    <td
+                      onClick={() => handleEdit(student.id)}
+                      style={{
+                        width: '50%',
+                        paddingLeft: '10px',
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      {student.name}
+                    </td>
 
-                <td
-                  // onClick={() => handleEdit(clients.id)}
-                  style={{ width: '10%', paddingLeft: '10px' }}
-                >
-                  {/* {clients.email} */}
-                </td>
-                <td
-                  // onClick={() => handleEdit(clients.id)}
-                  style={{ width: '10%', paddingLeft: '10px' }}
-                >
-                  {/* {clients.email} */}
-                </td>
-              </tr>
-            </TbodyResult>
-          </Table>
+                    <td
+                      onClick={() => handleEdit(student.id)}
+                      style={{
+                        width: '20%',
+                        paddingLeft: '10px',
+                      }}
+                    >
+                      {student.email}
+                    </td>
+
+                    <td
+                      onClick={() => handleEdit(student.id)}
+                      style={{ width: '10%', paddingLeft: '10px' }}
+                    >
+                      {student.phone}
+                    </td>
+
+                    <td
+                      onClick={() => handleEdit(student.id)}
+                      style={{ width: '10%', paddingLeft: '10px' }}
+                    >
+                      {student.expirationDate}
+                    </td>
+                  </tr>
+                ))}
+              </TbodyResult>
+            </Table>
+          )}
         </ContainerList>
       </Form>
     </Container>
   )
 }
+
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cookies = parseCookies(context)
   const token = cookies.CorpusFitToken

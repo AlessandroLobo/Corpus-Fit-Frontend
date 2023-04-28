@@ -52,7 +52,9 @@ export default function Header() {
           <Link href="/">Home</Link>
           <Link href="/userDashboard">Area do Aluno</Link>
           <Link href="/">Treinos</Link>
-          <Link href="/administration">Administração</Link>
+          {user?.email === 'admin@hotmail.com' ? (
+            <Link href="/administration">Administração</Link>
+          ) : null}
         </LinkContainer>
         <HeaderInfo>
           <NameAndEmail>

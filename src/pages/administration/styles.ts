@@ -2,8 +2,9 @@ import { styled, Box } from '@ignite-ui/react'
 
 export const Container = styled('main', {
   maxWidth: 872,
-  margin: '4rem auto $4',
+  margin: '1.5rem auto $4',
   padding: '0 $4',
+  // border: '1px solid red',
 
   '@media screen and (max-width: 768px)': {
     /* Quando a largura da tela for menor ou igual a 768 pixels */
@@ -26,15 +27,15 @@ export const TextInfo = styled('div', {
   // border: '1px solid red'
 })
 
-export const ButonCadContainer = styled(Box, {
-  height: '10rem',
+export const ButtonCadContainer = styled(Box, {
+  // height: '1rem',
   marginTop: '0rem',
   display: 'flex',
-  alignItems: 'center',
   justifyContent: 'space-between',
-  marginBottom: '4rem',
-  flexDirection: 'row',
-  gap: '$4',
+  alignItems: 'space-between',
+  // marginBottom: '4rem',
+  flexDirection: 'column',
+  // gap: '$4',
   // border: 'solid 1px red',
 
   label: {
@@ -44,7 +45,29 @@ export const ButonCadContainer = styled(Box, {
   },
 
   '@media (max-width: 767px)': {
-    marginBottom: '2rem',
+    // marginBottom: '2rem',
+    flexDirection: 'column',
+    marginTop: 0,
+    border: 'solid 1px red',
+  },
+})
+
+export const ButtonContainer = styled('div', {
+  height: '5rem',
+  marginTop: '0rem',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  flexDirection: 'row',
+  gap: '$4',
+
+  label: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: '$2',
+  },
+
+  '@media (max-width: 767px)': {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 0,
@@ -81,6 +104,7 @@ export const ButtonCad = styled('button', {
 
   '@media screen and (max-width: 768px)': {
     fontSize: '0rem',
+    maxWidth: '6rem',
   },
 })
 
@@ -143,6 +167,7 @@ export const TextInput = styled('input', {
 
 export const Button = styled('button', {
   flex: '1',
+  gap: '0.3rem',
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
@@ -171,8 +196,7 @@ export const Text = styled('div', {
 })
 
 export const Line = styled('div', {
-  marginTop: '5px',
-  marginBottom: '5px',
+  margin: '1rem',
   color: '$gray100',
   flexGrow: '1',
   height: '1px',
@@ -229,7 +253,7 @@ export const TbodyResult = styled('tbody', {
     },
 
     '&:hover': {
-      color: '$ignite300',
+      color: '#00e7f9',
       cursor: 'pointer',
     },
 
@@ -250,7 +274,7 @@ export const TbodyResult = styled('tbody', {
       },
 
       '&:hover': {
-        color: '$ignite300',
+        color: '#00e7f9',
         cursor: 'pointer',
       },
     },
@@ -261,20 +285,20 @@ export const TbodyResult = styled('tbody', {
     backgroundColor: '$gray600',
 
     '&:hover': {
-      color: '$ignite300',
+      color: '#00e7f9',
       cursor: 'pointer',
     },
 
     input: {
       backgroundColor: '$gray600',
-      color: '$gray100',
+      color: '#00e7f9',
 
       '&:focus': {
         boxShadow: '0 0 0 2px $colors$ignite500',
       },
 
       '&:hover': {
-        color: '$ignite300',
+        color: '#00e7f9',
         cursor: 'pointer',
       },
     },

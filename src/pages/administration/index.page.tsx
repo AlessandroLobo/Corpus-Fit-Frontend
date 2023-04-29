@@ -12,14 +12,23 @@ import {
   Thead,
   ButtonCad,
   Button,
-  ButonCadContainer,
+  ButtonContainer,
+  ButtonCadContainer,
+  Line,
 } from './styles'
-import { Barbell, Person, UserPlus } from '@phosphor-icons/react'
-import { StudentRegistration } from '../components/StudentRegistration/index.page'
+import {
+  Barbell,
+  CalendarPlus,
+  MagnifyingGlass,
+  Person,
+  UserPlus,
+} from '@phosphor-icons/react'
 import { parseCookies } from 'nookies'
 import { validateToken } from '../api/authService'
 import { GetServerSidePropsContext } from 'next'
-import { getAllStudents } from '../api/getAllStudents/index.api'
+import { GetAllStudents } from '../api/getAllStudents/index.api'
+import { StudentEdit } from '../components/StudentsEdit/index.page'
+import { StudentRegistration } from '../components/StudentsRegistration/index.page'
 
 interface Student {
   id: string
@@ -29,46 +38,76 @@ interface Student {
   expirationDate: string
 }
 
-export default function Administration() {
+interface StudentEditProps {
+  studentId: string
+  studentModalId: string
+}
+
+export default function Administration({ studentId }: StudentEditProps) {
   const [modalOpen, setModalOpen] = useState(false)
 
   const [students, setStudents] = useState<Student[]>([])
 
+  const [editingStudent, setEditingStudent] = useState(false)
+
+  const [selectedStudent, setSelectedStudent] = useState<any>(null)
+
   const handleSearch = async () => {
     const searchTerm =
       (document.querySelector('#search-input') as HTMLInputElement)?.value || ''
-    const students = await getAllStudents(searchTerm, searchTerm)
+    const students = await GetAllStudents(searchTerm, searchTerm)
     setStudents(students)
   }
 
   function handleStudentRegistration() {
+    setEditingStudent(false)
     setModalOpen(true)
-    console.log('handleRegisterStudent')
+    // console.log('handleRegisterStudent')
   }
 
-  function handleEdit(id: string) {
-    // implement edit functionality here
+  function handleEdit(studentParansId: string) {
+    setSelectedStudent(studentParansId)
+    setEditingStudent(true)
+    setModalOpen(true)
+
+    // console.log('Id do aluno_____', studentParansId)
   }
 
   return (
     <Container>
       <ModalInfo isOpen={modalOpen} setIsOpen={setModalOpen}>
-        <StudentRegistration />
+        {/* Renderiza o formulário de registro ou de edição */}
+        {editingStudent ? (
+          <StudentEdit studentParansId={selectedStudent} />
+        ) : (
+          <StudentRegistration />
+        )}
       </ModalInfo>
-      <ButonCadContainer>
-        <ButtonCad onClick={handleStudentRegistration}>
-          <UserPlus size={50} />
-          Cadastro de Alunos
-        </ButtonCad>
-        <ButtonCad>
-          <Barbell size={50} />
-          Cadastro de Treinos
-        </ButtonCad>
-        <ButtonCad>
-          <Person size={50} />
-          Cadastro de Exercícios
-        </ButtonCad>
-      </ButonCadContainer>
+
+      <ButtonCadContainer>
+        <ButtonContainer>
+          <ButtonCad onClick={handleStudentRegistration}>
+            <UserPlus size={50} />
+            Cadastro de Alunos
+          </ButtonCad>
+          <ButtonCad>
+            <Barbell size={50} />
+            Cadastro de Treinos
+          </ButtonCad>
+          <ButtonCad>
+            <Person size={50} />
+            Cadastro de Exercícios
+          </ButtonCad>
+        </ButtonContainer>
+        <Line />
+        <ButtonContainer>
+          <ButtonCad>
+            <CalendarPlus size={50} />
+            Cadastro de Planos
+          </ButtonCad>
+        </ButtonContainer>
+      </ButtonCadContainer>
+
       <Form>
         <ContainerList>
           <TextInputContainer>
@@ -84,6 +123,7 @@ export default function Administration() {
             style={{ marginTop: 17, marginBottom: 10, width: '100%' }}
           >
             Buscar
+            <MagnifyingGlass size={18} />
           </Button>
 
           {!!students.length && (
@@ -150,7 +190,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   const user = validateToken(token!)
 
-  console.log(user)
+  // console.log(user)
 
   if (!user || user.user !== 'admin@hotmail.com') {
     return {

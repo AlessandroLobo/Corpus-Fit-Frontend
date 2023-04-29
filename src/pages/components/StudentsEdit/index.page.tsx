@@ -1,5 +1,4 @@
 import { TextInput } from '@ignite-ui/react'
-import { ArrowRight } from 'phosphor-react'
 import {
   Button,
   Container,
@@ -12,8 +11,10 @@ import {
   TextInputContainer,
   TextInfo,
   Text,
+  ButtonContainer,
+  ButtonDelete,
 } from './styles'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { getAddress } from '../../../utils/getAddress'
 import { useGenders } from '../../../utils/useGenders'
 import { z } from 'zod'
@@ -24,11 +25,17 @@ import { cepMask, cpfMask, dataMask, phoneMask } from '../../../utils/maskUtils'
 import { ModalInfo } from '../Modal/modalInfo'
 import { usePlans } from '@/pages/api/plans/index.api'
 import { LoginParams, createStudent } from '@/pages/api/createStudent'
+import { Pencil, Trash } from '@phosphor-icons/react'
+import { FindStudent } from '@/pages/api/getAllStudents/index.api'
 
 interface Genders {
   id: number
   value: string
   label: string
+}
+
+interface StudentEditProps {
+  studentParansId: string
 }
 
 const registerFormSchema = z.object({
@@ -48,13 +55,13 @@ const registerFormSchema = z.object({
       'A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.',
     ),
   plan: z.string().nonempty({ message: 'Escolha um Plano' }),
-  birthdate: z.string().length(8, 'Digiete uma data valida'),
-  peso: z.string().nonempty({ message: 'Entre com um peso valido' }),
+  birthdate: z.string().length(8, 'Digite uma data valida'),
+  weight: z.string().nonempty({ message: 'Entre com um peso valido' }),
   phone: z
     .string()
     .min(11, 'O telefone deve ter pelo menos 10 dígitos')
-    .max(11, 'O telefone deve ter no maximo 10 digitos'),
-  gender: z.string().nonempty({ message: 'Escolha um genero.' }),
+    .max(11, 'O telefone deve ter no máximo 10 dígitos'),
+  gender: z.string().nonempty({ message: 'Escolha um gênero.' }),
   zipCode: z.string().length(8, 'O CEP deve ter exatamente 8 dígitos'),
   city: z.string().optional(),
   address: z.string().optional(),
@@ -63,9 +70,8 @@ const registerFormSchema = z.object({
 })
 
 type RegisterFormData = z.infer<typeof registerFormSchema>
-export const StudentRegistration = () => {
-  // const [dataNasc, setDataNasc] = useState<Date | null>(null)
 
+export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
   const {
     register,
     handleSubmit,
@@ -84,6 +90,8 @@ export const StudentRegistration = () => {
     state: '',
   })
 
+  const [student, setStudent] = useState(null)
+
   const [error, setError] = useState('')
 
   const genders: Genders[] = useGenders()
@@ -93,6 +101,27 @@ export const StudentRegistration = () => {
   const [registerError, setRegisterError] = useState<string | null>(null)
 
   const [modalOpen, setModalOpen] = useState(false)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const studentData = await FindStudent({
+          studentParansId,
+        })
+        console.log(studentData)
+        const addressInfo = await getAddress(studentData.CEP)
+        setAddressInfo(addressInfo)
+        setStudent(studentData)
+      } catch (error) {
+        setError(error)
+      }
+    }
+    fetchData()
+  }, [])
+
+  if (!student) {
+    return <div>Carregando...</div>
+  }
 
   async function handleGetAddressBlur(
     event: React.FocusEvent<HTMLInputElement>,
@@ -106,13 +135,13 @@ export const StudentRegistration = () => {
 
       if (!addressInfo) {
         setError('Invalid Zip Code')
-        console.log('addresinfo if------')
+        // console.log('addresinfo if------')
         return
       }
       // Atualiza o estado com as informações de endereço retornadas pela API
       setAddressInfo(addressInfo)
 
-      console.log('Address Info:', addressInfo) // adicionando novo log
+      // console.log('Address Info:', addressInfo) // adicionando novo log
 
       // Re-validate the form fields after updating the address information
     } catch (error) {
@@ -126,7 +155,7 @@ export const StudentRegistration = () => {
   }
 
   async function handleRegister(data: RegisterFormData) {
-    console.log(data)
+    // console.log(data)
     try {
       const params: LoginParams = {
         name: data.name.toUpperCase(),
@@ -135,7 +164,7 @@ export const StudentRegistration = () => {
         cpf: data.cpf,
         planId: data.plan,
         birthDate: data.birthdate,
-        weight: data.peso,
+        weight: data.weight,
         phone: data.phone,
         gender: data.gender,
         CEP: data.zipCode,
@@ -188,6 +217,7 @@ export const StudentRegistration = () => {
                 {...register('name', {
                   required: true,
                 })}
+                defaultValue={student.name}
                 placeholder="Digite seu nome completo"
                 style={{ width: '70%' }}
                 onBlur={(event) =>
@@ -208,6 +238,7 @@ export const StudentRegistration = () => {
                 {...register('email', {
                   required: true,
                 })}
+                defaultValue={student.email}
                 placeholder="Entre com e-Mail completo"
                 style={{ width: '100%' }}
               />
@@ -237,6 +268,7 @@ export const StudentRegistration = () => {
                 {...register('cpf', {
                   required: true,
                 })}
+                defaultValue={student.cpf}
                 placeholder="Digite seu CPF completo"
                 style={{ width: '100%' }}
                 onBlur={(e) => {
@@ -262,6 +294,7 @@ export const StudentRegistration = () => {
                     {plan.name}
                   </option>
                 ))}
+                defaultValue={student.planId}
               </Select>
               {errors.plan && (
                 <FormError>
@@ -277,6 +310,7 @@ export const StudentRegistration = () => {
                 {...register('birthdate', {
                   required: true,
                 })}
+                defaultValue={student.birthDate}
                 placeholder="Digite sua data de Nascimento completo"
                 style={{ width: '100%' }}
                 onBlur={(e) => {
@@ -294,15 +328,16 @@ export const StudentRegistration = () => {
             <TextInputContainer>
               <Text>Peso:</Text>
               <TextInput
-                {...register('peso', {
+                {...register('weight', {
                   required: true,
                 })}
+                defaultValue={student.weight}
                 placeholder="Entre com o peso do aluno"
                 style={{ width: '100%' }}
                 type="number"
                 inputMode="numeric"
               />
-              {errors.peso && (
+              {errors.weight && (
                 <FormError>
                   <Text>{errors.peso?.message}</Text>
                 </FormError>
@@ -314,6 +349,7 @@ export const StudentRegistration = () => {
               <Select
                 style={{ width: '100%' }}
                 {...register('gender', { required: true })}
+                defaultValue={student.gender}
               >
                 {genders.map((gender) => (
                   <Option key={gender.id} value={gender.value}>
@@ -337,6 +373,7 @@ export const StudentRegistration = () => {
                 {...register('phone', {
                   required: true,
                 })}
+                defaultValue={student.phone}
                 placeholder="Entre com o numero de telefone "
                 style={{ width: '100%' }}
                 onBlur={(e) => {
@@ -356,6 +393,7 @@ export const StudentRegistration = () => {
                 {...register('zipCode', {
                   required: true,
                 })}
+                defaultValue={student.CEP}
                 placeholder="Digite o CEP"
                 style={{ width: '100%' }}
                 onBlur={(e) => {
@@ -414,6 +452,7 @@ export const StudentRegistration = () => {
                 {...register('number', {
                   required: true,
                 })}
+                defaultValue={student.number}
                 placeholder="Digite o numero da casa"
                 style={{ width: '100%' }}
               />
@@ -438,10 +477,19 @@ export const StudentRegistration = () => {
             </TextInputContainer>
           </FormDataTelSexo>
           <Line />
-          <Button type="submit" style={{ marginTop: 27, marginBottom: 20 }}>
-            CADASTRAR
-            <ArrowRight />
-          </Button>
+          <ButtonContainer>
+            <Button type="button" style={{ marginTop: 27, marginBottom: 20 }}>
+              Alterar
+              <Pencil />
+            </Button>
+            <ButtonDelete
+              type="button"
+              style={{ marginTop: 27, marginBottom: 20 }}
+            >
+              Deletar
+              <Trash />
+            </ButtonDelete>
+          </ButtonContainer>
         </Form>
         {/* <button onClick={() => setModalOpen(true)} style={{ marginTop: 27, marginBottom: 20 }} /> */}
       </Container>

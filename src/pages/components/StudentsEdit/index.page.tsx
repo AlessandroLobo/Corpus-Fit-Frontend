@@ -14,7 +14,7 @@ import {
   ButtonContainer,
   ButtonDelete,
 } from './styles'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { getAddress } from '../../../utils/getAddress'
 import { useGenders } from '../../../utils/useGenders'
 import { z } from 'zod'
@@ -27,7 +27,10 @@ import { usePlans } from '@/pages/api/plans/index.api'
 import { LoginParams, createStudent } from '@/pages/api/createStudent'
 import { Pencil, Trash } from '@phosphor-icons/react'
 import { FindStudent } from '@/pages/api/getAllStudents/index.api'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 
+dayjs.extend(utc)
 interface Genders {
   id: number
   value: string
@@ -36,6 +39,23 @@ interface Genders {
 
 interface StudentEditProps {
   studentParansId: string
+}
+
+interface Data {
+  name: string
+  cpf: string
+  email: string
+  password: string
+  plan: string
+  birthDate: string
+  weight: string
+  phone: string
+  gender: string
+  CEP: string
+  city: string
+  address: string
+  number: string
+  state: string
 }
 
 const registerFormSchema = z.object({
@@ -55,14 +75,14 @@ const registerFormSchema = z.object({
       'A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.',
     ),
   plan: z.string().nonempty({ message: 'Escolha um Plano' }),
-  birthdate: z.string().length(8, 'Digite uma data valida'),
+  birthDate: z.string().length(8, 'Digite uma data valida'),
   weight: z.string().nonempty({ message: 'Entre com um peso valido' }),
   phone: z
     .string()
     .min(11, 'O telefone deve ter pelo menos 10 dígitos')
     .max(11, 'O telefone deve ter no máximo 10 dígitos'),
   gender: z.string().nonempty({ message: 'Escolha um gênero.' }),
-  zipCode: z.string().length(8, 'O CEP deve ter exatamente 8 dígitos'),
+  CEP: z.string().length(8, 'O CEP deve ter exatamente 8 dígitos'),
   city: z.string().optional(),
   address: z.string().optional(),
   number: z.string().nonempty({ message: 'O número é obrigatório.' }),
@@ -90,9 +110,9 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
     state: '',
   })
 
-  const [student, setStudent] = useState(null)
+  const [student, setStudent] = useState<Data | null>(null)
 
-  const [error, setError] = useState('')
+  const [err, setError] = useState('')
 
   const genders: Genders[] = useGenders()
 
@@ -102,22 +122,45 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
 
   const [modalOpen, setModalOpen] = useState(false)
 
+  const birthdayRef = useRef('')
+
+  const planNameRef = useRef('')
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const studentData = await FindStudent({
           studentParansId,
         })
-        console.log(studentData)
         const addressInfo = await getAddress(studentData.CEP)
-        setAddressInfo(addressInfo)
+
+        if (!addressInfo) {
+          setError('Invalid Zip Code')
+          return
+        }
+
+        const dataOriginal = studentData.birthDate
+        const formattedDate = dayjs(dataOriginal).utc().format('DDMMYYYY')
+
+        console.log(formattedDate) // Output: "12092030"
+
+        birthdayRef.current = formattedDate
+        console.log('birthdayRef.current', birthdayRef.current)
+
         setStudent(studentData)
+        setAddressInfo(addressInfo)
+
+        const planName = studentData.Plan.name
+
+        planNameRef.current = planName
+
+        console.log('nome do plan', planNameRef.current)
       } catch (error) {
-        setError(error)
+        setError(err)
       }
     }
     fetchData()
-  }, [])
+  }, [studentParansId, err])
 
   if (!student) {
     return <div>Carregando...</div>
@@ -162,12 +205,12 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
         email: data.email,
         password: data.password,
         cpf: data.cpf,
-        planId: data.plan,
-        birthDate: data.birthdate,
+        planId: planNameRef.current,
+        birthDate: birthdayRef.current,
         weight: data.weight,
         phone: data.phone,
         gender: data.gender,
-        CEP: data.zipCode,
+        CEP: data.CEP,
         city: addressInfo.city, // aqui estamos incluindo o valor de city a partir do estado local
         address: addressInfo.address, // aqui estamos incluindo o valor de address a partir do estado local
         number: data.number,
@@ -217,7 +260,7 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
                 {...register('name', {
                   required: true,
                 })}
-                defaultValue={student.name}
+                defaultValue={student?.name || ''}
                 placeholder="Digite seu nome completo"
                 style={{ width: '70%' }}
                 onBlur={(event) =>
@@ -268,6 +311,7 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
                 {...register('cpf', {
                   required: true,
                 })}
+                id="CPF"
                 defaultValue={student.cpf}
                 placeholder="Digite seu CPF completo"
                 style={{ width: '100%' }}
@@ -288,13 +332,13 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
               <Select
                 style={{ width: '100%' }}
                 {...register('plan', { required: true })}
+                defaultValue={planNameRef.current}
               >
                 {plans.map((plan) => (
-                  <option key={plan.id} value={plan.id}>
+                  <option key={plan.id} value={plan.name}>
                     {plan.name}
                   </option>
                 ))}
-                defaultValue={student.planId}
               </Select>
               {errors.plan && (
                 <FormError>
@@ -307,20 +351,20 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
             <TextInputContainer>
               <Text>Data de Nascimento:</Text>
               <TextInput
-                {...register('birthdate', {
+                {...register('birthDate', {
                   required: true,
                 })}
-                defaultValue={student.birthDate}
+                defaultValue={birthdayRef.current}
                 placeholder="Digite sua data de Nascimento completo"
                 style={{ width: '100%' }}
                 onBlur={(e) => {
                   e.target.value = dataMask(e.target.value)
-                  trigger('birthdate')
+                  trigger('birthDate')
                 }}
               />
-              {errors.birthdate && (
+              {errors.birthDate && (
                 <FormError>
-                  <Text>{errors.birthdate?.message}</Text>
+                  <Text>{errors.birthDate?.message}</Text>
                 </FormError>
               )}
             </TextInputContainer>
@@ -339,7 +383,7 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
               />
               {errors.weight && (
                 <FormError>
-                  <Text>{errors.peso?.message}</Text>
+                  <Text>{errors.weight?.message}</Text>
                 </FormError>
               )}
             </TextInputContainer>
@@ -390,7 +434,7 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
             <TextInputContainer>
               <Text>CEP:</Text>
               <TextInput
-                {...register('zipCode', {
+                {...register('CEP', {
                   required: true,
                 })}
                 defaultValue={student.CEP}
@@ -400,12 +444,12 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
                   handleGetAddressBlur(e)
                   const formattedValue = cepMask(e.target.value)
                   e.target.value = formattedValue
-                  trigger('zipCode')
+                  trigger('CEP')
                 }}
               />
-              {errors.zipCode && (
+              {errors.CEP && (
                 <FormError>
-                  <Text>{errors.zipCode?.message}</Text>
+                  <Text>{errors.CEP?.message}</Text>
                 </FormError>
               )}
             </TextInputContainer>

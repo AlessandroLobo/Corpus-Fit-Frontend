@@ -36,12 +36,28 @@ export const FindStudent = ({
 export const GetAllStudents = async (
   name: string,
   email: string,
-): Promise<Student[]> => {
-  const response = await axios.get('http://localhost:3333/users/listStudents', {
-    params: {
-      name,
-      email,
-    },
-  })
-  return response.data
+  limit: number,
+  offset: number,
+): Promise<{ students: Student[]; total: number }> => {
+  console.log('offset', offset)
+  try {
+    const response = await axios.get(
+      'http://localhost:3333/users/listStudents',
+      {
+        params: {
+          name,
+          email,
+          limit,
+          offset,
+        },
+      },
+    )
+
+    // console.log('Retorno função getAllStudents', response.data)
+
+    return { students: response.data.users, total: response.data.total }
+  } catch (error) {
+    console.log(error)
+    return { students: [], total: 0 }
+  }
 }

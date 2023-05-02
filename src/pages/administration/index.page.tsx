@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ModalInfo } from '../components/Modal/modalInfo'
 import {
   Container,
@@ -29,6 +29,7 @@ import { GetServerSidePropsContext } from 'next'
 import { GetAllStudents } from '../api/getAllStudents/index.api'
 import { StudentEdit } from '../components/StudentsEdit/index.page'
 import { StudentRegistration } from '../components/StudentsRegistration/index.page'
+import Pagination from '../components/Pagination'
 
 interface Student {
   id: string
@@ -52,11 +53,33 @@ export default function Administration({ studentId }: StudentEditProps) {
 
   const [selectedStudent, setSelectedStudent] = useState<any>(null)
 
+  const [totalResults, setTotalResults] = useState(0)
+
+  const [currentPage] = useState(1)
+
+  const [offset, setOffset] = useState(0)
+
+  const LIMIT = 12
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    handleSearch()
+  }, [offset])
+
   const handleSearch = async () => {
     const searchTerm =
       (document.querySelector('#search-input') as HTMLInputElement)?.value || ''
-    const students = await GetAllStudents(searchTerm, searchTerm)
+
+    const data = await GetAllStudents(searchTerm, searchTerm, LIMIT, offset)
+
+    console.log('offset Administration', offset)
+
+    // Desestrutura os dados retornados por GetAllStudents
+    const { students, total } = data
+
+    // Define os estados de students e totalResults com os dados retornados
     setStudents(students)
+    setTotalResults(total)
   }
 
   function handleStudentRegistration() {
@@ -69,8 +92,6 @@ export default function Administration({ studentId }: StudentEditProps) {
     setSelectedStudent(studentParansId)
     setEditingStudent(true)
     setModalOpen(true)
-
-    // console.log('Id do aluno_____', studentParansId)
   }
 
   return (
@@ -126,7 +147,7 @@ export default function Administration({ studentId }: StudentEditProps) {
             <MagnifyingGlass size={18} />
           </Button>
 
-          {!!students.length && (
+          {students && students.length > 0 && (
             <Table>
               <Thead>
                 <tr>
@@ -137,47 +158,56 @@ export default function Administration({ studentId }: StudentEditProps) {
                 </tr>
               </Thead>
               <TbodyResult>
-                {students.map((student) => (
-                  <tr key={student.id}>
-                    <td
-                      onClick={() => handleEdit(student.id)}
-                      style={{
-                        width: '50%',
-                        paddingLeft: '10px',
-                        textTransform: 'uppercase',
-                      }}
-                    >
-                      {student.name}
-                    </td>
+                {students
+                  .slice((currentPage - 1) * LIMIT, currentPage * LIMIT)
+                  .map((student) => (
+                    <tr key={student.id}>
+                      <td
+                        onClick={() => handleEdit(student.id)}
+                        style={{
+                          width: '50%',
+                          paddingLeft: '10px',
+                          textTransform: 'uppercase',
+                        }}
+                      >
+                        {student.name}
+                      </td>
 
-                    <td
-                      onClick={() => handleEdit(student.id)}
-                      style={{
-                        width: '20%',
-                        paddingLeft: '10px',
-                      }}
-                    >
-                      {student.email}
-                    </td>
+                      <td
+                        onClick={() => handleEdit(student.id)}
+                        style={{
+                          width: '20%',
+                          paddingLeft: '10px',
+                        }}
+                      >
+                        {student.email}
+                      </td>
 
-                    <td
-                      onClick={() => handleEdit(student.id)}
-                      style={{ width: '10%', paddingLeft: '10px' }}
-                    >
-                      {student.phone}
-                    </td>
+                      <td
+                        onClick={() => handleEdit(student.id)}
+                        style={{ width: '10%', paddingLeft: '10px' }}
+                      >
+                        {student.phone}
+                      </td>
 
-                    <td
-                      onClick={() => handleEdit(student.id)}
-                      style={{ width: '10%', paddingLeft: '10px' }}
-                    >
-                      {student.expirationDate}
-                    </td>
-                  </tr>
-                ))}
+                      <td
+                        onClick={() => handleEdit(student.id)}
+                        style={{ width: '10%', paddingLeft: '10px' }}
+                      >
+                        {student.expirationDate}
+                      </td>
+                    </tr>
+                  ))}
               </TbodyResult>
             </Table>
           )}
+          <Pagination
+            limit={LIMIT}
+            total={totalResults}
+            offset={offset}
+            setOffset={setOffset}
+            handleSearch={handleSearch}
+          />
         </ContainerList>
       </Form>
     </Container>

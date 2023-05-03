@@ -15,6 +15,8 @@ import {
   ButtonContainer,
   ButtonCadContainer,
   Line,
+  TextInputFindContainer,
+  TextInputSelectPagination,
 } from './styles'
 import {
   Barbell,
@@ -43,6 +45,7 @@ interface StudentEditProps {
   studentId: string
   studentModalId: string
 }
+let LIMIT = 12
 
 export default function Administration({ studentId }: StudentEditProps) {
   const [modalOpen, setModalOpen] = useState(false)
@@ -59,7 +62,15 @@ export default function Administration({ studentId }: StudentEditProps) {
 
   const [offset, setOffset] = useState(0)
 
-  const LIMIT = 12
+  function handleLIMIT(e: any) {
+    LIMIT = e.target.value
+    if (e.target.value <= 0) {
+      LIMIT = 12
+    }
+    setOffset(0)
+    console.log('LIMIT', LIMIT)
+    handleSearch()
+  }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -69,10 +80,13 @@ export default function Administration({ studentId }: StudentEditProps) {
   const handleSearch = async () => {
     const searchTerm =
       (document.querySelector('#search-input') as HTMLInputElement)?.value || ''
-
+    if (offset < 0) {
+      setOffset(1)
+      console.log('offset menor que 0', offset)
+    }
     const data = await GetAllStudents(searchTerm, searchTerm, LIMIT, offset)
 
-    console.log('offset Administration', offset)
+    // console.log('offset Administration', offset)
 
     // Desestrutura os dados retornados por GetAllStudents
     const { students, total } = data
@@ -133,11 +147,18 @@ export default function Administration({ studentId }: StudentEditProps) {
         <ContainerList>
           <TextInputContainer>
             <Text>Pesquise por Nome ou E-mail:</Text>
-            <TextInput
-              onChange={handleSearch}
-              id="search-input"
-              placeholder="Digite o nome ou e-mail"
-            />
+            <TextInputFindContainer>
+              <TextInput
+                onChange={handleSearch}
+                id="search-input"
+                placeholder="Digite o nome ou e-mail"
+              />
+              <TextInputSelectPagination
+                onChange={handleLIMIT}
+                defaultValue="12"
+                placeholder="12"
+              />
+            </TextInputFindContainer>
           </TextInputContainer>
           <Button
             onClick={handleSearch}
@@ -165,7 +186,7 @@ export default function Administration({ studentId }: StudentEditProps) {
                       <td
                         onClick={() => handleEdit(student.id)}
                         style={{
-                          width: '50%',
+                          width: '60%',
                           paddingLeft: '10px',
                           textTransform: 'uppercase',
                         }}
@@ -177,7 +198,7 @@ export default function Administration({ studentId }: StudentEditProps) {
                         onClick={() => handleEdit(student.id)}
                         style={{
                           width: '20%',
-                          paddingLeft: '10px',
+                          paddingLeft: '20px',
                         }}
                       >
                         {student.email}
@@ -185,14 +206,14 @@ export default function Administration({ studentId }: StudentEditProps) {
 
                       <td
                         onClick={() => handleEdit(student.id)}
-                        style={{ width: '10%', paddingLeft: '10px' }}
+                        style={{ width: '20%', paddingLeft: '10px' }}
                       >
                         {student.phone}
                       </td>
 
                       <td
                         onClick={() => handleEdit(student.id)}
-                        style={{ width: '10%', paddingLeft: '10px' }}
+                        style={{ width: '20%', paddingLeft: '10px' }}
                       >
                         {student.expirationDate}
                       </td>

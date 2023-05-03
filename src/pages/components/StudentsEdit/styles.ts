@@ -180,6 +180,7 @@ export const ButtonContainer = styled('div', {
     cursor: 'pointer',
   },
 })
+
 export const ButtonDelete = styled('button', {
   gap: '0.3rem',
   flex: '1',

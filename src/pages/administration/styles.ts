@@ -165,6 +165,27 @@ export const TextInput = styled('input', {
   backgroundColor: '$gray700',
 })
 
+export const TextInputSelectPagination = styled('input', {
+  height: '3rem',
+  color: '$gray100',
+  fontSize: '1.3rem',
+  maxWidth: '400px',
+  width: '5rem',
+  padding: '0 1rem',
+  border: 'none',
+  borderRadius: '6px',
+  flexDirection: 'row',
+  alignItems: 'center',
+  textAlign: 'center',
+  backgroundColor: '$gray700',
+})
+export const TextInputFindContainer = styled('div', {
+  display: 'flex',
+  // flexDirection: 'row',
+  justifyContent: 'space-between',
+  // border: 'solid 1px red',
+})
+
 export const Button = styled('button', {
   flex: '1',
   gap: '0.3rem',

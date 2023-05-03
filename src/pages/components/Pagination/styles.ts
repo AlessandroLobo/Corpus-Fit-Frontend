@@ -1,43 +1,121 @@
 import { styled } from '@ignite-ui/react'
 
-export const Button = styled('button', {
-  gap: '0.3rem',
-  flex: '1',
+export const ButtonContainer = styled('div', {
+  paddingTop: '0.5rem',
   display: 'flex',
-  flexDirection: 'row',
+  margin: '0 auto',
   alignItems: 'center',
-  lineHeight: '1.5rem',
   justifyContent: 'center',
-  padding: '12px 24px',
-  borderRadius: '4px',
+  width: '100%',
+  color: '$gray400',
+  // border: '1px solid $gray400',
+
+  ul: {
+    // gap: '5rem',
+    display: 'flex',
+    listStyle: 'none',
+    gap: '1rem',
+    '&:focus': {
+      // outline: 'none',
+    },
+
+    '@media (max-width: 768px)': {
+      gap: '0.1rem',
+    },
+
+    '&:hover': {
+      color: '$ignite300',
+      cursor: 'pointer',
+    },
+  },
+
+  li: {
+    display: 'flex',
+    justifyContent: 'center',
+    fontWeight: 'bold',
+    border: 'none',
+    width: '3rem',
+    height: '2rem',
+    alignItems: 'center',
+    textAlign: 'center',
+    backgroundColor: 'transparent',
+
+    '@media (max-width: 768px)': {
+      gap: '0.1rem',
+    },
+
+    '&:focus': {
+      outline: 'none',
+    },
+  },
+
+  '&:hover': {
+    color: '$ignite300',
+    cursor: 'pointer',
+  },
+})
+
+export const ButtonItem = styled('button', {
+  display: 'flex',
+  textAlign: 'center',
+  alignItems: 'center',
+  lineHeight: '1rem',
+  justifyContent: 'center',
+  padding: '12px ',
+  width: '100%',
+  borderRadius: '6px',
   backgroundColor: '$gray600',
   color: '#fff',
   fontSize: '16px',
-  fontWeight: '600',
+  fontWeight: '100',
   border: 'none',
   cursor: 'pointer',
   transition: '.2s ease-in-out',
+
+  '@media (max-width: 768px)': {
+    gap: '0.1rem',
+  },
 
   '&:hover': {
     backgroundColor: '#0069d9',
   },
 
-  '&:active': {
-    transform: 'scale(0.98)',
+  variants: {
+    focusCurrentPage: {
+      true: {
+        color: '#00e7f9',
+        backgroundColor: '$ignite100',
+      },
+    },
   },
 })
 
-export const PaginationUl = styled('ul', {
+export const Button = styled('button', {
   display: 'flex',
-  listStyle: 'none',
-})
-
-export const PaginationItem = styled('li', {
-  background: 'none',
-  fontWeight: 'bold',
+  marginLeft: '1rem',
+  marginRight: '1rem',
+  padding: '12px ',
+  borderRadius: '6px',
+  backgroundColor: '$gray600',
+  color: '#fff',
+  fontSize: '16px',
+  fontWeight: '100',
   border: 'none',
+  cursor: 'pointer',
+  transition: '.2s ease-in-out',
 
-  '&:focus': {
-    outline: 'none',
+  '@media (max-width: 768px)': {
+    marginLeft: '0.1rem',
+    marginRight: '0.1rem',
+  },
+
+  '&:hover': {
+    backgroundColor: '#0069d9',
+  },
+
+  '&:disabled': {
+    backgroundColor: '$gray500',
+    cursor: 'not-allowed',
+    color: '$gray400',
   },
 })

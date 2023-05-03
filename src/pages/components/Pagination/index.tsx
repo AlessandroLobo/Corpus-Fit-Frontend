@@ -1,3 +1,5 @@
+import { Button, ButtonContainer, ButtonItem } from './styles'
+
 interface PaginationProps {
   limit: number
   total: number
@@ -17,50 +19,46 @@ const Pagination = ({
   handleSearch,
 }: PaginationProps) => {
   const current = offset ? offset / limit + 1 : 1
-  console.log('Offset Fora da Funçao', offset)
   const pages = Math.ceil(total / limit)
   const first = Math.max(current - MAX_LEFT, 1)
 
   function onPageChange(page: number) {
     setOffset((page - 1) * limit)
-    console.log('Offset--', offset)
-    console.log('Page--', page)
+    console.log('PAGE', page)
+    console.log('limit', limit)
+    console.log('Current', current)
     handleSearch()
   }
 
   return (
-    <ul className="pagination">
-      <li>
-        <button
-          onClick={() => onPageChange(current - 1)}
-          disabled={current === 1}
-        >
-          Anterior
-        </button>
-      </li>
-      {Array.from({ length: Math.min(MAX_ITEMS, pages) })
-        .map((_, index) => index + first)
-        .map((page) => (
-          <li key={page}>
-            <button
-              onClick={() => onPageChange(page)}
-              className={
-                page === current ? 'pagination__item--active' : undefined
-              }
-            >
-              {page}
-            </button>
-          </li>
-        ))}
-      <li>
-        <button
-          onClick={() => onPageChange(current + 1)}
-          disabled={current === pages}
-        >
-          Próxima
-        </button>
-      </li>
-    </ul>
+    <ButtonContainer>
+      <Button
+        onClick={() => onPageChange(current - 1)}
+        disabled={current === 1}
+      >
+        Anterior
+      </Button>
+      <ul className="pagination">
+        {Array.from({ length: Math.min(MAX_ITEMS, pages) })
+          .map((_, index) => index + first)
+          .map((page) => (
+            <li key={page}>
+              <ButtonItem
+                onClick={() => onPageChange(page)}
+                focusCurrentPage={page === current}
+              >
+                {page}
+              </ButtonItem>
+            </li>
+          ))}
+      </ul>
+      <Button
+        onClick={() => onPageChange(current + 1)}
+        disabled={current === pages}
+      >
+        Próxima
+      </Button>
+    </ButtonContainer>
   )
 }
 

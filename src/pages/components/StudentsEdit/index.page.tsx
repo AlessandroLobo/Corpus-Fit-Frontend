@@ -24,7 +24,7 @@ import { cpf } from 'cpf-cnpj-validator'
 import { cepMask, cpfMask, dataMask, phoneMask } from '../../../utils/maskUtils'
 import { ModalInfo } from '../Modal/modalInfo'
 import { usePlans } from '@/pages/api/plans/index.api'
-import { LoginParams, createStudent } from '@/pages/api/createStudent'
+import { UpdateParams, updateStudent } from '@/pages/api/createStudent'
 import { Pencil, Trash } from '@phosphor-icons/react'
 import { FindStudent } from '@/pages/api/getAllStudents/index.api'
 import dayjs from 'dayjs'
@@ -39,9 +39,11 @@ interface Genders {
 
 interface StudentEditProps {
   studentParansId: string
+  id: string
 }
 
 interface Data {
+  id: string
   name: string
   cpf: string
   email: string
@@ -94,15 +96,14 @@ type RegisterFormData = z.infer<typeof registerFormSchema>
 export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
   const {
     register,
-    handleSubmit,
-    reset,
+    // handleSubmit,
     formState: { errors },
     trigger,
-    // getValues,
+    getValues,
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerFormSchema),
   })
-  // console.log('register:', register)
+  // ('register:', register)
 
   const [addressInfo, setAddressInfo] = useState({
     city: '',
@@ -126,6 +127,19 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
 
   const planNameRef = useRef('')
 
+  const [planObjectid, setPlanObjetcId] = useState('')
+
+  function handlePlanChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    const selectedName = event.target.value
+
+    // Procura o objeto do plano selecionado no array "plans"
+    const selectedPlanObj = plans.find((plan) => plan.name === selectedName)
+    // Atualiza o valor de "ide" com o ID do objeto encontrado
+    if (selectedPlanObj) {
+      setPlanObjetcId(selectedPlanObj.id)
+    }
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -142,10 +156,7 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
         const dataOriginal = studentData.birthDate
         const formattedDate = dayjs(dataOriginal).utc().format('DDMMYYYY')
 
-        console.log(formattedDate) // Output: "12092030"
-
         birthdayRef.current = formattedDate
-        console.log('birthdayRef.current', birthdayRef.current)
 
         setStudent(studentData)
         setAddressInfo(addressInfo)
@@ -153,8 +164,6 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
         const planName = studentData.Plan.name
 
         planNameRef.current = planName
-
-        console.log('nome do plan', planNameRef.current)
       } catch (error) {
         setError(err)
       }
@@ -174,17 +183,12 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
       const zipCode = event.currentTarget.value.replace(/\D/g, '').toUpperCase()
       const addressInfo = await getAddress(zipCode)
 
-      // console.log('Endereço retornado pela API:', addressInfo)
-
       if (!addressInfo) {
         setError('Invalid Zip Code')
-        // console.log('addresinfo if------')
         return
       }
       // Atualiza o estado com as informações de endereço retornadas pela API
       setAddressInfo(addressInfo)
-
-      // console.log('Address Info:', addressInfo) // adicionando novo log
 
       // Re-validate the form fields after updating the address information
     } catch (error) {
@@ -197,16 +201,21 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
     return <p>Carregando planos...</p>
   }
 
-  async function handleRegister(data: RegisterFormData) {
-    // console.log(data)
+  async function handleUpdate(student: RegisterFormData) {
     try {
-      const params: LoginParams = {
+      const studentId = studentParansId
+      // const studentPlanId = planObjectid
+      const studentPlanId = planObjectid || student.Plan.id
+
+      const data = getValues()
+      const params: UpdateParams = {
+        id: studentId,
         name: data.name.toUpperCase(),
         email: data.email,
         password: data.password,
         cpf: data.cpf,
-        planId: planNameRef.current,
-        birthDate: birthdayRef.current,
+        planId: studentPlanId,
+        birthDate: data.birthDate,
         weight: data.weight,
         phone: data.phone,
         gender: data.gender,
@@ -214,12 +223,12 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
         city: addressInfo.city, // aqui estamos incluindo o valor de city a partir do estado local
         address: addressInfo.address, // aqui estamos incluindo o valor de address a partir do estado local
         number: data.number,
-        state: addressInfo.state, // aqui estamos incluindo o valor de state a partir do estado local
+        state: addressInfo.state, // aqui estamos incluindo o valor de state a partir do estado locali estamos incluindo o valor de state a partir do estado local
       }
-      await createStudent(params)
+      await updateStudent(params)
       setModalOpen(true)
-      reset()
-      setAddressInfo({ city: '', address: '', state: '' })
+      // reset()
+      // setAddressInfo({ city: '', address: '', state: '' })
     } catch (err: any) {
       if (err.response && err.response.status === 400) {
         if (
@@ -247,7 +256,14 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
             <h1>Cadastro realizado com sucesso!</h1>
           </TextInfo>
         </ModalInfo>
-        <Form as="form" onSubmit={handleSubmit(handleRegister)}>
+        <Form
+          as="form"
+          onSubmit={(event) => {
+            event.preventDefault()
+            // handleDelete(clientId)
+            handleUpdate(student)
+          }}
+        >
           {registerError && (
             <FormError>
               <Text>{registerError}</Text>
@@ -333,6 +349,7 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
                 style={{ width: '100%' }}
                 {...register('plan', { required: true })}
                 defaultValue={planNameRef.current}
+                onChange={handlePlanChange}
               >
                 {plans.map((plan) => (
                   <option key={plan.id} value={plan.name}>
@@ -522,7 +539,13 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
           </FormDataTelSexo>
           <Line />
           <ButtonContainer>
-            <Button type="button" style={{ marginTop: 27, marginBottom: 20 }}>
+            <Button
+              type="button"
+              style={{ marginTop: 27, marginBottom: 20 }}
+              onClick={() => {
+                student && handleUpdate(student)
+              }}
+            >
               Alterar
               <Pencil />
             </Button>

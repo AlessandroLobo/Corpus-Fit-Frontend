@@ -39,7 +39,6 @@ export const GetAllStudents = async (
   limit: number,
   offset: number,
 ): Promise<{ students: Student[]; total: number }> => {
-  console.log('offset', offset)
   try {
     const response = await axios.get(
       'http://localhost:3333/users/listStudents',
@@ -52,8 +51,6 @@ export const GetAllStudents = async (
         },
       },
     )
-
-    // console.log('Retorno função getAllStudents', response.data)
 
     return { students: response.data.users, total: response.data.total }
   } catch (error) {

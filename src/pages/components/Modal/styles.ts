@@ -36,6 +36,12 @@ export const ContainerModal = styled('div', {
   borderRadius: '8px',
   // boxShadow: '0 0 10px rgba(0, 0, 0, 0.25)',
   // border: '1px solid red',
+
+  '@media (max-width: 768px)': {
+    top: 'calc(105% - 280px)',
+    maxWidth: '20rem',
+    position: 'absolute',
+  },
 })
 
 export const ContainerButton = styled('div', {

@@ -1,5 +1,16 @@
 import { styled, Box } from '@ignite-ui/react'
 
+export const Container = styled('main', {
+  maxWidth: 872,
+  margin: '$8 auto $4',
+  padding: '0 $4',
+  zIndex: 1000,
+
+  '@media (max-width: 768px)': {
+    maxWidth: '20rem',
+  },
+})
+
 export const Header = styled('div', {
   borderRadius: 10,
   maxWidth: '95%',
@@ -31,8 +42,11 @@ export const TextInfo = styled('div', {
   height: '14rem',
   fontSize: '16px',
   width: '100%',
-  // height: '100%',
   // border: '1px solid red',
+
+  '@media (max-width: 768px)': {
+    textAlign: 'left',
+  },
 })
 
 export const Text = styled('text', {
@@ -123,13 +137,6 @@ export const Line = styled('div', {
   backgroundColor: '$gray500',
 })
 
-export const Container = styled('main', {
-  maxWidth: 872,
-  margin: '$8 auto $4',
-  padding: '0 $4',
-  zIndex: 1000,
-})
-
 export const Form = styled(Box, {
   marginTop: '$6',
   display: 'flex',
@@ -179,6 +186,10 @@ export const ButtonContainer = styled('div', {
     color: '$ignite300',
     cursor: 'pointer',
   },
+
+  '@media (max-width: 768px)': {
+    gap: '2rem',
+  },
 })
 
 export const ButtonUpdate = styled('button', {
@@ -212,9 +223,7 @@ export const ButtonUpdate = styled('button', {
     cursor: 'not-allowed',
     color: '$gray400',
   },
-
 })
-
 
 export const ButtonDelete = styled('button', {
   gap: '0.3rem',
@@ -247,7 +256,6 @@ export const ButtonDelete = styled('button', {
     cursor: 'not-allowed',
     color: '$gray400',
   },
-
 })
 
 export const Button = styled('button', {

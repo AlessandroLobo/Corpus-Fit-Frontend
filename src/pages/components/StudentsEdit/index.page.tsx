@@ -283,10 +283,6 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
         phone: '',
         gender: '',
         CEP: '',
-        // city: '',
-        // address: '',
-        // number: '',
-        // state: '',
       })
       reset()
       setModalOpen(true)

@@ -76,7 +76,6 @@ export const StudentRegistration = () => {
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerFormSchema),
   })
-  // console.log('register:', register)
 
   const [addressInfo, setAddressInfo] = useState({
     city: '',
@@ -102,18 +101,12 @@ export const StudentRegistration = () => {
       const zipCode = event.currentTarget.value.replace(/\D/g, '').toUpperCase()
       const addressInfo = await getAddress(zipCode)
 
-      // console.log('Endereço retornado pela API:', addressInfo)
-
       if (!addressInfo) {
         setError('Invalid Zip Code')
-        console.log('addresinfo if------')
         return
       }
       // Atualiza o estado com as informações de endereço retornadas pela API
       setAddressInfo(addressInfo)
-
-      console.log('Address Info:', addressInfo) // adicionando novo log
-
       // Re-validate the form fields after updating the address information
     } catch (error) {
       console.log(error)
@@ -126,7 +119,6 @@ export const StudentRegistration = () => {
   }
 
   async function handleRegister(data: RegisterFormData) {
-    console.log(data)
     try {
       const params: LoginParams = {
         name: data.name.toUpperCase(),

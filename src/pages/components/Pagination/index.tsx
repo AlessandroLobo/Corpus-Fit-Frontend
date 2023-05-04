@@ -24,9 +24,6 @@ const Pagination = ({
 
   function onPageChange(page: number) {
     setOffset((page - 1) * limit)
-    console.log('PAGE', page)
-    console.log('limit', limit)
-    console.log('Current', current)
     handleSearch()
   }
 

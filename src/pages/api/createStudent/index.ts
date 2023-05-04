@@ -136,3 +136,20 @@ export function updateStudent({
       throw error // adicione essa linha para lançar o erro novamente
     })
 }
+
+export function deleteStudent(id: string) {
+  return axios
+    .delete(`http://localhost:3333/users/delete/${id}`)
+    .then((response) => response.data)
+    .catch((error: AxiosError) => {
+      if (error.response) {
+        console.log(error.response.data)
+      } else if (error.request) {
+        console.log(error.request)
+      } else {
+        console.log('Error', error.message)
+      }
+      console.log(error.config)
+      throw error
+    })
+}

@@ -13,6 +13,13 @@ import {
   Text,
   ButtonContainer,
   ButtonDelete,
+  ContainerAlert,
+  ContainerModalAlert,
+  OverlayAlert,
+  ButtonContainerAlert,
+  ButtonAlert,
+  TextAlert,
+  ButtonUpdate,
 } from './styles'
 import React, { useEffect, useRef, useState } from 'react'
 import { getAddress } from '../../../utils/getAddress'
@@ -24,7 +31,11 @@ import { cpf } from 'cpf-cnpj-validator'
 import { cepMask, cpfMask, dataMask, phoneMask } from '../../../utils/maskUtils'
 import { ModalInfo } from '../Modal/modalInfo'
 import { usePlans } from '@/pages/api/plans/index.api'
-import { UpdateParams, updateStudent } from '@/pages/api/createStudent'
+import {
+  UpdateParams,
+  deleteStudent,
+  updateStudent,
+} from '@/pages/api/createStudent'
 import { Pencil, Trash } from '@phosphor-icons/react'
 import { FindStudent } from '@/pages/api/getAllStudents/index.api'
 import dayjs from 'dayjs'
@@ -41,7 +52,6 @@ interface StudentEditProps {
   studentParansId: string
   id: string
 }
-
 interface Data {
   id: string
   name: string
@@ -96,7 +106,7 @@ type RegisterFormData = z.infer<typeof registerFormSchema>
 export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
   const {
     register,
-    // handleSubmit,
+    reset,
     formState: { errors },
     trigger,
     getValues,
@@ -123,11 +133,17 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
 
   const [modalOpen, setModalOpen] = useState(false)
 
+  const [isOpen, setIsOpen] = useState(false)
+
+  const [buttonDeleteDisabled, setButtonDeleteDisabled] = useState(false)
+
   const birthdayRef = useRef('')
 
   const planNameRef = useRef('')
 
   const [planObjectid, setPlanObjetcId] = useState('')
+
+  const [textMOdal, setTextModal] = useState('')
 
   function handlePlanChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const selectedName = event.target.value
@@ -227,8 +243,7 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
       }
       await updateStudent(params)
       setModalOpen(true)
-      // reset()
-      // setAddressInfo({ city: '', address: '', state: '' })
+      setTextModal('Alteraçao realizado com sucesso!')
     } catch (err: any) {
       if (err.response && err.response.status === 400) {
         if (
@@ -248,12 +263,83 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
     }
   }
 
+  function butonDelete() {
+    setIsOpen(true)
+  }
+
+  async function handleDelete(student: RegisterFormData) {
+    try {
+      const studentId = studentParansId
+
+      await deleteStudent(studentId)
+      // alert('Exclusão feita')
+      reset({
+        name: '',
+        email: '',
+        password: '',
+        cpf: '',
+        birthDate: '',
+        weight: '',
+        phone: '',
+        gender: '',
+        CEP: '',
+        // city: '',
+        // address: '',
+        // number: '',
+        // state: '',
+      })
+      reset()
+      setModalOpen(true)
+      setTextModal('Aluno deletado com sucesso!')
+      setButtonDeleteDisabled(true)
+      setAddressInfo({ city: '', address: '', state: '' })
+    } catch (err: any) {
+      if (err.response && err.response.status === 404) {
+        setRegisterError('Cliente não encontrado')
+      } else if (err.response && err.response.status === 409) {
+        setRegisterError('CPF já cadastrado')
+      } else {
+        setRegisterError(
+          'Ocorreu um erro interno do servidor. Por favor, tente novamente mais tarde.',
+        )
+      }
+    }
+  }
+
   return (
     <>
       <Container>
+        {isOpen && (
+          <OverlayAlert>
+            <ContainerAlert>
+              <ContainerModalAlert>
+                <TextAlert>
+                  <h2>Deseja excluir esse aluno?</h2>
+                </TextAlert>
+                <ButtonContainerAlert>
+                  <ButtonAlert
+                    onClick={() => {
+                      student && handleDelete(student)
+                      setIsOpen(false)
+                    }}
+                  >
+                    Deletar
+                  </ButtonAlert>
+                  <ButtonAlert
+                    onClick={() => {
+                      setIsOpen(false)
+                    }}
+                  >
+                    Cancelar
+                  </ButtonAlert>
+                </ButtonContainerAlert>
+              </ContainerModalAlert>
+            </ContainerAlert>
+          </OverlayAlert>
+        )}
         <ModalInfo isOpen={modalOpen} setIsOpen={setModalOpen}>
           <TextInfo>
-            <h1>Cadastro realizado com sucesso!</h1>
+            <h1>{textMOdal}</h1>
           </TextInfo>
         </ModalInfo>
         <Form
@@ -539,19 +625,24 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
           </FormDataTelSexo>
           <Line />
           <ButtonContainer>
-            <Button
+            <ButtonUpdate
               type="button"
               style={{ marginTop: 27, marginBottom: 20 }}
               onClick={() => {
                 student && handleUpdate(student)
               }}
+              disabled={buttonDeleteDisabled}
             >
               Alterar
               <Pencil />
-            </Button>
+            </ButtonUpdate>
             <ButtonDelete
               type="button"
               style={{ marginTop: 27, marginBottom: 20 }}
+              onClick={() => {
+                butonDelete()
+              }}
+              disabled={buttonDeleteDisabled}
             >
               Deletar
               <Trash />

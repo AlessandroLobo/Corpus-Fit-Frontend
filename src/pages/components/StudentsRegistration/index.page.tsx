@@ -63,6 +63,7 @@ const registerFormSchema = z.object({
 })
 
 type RegisterFormData = z.infer<typeof registerFormSchema>
+
 export const StudentRegistration = () => {
   // const [dataNasc, setDataNasc] = useState<Date | null>(null)
 

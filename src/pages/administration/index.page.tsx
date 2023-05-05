@@ -32,6 +32,7 @@ import { GetAllStudents } from '../api/getAllStudents/index.api'
 import { StudentEdit } from '../components/StudentsEdit/index.page'
 import { StudentRegistration } from '../components/StudentsRegistration/index.page'
 import Pagination from '../components/Pagination'
+import { PlanRegistration } from '../components/PlanRegistration'
 
 interface Student {
   id: string
@@ -52,9 +53,13 @@ export default function Administration({ studentId }: StudentEditProps) {
 
   const [students, setStudents] = useState<Student[]>([])
 
+  const [createStudent, setCreateStudent] = useState(false)
+
   const [editingStudent, setEditingStudent] = useState(false)
 
   const [selectedStudent, setSelectedStudent] = useState<any>(null)
+
+  const [createPlan, setCreatePlan] = useState(false)
 
   const [totalResults, setTotalResults] = useState(0)
 
@@ -97,9 +102,18 @@ export default function Administration({ studentId }: StudentEditProps) {
   }
 
   function handleStudentRegistration() {
+    setCreateStudent(true)
     setEditingStudent(false)
+    setCreatePlan(false)
     setModalOpen(true)
     // console.log('handleRegisterStudent')
+  }
+
+  function handlePlanRegistration() {
+    setCreateStudent(false)
+    setEditingStudent(false)
+    setCreatePlan(true)
+    setModalOpen(true)
   }
 
   function handleEdit(studentParansId: string) {
@@ -107,16 +121,18 @@ export default function Administration({ studentId }: StudentEditProps) {
     setEditingStudent(true)
     setModalOpen(true)
   }
-
+  console.log(createPlan)
   return (
     <Container>
       <ModalInfo isOpen={modalOpen} setIsOpen={setModalOpen}>
         {/* Renderiza o formulário de registro ou de edição */}
         {editingStudent ? (
           <StudentEdit studentParansId={selectedStudent} />
-        ) : (
+        ) : createPlan ? (
+          <PlanRegistration />
+        ) : createStudent ? (
           <StudentRegistration />
-        )}
+        ) : null}
       </ModalInfo>
 
       <ButtonCadContainer>
@@ -136,7 +152,7 @@ export default function Administration({ studentId }: StudentEditProps) {
         </ButtonContainer>
         <Line />
         <ButtonContainer>
-          <ButtonCad>
+          <ButtonCad onClick={handlePlanRegistration}>
             <CalendarPlus size={50} />
             Cadastro de Planos
           </ButtonCad>

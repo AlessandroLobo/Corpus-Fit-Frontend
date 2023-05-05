@@ -260,7 +260,8 @@ export const TbodyResult = styled('tbody', {
   td: {
     height: '40px',
     background: '$gray700',
-    fontSize: '14px',
+    fontSize: '1rem',
+    fontWeight: '400',
     position: 'relative',
 
     '&:first-child': {

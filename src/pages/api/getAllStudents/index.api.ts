@@ -13,7 +13,6 @@ export const FindStudent = ({
 }: {
   studentParansId: string
 }) => {
-  console.log('FindStudent api', studentParansId)
   return axios
     .get(`http://localhost:3333/users/findUser/${studentParansId}`)
     .then((response) => response.data)

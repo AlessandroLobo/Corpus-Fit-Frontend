@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ModalInfo } from '../Modal/modalInfo'
 import {
-  Button,
   ButtonContainer,
   ButtonDelete,
   ButtonUpdate,
@@ -23,7 +22,7 @@ import {
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { MagnifyingGlass, Pencil, Trash } from '@phosphor-icons/react'
+import { Pencil, Trash } from '@phosphor-icons/react'
 import {
   createPlans,
   CreateParans,
@@ -37,11 +36,6 @@ interface Plan {
   price: number
 }
 
-interface StudentPlansProps {
-  planParansId: string
-  id: string
-}
-
 const registerFormSchema = z.object({
   name: z.string().min(3, 'O nome deve ter pelo menos 3 caracteres'),
   duration: z.number().min(1, 'A duração deve ter pelo menos 1 caracteres'),
@@ -50,14 +44,10 @@ const registerFormSchema = z.object({
 
 type RegisterFormData = z.infer<typeof registerFormSchema>
 
-export const PlanRegistration = ({ planParansId }: StudentPlansProps) => {
+export const PlanRegistration = () => {
   const [plans, setPlans] = useState<Plan[]>([])
 
   const [modalOpen, setModalOpen] = useState(false)
-
-  const [err, setError] = useState('')
-
-  const [registerError, setRegisterError] = useState<string | null>(null)
 
   const [textMOdal, setTextModal] = useState('')
 
@@ -68,8 +58,6 @@ export const PlanRegistration = ({ planParansId }: StudentPlansProps) => {
   const handleSearch = async () => {
     const searchTerm =
       (document.querySelector('#search-input') as HTMLInputElement)?.value || ''
-    console.log('SearchTerm', searchTerm)
-
     const data = await GetAllPlans(searchTerm)
 
     console.log('Data', data)
@@ -155,7 +143,7 @@ export const PlanRegistration = ({ planParansId }: StudentPlansProps) => {
                 required: true,
                 valueAsNumber: true, // converte automaticamente para número
               })}
-              type="number"
+              type="number" 
               step="0.01"
               placeholder="Digite o valor do plano"
             />
@@ -173,7 +161,7 @@ export const PlanRegistration = ({ planParansId }: StudentPlansProps) => {
             type="submit"
             style={{ marginTop: 27, marginBottom: 20 }}
           >
-            Alterar
+            Salvar
             <Pencil />
           </ButtonUpdate>
           <ButtonDelete
@@ -187,24 +175,15 @@ export const PlanRegistration = ({ planParansId }: StudentPlansProps) => {
       </Form>
       <ContainerList>
         <TextInputContainer>
-          <Text>Pesquise por Nome ou E-mail:</Text>
+          <Text>Pesquise por plano:</Text>
           <TextInputFindContainer>
             <TextInput
               onChange={handleSearch}
               id="search-input"
-              placeholder="Digite o nome ou e-mail"
+              placeholder="Digite o nome do plano"
             />
           </TextInputFindContainer>
         </TextInputContainer>
-        <Button
-          onClick={handleSearch}
-          style={{ marginTop: 17, marginBottom: 10, width: '100%' }}
-        >
-          Buscar
-          <MagnifyingGlass size={18} />
-        </Button>
-
-        {/* {students && students.length > 0 && ( */}
         <Table>
           <Thead>
             <tr>
@@ -220,7 +199,8 @@ export const PlanRegistration = ({ planParansId }: StudentPlansProps) => {
                   // onClick={() => handleEdit(plan.id)}
                   style={{
                     width: '60%',
-                    paddingLeft: '10px',
+                    paddingLeft: '1rem',
+                    textAlign: 'left',
                     textTransform: 'uppercase',
                   }}
                 >
@@ -230,8 +210,8 @@ export const PlanRegistration = ({ planParansId }: StudentPlansProps) => {
                 <td
                   // onClick={() => handleEdit(plan.id)}
                   style={{
-                    width: '20%',
-                    paddingLeft: '20px',
+                    width: '10%',
+                    paddingLeft: '1rem',
                   }}
                 >
                   {plan.duration}
@@ -239,7 +219,7 @@ export const PlanRegistration = ({ planParansId }: StudentPlansProps) => {
 
                 <td
                   // onClick={() => handleEdit(plan.id)}
-                  style={{ width: '20%', paddingLeft: '10px' }}
+                  style={{ width: '10%', paddingLeft: '1rem' }}
                 >
                   {plan.price}
                 </td>
@@ -247,7 +227,6 @@ export const PlanRegistration = ({ planParansId }: StudentPlansProps) => {
             ))}
           </TbodyResult>
         </Table>
-        {/* )} */}
       </ContainerList>
     </Container>
   )

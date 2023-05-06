@@ -47,11 +47,13 @@ export const Form = styled(Box, {
   },
 })
 
-export const ContainerList = styled('div', {
+export const ContainerList = styled(Box, {
   width: '100%',
   maxWidth: '1120px',
-  padding: '0 1.5rem',
+  paddingBottom: '2rem',
+  marginBottom: '1rem',
   overflowX: 'auto',
+  // border: '1px solid red',
 
   '@media screen and (max-width: 768px)': {
     /* Quando a largura da tela for menor ou igual a 768 pixels */
@@ -68,13 +70,14 @@ export const TextInputContainer = styled('div', {
   width: '100%',
   alignItems: 'left',
   textAlign: 'left',
-  // border: '1px solid red',
+  // border: '1px solid red'
 })
 
 export const InputContainer = styled('div', {
   gap: '2rem',
   display: 'flex',
   flexDirection: 'row',
+  // border: 'solid 1px red',
 })
 
 export const TextInputFindContainer = styled('div', {
@@ -85,8 +88,11 @@ export const TextInputFindContainer = styled('div', {
 })
 
 export const Text = styled('text', {
+  display: 'flex',
   textAlign: 'left',
   fontSize: '0.95rem',
+  paddingBottom: '0.5rem',
+  // border: 'solid 1px red',
 })
 
 export const TextInput = styled('input', {
@@ -131,10 +137,12 @@ export const Line = styled('div', {
 })
 
 export const Table = styled('table', {
+  paddingTop: '1rem',
   margin: '0',
   width: '100%',
   height: '100%',
-  display: 'block',
+  alignItems: 'center',
+  // border: '1px solid red',
 })
 
 export const Thead = styled('thead', {
@@ -173,7 +181,8 @@ export const TbodyResult = styled('tbody', {
   td: {
     height: '40px',
     background: '$gray700',
-    fontSize: '14px',
+    fontSize: '1rem',
+    fontWeight: '400',
     position: 'relative',
 
     '&:first-child': {
@@ -238,7 +247,6 @@ export const TbodyResult = styled('tbody', {
     },
   },
 })
-
 
 export const ButtonContainer = styled('div', {
   display: 'flex',
@@ -329,16 +337,15 @@ export const ButtonDelete = styled('button', {
 })
 
 export const Button = styled('button', {
-  gap: '0.3rem',
   flex: '1',
+  gap: '0.3rem',
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
-  lineHeight: '1.5rem',
   justifyContent: 'center',
   padding: '12px 24px',
   borderRadius: '4px',
-  backgroundColor: '$gray600',
+  backgroundColor: '#007bff',
   color: '#fff',
   fontSize: '16px',
   fontWeight: '600',

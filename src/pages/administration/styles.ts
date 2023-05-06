@@ -136,6 +136,7 @@ export const ContainerList = styled('div', {
 })
 
 export const Table = styled('table', {
+  paddingTop: '1rem',
   margin: '0',
   width: '100%',
   height: '100%',

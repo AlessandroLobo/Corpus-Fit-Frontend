@@ -1,6 +1,5 @@
 import { TextInput } from '@ignite-ui/react'
 import {
-  Button,
   Container,
   Form,
   FormDataTelSexo,
@@ -50,7 +49,6 @@ interface Genders {
 
 interface StudentEditProps {
   studentParansId: string
-  id: string
 }
 interface Data {
   id: string
@@ -220,7 +218,6 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
   async function handleUpdate(student: RegisterFormData) {
     try {
       const studentId = studentParansId
-      // const studentPlanId = planObjectid
       const studentPlanId = planObjectid || student.Plan.id
 
       const data = getValues()

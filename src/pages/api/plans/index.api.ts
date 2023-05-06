@@ -9,6 +9,8 @@ export interface CreateParans {
 interface Plan {
   id: string
   name: string
+  duration: number
+  price: number
 }
 
 interface ApiResponse {

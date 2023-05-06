@@ -11,17 +11,17 @@ import {
   TextInputContainer,
   Thead,
   ButtonCad,
-  Button,
   ButtonContainer,
   ButtonCadContainer,
   Line,
   TextInputFindContainer,
   TextInputSelectPagination,
+  Button,
 } from './styles'
 import {
+  ArrowClockwise,
   Barbell,
   CalendarPlus,
-  MagnifyingGlass,
   Person,
   UserPlus,
 } from '@phosphor-icons/react'
@@ -116,16 +116,16 @@ export default function Administration({ studentId }: StudentEditProps) {
     setModalOpen(true)
   }
 
-  function handleEdit(studentParansId: string) {
+  function handleEdit(studentParansId: any) {
     setSelectedStudent(studentParansId)
     setEditingStudent(true)
     setModalOpen(true)
   }
+
   console.log(createPlan)
   return (
     <Container>
       <ModalInfo isOpen={modalOpen} setIsOpen={setModalOpen}>
-        {/* Renderiza o formulário de registro ou de edição */}
         {editingStudent ? (
           <StudentEdit studentParansId={selectedStudent} />
         ) : createPlan ? (
@@ -180,10 +180,9 @@ export default function Administration({ studentId }: StudentEditProps) {
             onClick={handleSearch}
             style={{ marginTop: 17, marginBottom: 10, width: '100%' }}
           >
-            Buscar
-            <MagnifyingGlass size={18} />
+            Atualizar dados
+            <ArrowClockwise size={18} />
           </Button>
-
           {students && students.length > 0 && (
             <Table>
               <Thead>

@@ -626,7 +626,7 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
               }}
               disabled={buttonDeleteDisabled}
             >
-              Alterar
+              Atualizar
               <Pencil />
             </ButtonUpdate>
             <ButtonDelete

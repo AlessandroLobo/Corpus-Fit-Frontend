@@ -13,6 +13,13 @@ interface Plan {
   price: number
 }
 
+export interface UpdateParans {
+  id: string
+  name: string
+  duration: number
+  price: number
+}
+
 interface ApiResponse {
   plans: Plan[]
   // outras propriedades podem ser adicionadas se necessário
@@ -85,4 +92,46 @@ export const GetAllPlans = async (name: string): Promise<ApiResponse> => {
     console.log(error)
     return { plans: [] }
   }
+}
+
+export function updatePlans({ id, name, duration, price }: UpdateParans) {
+  return axios
+    .put('http://localhost:3333/plans/update', {
+      id,
+      name,
+      duration,
+      price,
+    })
+    .then((response) => response.data)
+    .catch((error: AxiosError) => {
+      if (error.response) {
+        // O servidor respondeu com um status diferente de 2xx
+        console.log(error.response.data)
+      } else if (error.request) {
+        // A requisição foi feita, mas não houve resposta
+        console.log(error.request)
+      } else {
+        // Algum erro ocorreu durante a requisição
+        console.log('Error', error.message)
+      }
+      console.log(error.config)
+      throw error // adicione essa linha para lançar o erro novamente
+    })
+}
+
+export function deletePlans(id: string) {
+  return axios
+    .delete(`http://localhost:3333/plans/delete/${id}`)
+    .then((response) => response.data)
+    .catch((error: AxiosError) => {
+      if (error.response) {
+        console.log(error.response.data)
+      } else if (error.request) {
+        console.log(error.request)
+      } else {
+        console.log('Error', error.message)
+      }
+      console.log(error.config)
+      throw error
+    })
 }

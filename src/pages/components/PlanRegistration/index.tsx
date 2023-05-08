@@ -1,18 +1,25 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ModalInfo } from '../Modal/modalInfo'
 import {
+  ButtonAlert,
   ButtonContainer,
+  ButtonContainerAlert,
   ButtonDelete,
+  ButtonSave,
   ButtonUpdate,
   Container,
+  ContainerAlert,
   ContainerList,
+  ContainerModalAlert,
   Form,
   FormError,
   InputContainer,
   Line,
+  OverlayAlert,
   Table,
   TbodyResult,
   Text,
+  TextAlert,
   TextInfo,
   TextInput,
   TextInputContainer,
@@ -27,9 +34,19 @@ import {
   createPlans,
   CreateParans,
   GetAllPlans,
+  updatePlans,
+  UpdateParans,
+  deletePlans,
 } from '@/pages/api/plans/index.api'
 
 interface Plan {
+  id: string
+  name: string
+  duration: number
+  price: number
+}
+
+interface Data {
   id: string
   name: string
   duration: number
@@ -49,7 +66,18 @@ export const PlanRegistration = () => {
 
   const [modalOpen, setModalOpen] = useState(false)
 
+  const [isOpen, setIsOpen] = useState(false)
+
   const [textMOdal, setTextModal] = useState('')
+
+  const [buttonDeleteDisabled, setButtonDeleteDisabled] = useState(false)
+
+  const [planInfo, setPlanInfo] = useState<Data>({
+    id: '',
+    name: '',
+    duration: 0,
+    price: 0,
+  })
 
   useEffect(() => {
     handleSearch()
@@ -60,17 +88,16 @@ export const PlanRegistration = () => {
       (document.querySelector('#search-input') as HTMLInputElement)?.value || ''
     const data = await GetAllPlans(searchTerm)
 
-    console.log('Data', data)
     const { plans } = data
 
     setPlans(plans)
   }
 
-  console.log('Plans', plans)
   const {
     register,
     reset,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerFormSchema),
@@ -87,17 +114,102 @@ export const PlanRegistration = () => {
       setModalOpen(true)
       setTextModal('Alteração realizada com sucesso!')
       reset()
+      handleSearch()
     } catch (err: any) {
       // handle errors...
     }
   }
 
-  // if (loading) {
-  //   return <p>Carregando planos...</p>
-  // }
+  async function handleUpdate(plan: Data) {
+    try {
+      const data = planInfo
+      const params: UpdateParans = {
+        id: data.id,
+        name: data.name.toUpperCase(),
+        duration: parseInt(data.duration), // converte para número
+        price: parseFloat(data.price), // converte para número
+      }
+      await updatePlans(params)
+      handleSearch()
+
+      setModalOpen(true)
+      setTextModal('Alteração realizada com sucesso!')
+      reset()
+    } catch (err: any) {
+      // handle errors...
+    }
+  }
+
+  function handleEdit(id: string) {
+    const planInfo = plans.filter((plan) => plan.id === id)[0]
+    setValue('name', planInfo.name)
+    setValue('duration', planInfo.duration)
+    setValue('price', planInfo.price)
+    setPlanInfo(planInfo)
+    setButtonDeleteDisabled(true)
+  }
+
+  function butonDelete() {
+    setIsOpen(true)
+  }
+
+  async function handleDelete(plan: Data) {
+    try {
+      await deletePlans(planInfo.id)
+      // alert('Exclusão feita')
+      reset({
+        name: '',
+        duration: 0,
+        price: 0,
+      })
+      setModalOpen(true)
+      setTextModal('Aluno deletado com sucesso!')
+      setButtonDeleteDisabled(false)
+      handleSearch()
+    } catch (err: any) {
+      // handle errors...
+    }
+  }
+
+  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = event.target
+
+    setPlanInfo((prevPlanInfo) => ({
+      ...prevPlanInfo,
+      [name]: value,
+    }))
+  }
 
   return (
     <Container>
+      {isOpen && (
+        <OverlayAlert>
+          <ContainerAlert>
+            <ContainerModalAlert>
+              <TextAlert>
+                <h2>Deseja excluir esse aluno?</h2>
+              </TextAlert>
+              <ButtonContainerAlert>
+                <ButtonAlert
+                  onClick={() => {
+                    planInfo && handleDelete(planInfo)
+                    setIsOpen(false)
+                  }}
+                >
+                  Deletar
+                </ButtonAlert>
+                <ButtonAlert
+                  onClick={() => {
+                    setIsOpen(false)
+                  }}
+                >
+                  Cancelar
+                </ButtonAlert>
+              </ButtonContainerAlert>
+            </ContainerModalAlert>
+          </ContainerAlert>
+        </OverlayAlert>
+      )}
       <ModalInfo isOpen={modalOpen} setIsOpen={setModalOpen}>
         <TextInfo>
           <h1>{textMOdal}</h1>
@@ -106,15 +218,30 @@ export const PlanRegistration = () => {
       <Form as="form" onSubmit={handleSubmit(handleRegister)}>
         <TextInputContainer>
           <Text>Nome:</Text>
-          <TextInput
-            {...register('name', {
-              required: true,
-            })}
-            placeholder="Digite o nome do plano"
-            onBlur={(event) =>
-              (event.target.value = event.target.value.toUpperCase())
-            }
-          />
+
+          {!buttonDeleteDisabled ? (
+            <TextInput
+              {...register('name', {
+                required: true,
+              })}
+              placeholder="Digite o nome do plano"
+              onBlur={(event) =>
+                (event.target.value = event.target.value.toUpperCase())
+              }
+            />
+          ) : (
+            <TextInput
+              {...register('name', {
+                required: true,
+              })}
+              placeholder="Digite o nome do plano"
+              value={planInfo.name ?? 'Aguardando informações...'}
+              onChange={handleInputChange}
+              onBlur={(event) =>
+                (event.target.value = event.target.value.toUpperCase())
+              }
+            />
+          )}
           {errors.name && (
             <FormError>{<Text>{errors.name?.message}</Text>}</FormError>
           )}
@@ -122,14 +249,28 @@ export const PlanRegistration = () => {
         <InputContainer>
           <TextInputContainer>
             <Text>Duração em dias:</Text>
-            <TextInput
-              {...register('duration', {
-                required: true,
-                valueAsNumber: true, // converte automaticamente para número
-              })}
-              type="number"
-              placeholder="Digite a duração do plano"
-            />
+            {!buttonDeleteDisabled ? (
+              <TextInput
+                {...register('duration', {
+                  required: true,
+                  valueAsNumber: true, // converte automaticamente para número
+                })}
+                type="number"
+                placeholder="Digite a duração do plano"
+              />
+            ) : (
+              <TextInput
+                {...register('duration', {
+                  required: true,
+                  valueAsNumber: true, // converte automaticamente para número
+                })}
+                type="number"
+                placeholder="Digite a duração do plano"
+                value={planInfo.duration ?? 'Aguardando informações...'}
+                onChange={handleInputChange}
+              />
+            )}
+
             {errors.duration && (
               <FormError>
                 <Text>{errors.duration?.message}</Text>
@@ -138,18 +279,32 @@ export const PlanRegistration = () => {
           </TextInputContainer>
           <TextInputContainer>
             <Text>Valor:</Text>
-            <TextInput
-              {...register('price', {
-                required: true,
-                valueAsNumber: true, // converte automaticamente para número
-              })}
-              type="number" 
-              step="0.01"
-              placeholder="Digite o valor do plano"
-            />
+            {!buttonDeleteDisabled ? (
+              <TextInput
+                {...register('price', {
+                  required: true,
+                  valueAsNumber: true, // converte automaticamente para número
+                })}
+                type="number"
+                step="0.01"
+                placeholder="Digite o valor do plano"
+              />
+            ) : (
+              <TextInput
+                {...register('price', {
+                  required: true,
+                  valueAsNumber: true, // converte automaticamente para número
+                })}
+                type="number"
+                step="0.01"
+                placeholder="Digite o valor do plano"
+                value={planInfo.price ?? 'Aguardando informações...'}
+                onChange={handleInputChange}
+              />
+            )}
+
             {errors.price && (
               <FormError>
-                {' '}
                 <Text>{errors.price?.message}</Text>{' '}
               </FormError>
             )}
@@ -157,16 +312,34 @@ export const PlanRegistration = () => {
         </InputContainer>
         <Line />
         <ButtonContainer>
-          <ButtonUpdate
-            type="submit"
-            style={{ marginTop: 27, marginBottom: 20 }}
-          >
-            Salvar
-            <Pencil />
-          </ButtonUpdate>
+          {!buttonDeleteDisabled ? (
+            <ButtonSave
+              type="submit"
+              style={{ marginTop: 27, marginBottom: 20 }}
+            >
+              Salvar
+              <Pencil />
+            </ButtonSave>
+          ) : (
+            <ButtonUpdate
+              type="button"
+              style={{ marginTop: 27, marginBottom: 20 }}
+              onClick={() => {
+                planInfo && handleUpdate(planInfo)
+              }}
+            >
+              Atualizar
+              <Pencil />
+            </ButtonUpdate>
+          )}
+
           <ButtonDelete
             type="button"
             style={{ marginTop: 27, marginBottom: 20 }}
+            onClick={() => {
+              butonDelete()
+            }}
+            disabled={!buttonDeleteDisabled}
           >
             Deletar
             <Trash />
@@ -196,7 +369,7 @@ export const PlanRegistration = () => {
             {plans.map((plan) => (
               <tr key={plan.id}>
                 <td
-                  // onClick={() => handleEdit(plan.id)}
+                  onClick={() => handleEdit(plan.id)}
                   style={{
                     width: '60%',
                     paddingLeft: '1rem',
@@ -214,14 +387,17 @@ export const PlanRegistration = () => {
                     paddingLeft: '1rem',
                   }}
                 >
-                  {plan.duration}
+                  {plan.duration} Dias
                 </td>
 
                 <td
                   // onClick={() => handleEdit(plan.id)}
                   style={{ width: '10%', paddingLeft: '1rem' }}
                 >
-                  {plan.price}
+                  {plan.price.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                  })}
                 </td>
               </tr>
             ))}

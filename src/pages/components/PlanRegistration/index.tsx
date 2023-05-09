@@ -126,8 +126,8 @@ export const PlanRegistration = () => {
       const params: UpdateParans = {
         id: data.id,
         name: data.name.toUpperCase(),
-        duration: parseInt(data.duration), // converte para número
-        price: parseFloat(data.price), // converte para número
+        duration: parseInt(data.duration.toString()), // converte para número
+        price: parseFloat(data.price.toString()), // converte para número
       }
       await updatePlans(params)
       handleSearch()
@@ -381,7 +381,7 @@ export const PlanRegistration = () => {
                 </td>
 
                 <td
-                  // onClick={() => handleEdit(plan.id)}
+                  onClick={() => handleEdit(plan.id)}
                   style={{
                     width: '10%',
                     paddingLeft: '1rem',

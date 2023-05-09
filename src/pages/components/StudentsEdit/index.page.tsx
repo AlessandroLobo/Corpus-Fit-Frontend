@@ -19,6 +19,8 @@ import {
   ButtonAlert,
   TextAlert,
   ButtonUpdate,
+  ButtonCadContainer,
+  ButtonCad,
 } from './styles'
 import React, { useEffect, useRef, useState } from 'react'
 import { getAddress } from '../../../utils/getAddress'
@@ -35,7 +37,14 @@ import {
   deleteStudent,
   updateStudent,
 } from '@/pages/api/createStudent'
-import { Pencil, Trash } from '@phosphor-icons/react'
+import {
+  Barbell,
+  CalendarPlus,
+  Pencil,
+  Person,
+  Trash,
+  UserPlus,
+} from '@phosphor-icons/react'
 import { FindStudent } from '@/pages/api/getAllStudents/index.api'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
@@ -335,6 +344,18 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
             <h1>{textMOdal}</h1>
           </TextInfo>
         </ModalInfo>
+        <ButtonCadContainer>
+          <ButtonContainer>
+            <ButtonCad>
+              <UserPlus size={50} />
+              Dados do Alunos
+            </ButtonCad>
+            <ButtonCad>
+              <CalendarPlus size={50} />
+              Area de Pagamentos
+            </ButtonCad>
+          </ButtonContainer>
+        </ButtonCadContainer>
         <Form
           as="form"
           onSubmit={(event) => {
@@ -348,6 +369,7 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
               <Text>{registerError}</Text>
             </FormError>
           )}
+
           <FormDataTelSexo>
             <TextInputContainer>
               <Text>Nome:</Text>

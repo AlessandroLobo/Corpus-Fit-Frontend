@@ -91,3 +91,36 @@ export const ButtonCad = styled('button', {
     maxWidth: '6rem',
   },
 })
+
+export const SetTabsContainer = styled('div', {
+  display: 'flex',
+  justifyContent: 'space-between',
+})
+
+export const SetTabsEdit = styled('div', {
+  display: 'flex',
+  marginRight: 'auto',
+  paddingLeft: '5rem',
+  justifyContent: 'left',
+  alignItems: 'center',
+  borderRadius: '8px',
+  width: '16rem',
+  height: '3rem',
+  color: '$gray200',
+  backgroundColor: '$gray800',
+  boxSizing: 'border-box',
+})
+
+export const SetTabsPlans = styled('div', {
+  display: 'flex',
+  marginLeft: 'auto',
+  paddingRight: '5rem',
+  justifyContent: 'right',
+  alignItems: 'center',
+  borderRadius: '8px',
+  width: '16rem',
+  height: '3rem',
+  color: '$gray200',
+  backgroundColor: '$gray800',
+  boxSizing: 'border-box',
+})

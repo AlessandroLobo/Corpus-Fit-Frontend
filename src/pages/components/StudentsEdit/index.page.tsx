@@ -185,7 +185,7 @@ const StudentEdit = ({ studentParansId }: StudentEditProps) => {
   }, [studentParansId, err])
 
   if (!student) {
-    return <div>Carregando...</div>
+    return <Form>Carregando dados...</Form>
   }
 
   async function handleGetAddressBlur(
@@ -211,7 +211,7 @@ const StudentEdit = ({ studentParansId }: StudentEditProps) => {
   }
 
   if (loading) {
-    return <p>Carregando planos...</p>
+    return <Form>Carregando planos...</Form>
   }
 
   async function handleUpdate(student: RegisterFormData) {
@@ -333,19 +333,6 @@ const StudentEdit = ({ studentParansId }: StudentEditProps) => {
           <h1>{textMOdal}</h1>
         </TextInfo>
       </ModalInfo>
-
-      {/* <ButtonCadContainer>
-          <ButtonContainer>
-            <ButtonCad>
-              <UserPlus size={50} />
-              Dados do Alunos
-            </ButtonCad>
-            <ButtonCad>
-              <CalendarPlus size={50} />
-              Area de Pagamentos
-            </ButtonCad>
-          </ButtonContainer>
-        </ButtonCadContainer> */}
 
       <Form
         as="form"

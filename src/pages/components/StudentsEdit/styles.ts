@@ -1,21 +1,10 @@
 import { styled, Box } from '@ignite-ui/react'
 
-export const Container = styled('main', {
-  maxWidth: 872,
-  // margin: '$8 auto $4',
-  padding: '0 $4',
-  zIndex: 1000,
-  // border: '1px solid red',
-
-  '@media (max-width: 768px)': {
-    maxWidth: '20rem',
-  },
-})
-
 export const Form = styled(Box, {
-  marginTop: '$6',
   display: 'flex',
   flexDirection: 'column',
+  width: '38rem',
+  height: '41rem',
   gap: '$4',
   // border: '1px solid red',
 
@@ -62,11 +51,6 @@ export const TextInfo = styled('div', {
   '@media (max-width: 768px)': {
     textAlign: 'left',
   },
-})
-
-export const Text = styled('text', {
-  textAlign: 'left',
-  fontSize: '0.95rem',
 })
 
 export const Select = styled('select', {
@@ -138,6 +122,11 @@ export const TextInput = styled('input', {
     '-webkit-box-shadow': '0 0 0 30px white inset !important',
     '-webkit-text-fill-color': '#333 !important',
   },
+})
+
+export const Text = styled('text', {
+  textAlign: 'left',
+  fontSize: '0.95rem',
 })
 
 export const ProfilePhoto = styled('div', {

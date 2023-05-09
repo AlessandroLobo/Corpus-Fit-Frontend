@@ -33,6 +33,7 @@ import { StudentEdit } from '../components/StudentsEdit/index.page'
 import { StudentRegistration } from '../components/StudentsRegistration/index.page'
 import Pagination from '../components/Pagination'
 import { PlanRegistration } from '../components/PlanRegistration'
+import { PlanGeneratePage } from '../planGeneratePage'
 
 interface Student {
   id: string
@@ -127,7 +128,7 @@ export default function Administration({ studentId }: StudentEditProps) {
     <Container>
       <ModalInfo isOpen={modalOpen} setIsOpen={setModalOpen}>
         {editingStudent ? (
-          <StudentEdit studentParansId={selectedStudent} />
+          <PlanGeneratePage studentParansId={selectedStudent} />
         ) : createPlan ? (
           <PlanRegistration />
         ) : createStudent ? (

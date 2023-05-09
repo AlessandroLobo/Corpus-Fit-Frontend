@@ -2,7 +2,7 @@ import { styled, Box } from '@ignite-ui/react'
 
 export const Container = styled('main', {
   maxWidth: 872,
-  margin: '$8 auto $4',
+  // margin: '$8 auto $4',
   padding: '0 $4',
   zIndex: 1000,
   // border: '1px solid red',

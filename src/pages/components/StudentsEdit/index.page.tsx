@@ -1,6 +1,5 @@
 import { TextInput } from '@ignite-ui/react'
 import {
-  Container,
   Form,
   FormDataTelSexo,
   FormError,
@@ -19,8 +18,6 @@ import {
   ButtonAlert,
   TextAlert,
   ButtonUpdate,
-  ButtonCadContainer,
-  ButtonCad,
 } from './styles'
 import React, { useEffect, useRef, useState } from 'react'
 import { getAddress } from '../../../utils/getAddress'
@@ -37,14 +34,7 @@ import {
   deleteStudent,
   updateStudent,
 } from '@/pages/api/createStudent'
-import {
-  Barbell,
-  CalendarPlus,
-  Pencil,
-  Person,
-  Trash,
-  UserPlus,
-} from '@phosphor-icons/react'
+import { Pencil, Trash } from '@phosphor-icons/react'
 import { FindStudent } from '@/pages/api/getAllStudents/index.api'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
@@ -110,7 +100,7 @@ const registerFormSchema = z.object({
 
 type RegisterFormData = z.infer<typeof registerFormSchema>
 
-export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
+const StudentEdit = ({ studentParansId }: StudentEditProps) => {
   const {
     register,
     reset,
@@ -310,41 +300,41 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
 
   return (
     <>
-      <Container>
-        {isOpen && (
-          <OverlayAlert>
-            <ContainerAlert>
-              <ContainerModalAlert>
-                <TextAlert>
-                  <h2>Deseja excluir esse aluno?</h2>
-                </TextAlert>
-                <ButtonContainerAlert>
-                  <ButtonAlert
-                    onClick={() => {
-                      student && handleDelete(student)
-                      setIsOpen(false)
-                    }}
-                  >
-                    Deletar
-                  </ButtonAlert>
-                  <ButtonAlert
-                    onClick={() => {
-                      setIsOpen(false)
-                    }}
-                  >
-                    Cancelar
-                  </ButtonAlert>
-                </ButtonContainerAlert>
-              </ContainerModalAlert>
-            </ContainerAlert>
-          </OverlayAlert>
-        )}
-        <ModalInfo isOpen={modalOpen} setIsOpen={setModalOpen}>
-          <TextInfo>
-            <h1>{textMOdal}</h1>
-          </TextInfo>
-        </ModalInfo>
-        <ButtonCadContainer>
+      {isOpen && (
+        <OverlayAlert>
+          <ContainerAlert>
+            <ContainerModalAlert>
+              <TextAlert>
+                <h2>Deseja excluir esse aluno?</h2>
+              </TextAlert>
+              <ButtonContainerAlert>
+                <ButtonAlert
+                  onClick={() => {
+                    student && handleDelete(student)
+                    setIsOpen(false)
+                  }}
+                >
+                  Deletar
+                </ButtonAlert>
+                <ButtonAlert
+                  onClick={() => {
+                    setIsOpen(false)
+                  }}
+                >
+                  Cancelar
+                </ButtonAlert>
+              </ButtonContainerAlert>
+            </ContainerModalAlert>
+          </ContainerAlert>
+        </OverlayAlert>
+      )}
+      <ModalInfo isOpen={modalOpen} setIsOpen={setModalOpen}>
+        <TextInfo>
+          <h1>{textMOdal}</h1>
+        </TextInfo>
+      </ModalInfo>
+
+      {/* <ButtonCadContainer>
           <ButtonContainer>
             <ButtonCad>
               <UserPlus size={50} />
@@ -355,317 +345,319 @@ export const StudentEdit = ({ studentParansId }: StudentEditProps) => {
               Area de Pagamentos
             </ButtonCad>
           </ButtonContainer>
-        </ButtonCadContainer>
-        <Form
-          as="form"
-          onSubmit={(event) => {
-            event.preventDefault()
-            // handleDelete(clientId)
-            handleUpdate(student)
-          }}
-        >
-          {registerError && (
-            <FormError>
-              <Text>{registerError}</Text>
-            </FormError>
-          )}
+        </ButtonCadContainer> */}
 
-          <FormDataTelSexo>
-            <TextInputContainer>
-              <Text>Nome:</Text>
-              <TextInput
-                {...register('name', {
-                  required: true,
-                })}
-                defaultValue={student?.name || ''}
-                placeholder="Digite seu nome completo"
-                style={{ width: '70%' }}
-                onBlur={(event) =>
-                  (event.target.value = event.target.value.toUpperCase())
-                }
-              />
-              {errors.name && (
-                <FormError>
-                  <Text>{errors.name?.message}</Text>
-                </FormError>
-              )}
-            </TextInputContainer>
-          </FormDataTelSexo>
-          <FormDataTelSexo>
-            <TextInputContainer>
-              <Text>E-Mail:</Text>
-              <TextInput
-                {...register('email', {
-                  required: true,
-                })}
-                defaultValue={student.email}
-                placeholder="Entre com e-Mail completo"
-                style={{ width: '100%' }}
-              />
-              {errors.email && (
-                <FormError>
-                  <Text>{errors.email?.message}</Text>
-                </FormError>
-              )}
-            </TextInputContainer>
-            <TextInputContainer>
-              <Text>Password</Text>
-              <TextInput
-                id="password"
-                placeholder="Enter your password"
-                {...register('password')}
-                autoComplete="new-password"
-              />
+      <Form
+        as="form"
+        onSubmit={(event) => {
+          event.preventDefault()
+          // handleDelete(clientId)
+          handleUpdate(student)
+        }}
+      >
+        {registerError && (
+          <FormError>
+            <Text>{registerError}</Text>
+          </FormError>
+        )}
+
+        <FormDataTelSexo>
+          <TextInputContainer>
+            <Text>Nome:</Text>
+            <TextInput
+              {...register('name', {
+                required: true,
+              })}
+              defaultValue={student?.name || ''}
+              placeholder="Digite seu nome completo"
+              style={{ width: '70%' }}
+              onBlur={(event) =>
+                (event.target.value = event.target.value.toUpperCase())
+              }
+            />
+            {errors.name && (
               <FormError>
-                <Text>{errors.password?.message}</Text>
+                <Text>{errors.name?.message}</Text>
               </FormError>
-            </TextInputContainer>
-          </FormDataTelSexo>
-          <FormDataTelSexo>
-            <TextInputContainer>
-              <Text>CPF:</Text>
-              <TextInput
-                {...register('cpf', {
-                  required: true,
-                })}
-                id="CPF"
-                defaultValue={student.cpf}
-                placeholder="Digite seu CPF completo"
-                style={{ width: '100%' }}
-                onBlur={(e) => {
-                  e.target.value = cpfMask(e.target.value)
-                  trigger('cpf')
-                }}
-              />
-              {errors.cpf && (
-                <FormError>
-                  <Text>{errors.cpf?.message}</Text>
-                </FormError>
-              )}
-            </TextInputContainer>
-
-            <TextInputContainer>
-              <Text>Plano:</Text>
-              <Select
-                style={{ width: '100%' }}
-                {...register('plan', { required: true })}
-                defaultValue={planNameRef.current}
-                onChange={handlePlanChange}
-              >
-                {plans.map((plan) => (
-                  <option key={plan.id} value={plan.name}>
-                    {plan.name}
-                  </option>
-                ))}
-              </Select>
-              {errors.plan && (
-                <FormError>
-                  <Text>{errors.plan?.message}</Text>
-                </FormError>
-              )}
-            </TextInputContainer>
-          </FormDataTelSexo>
-          <FormDataTelSexo>
-            <TextInputContainer>
-              <Text>Data de Nascimento:</Text>
-              <TextInput
-                {...register('birthDate', {
-                  required: true,
-                })}
-                defaultValue={birthdayRef.current}
-                placeholder="Digite sua data de Nascimento completo"
-                style={{ width: '100%' }}
-                onBlur={(e) => {
-                  e.target.value = dataMask(e.target.value)
-                  trigger('birthDate')
-                }}
-              />
-              {errors.birthDate && (
-                <FormError>
-                  <Text>{errors.birthDate?.message}</Text>
-                </FormError>
-              )}
-            </TextInputContainer>
-
-            <TextInputContainer>
-              <Text>Peso:</Text>
-              <TextInput
-                {...register('weight', {
-                  required: true,
-                })}
-                defaultValue={student.weight}
-                placeholder="Entre com o peso do aluno"
-                style={{ width: '100%' }}
-                type="number"
-                inputMode="numeric"
-              />
-              {errors.weight && (
-                <FormError>
-                  <Text>{errors.weight?.message}</Text>
-                </FormError>
-              )}
-            </TextInputContainer>
-
-            <TextInputContainer>
-              <Text>Sexo:</Text>
-              <Select
-                style={{ width: '100%' }}
-                {...register('gender', { required: true })}
-                defaultValue={student.gender}
-              >
-                {genders.map((gender) => (
-                  <Option key={gender.id} value={gender.value}>
-                    {gender.label}
-                  </Option>
-                ))}
-              </Select>
-              {errors.gender && (
-                <FormError>
-                  <Text>{errors.gender?.message}</Text>
-                </FormError>
-              )}
-            </TextInputContainer>
-          </FormDataTelSexo>
-          <Line />
-
-          <FormDataTelSexo>
-            <TextInputContainer>
-              <Text>Telefone:</Text>
-              <TextInput
-                {...register('phone', {
-                  required: true,
-                })}
-                defaultValue={student.phone}
-                placeholder="Entre com o numero de telefone "
-                style={{ width: '100%' }}
-                onBlur={(e) => {
-                  e.target.value = phoneMask(e.target.value)
-                  trigger('phone')
-                }}
-              />
-              {errors.phone && (
-                <FormError>
-                  <Text>{errors.phone?.message}</Text>
-                </FormError>
-              )}
-            </TextInputContainer>
-            <TextInputContainer>
-              <Text>CEP:</Text>
-              <TextInput
-                {...register('CEP', {
-                  required: true,
-                })}
-                defaultValue={student.CEP}
-                placeholder="Digite o CEP"
-                style={{ width: '100%' }}
-                onBlur={(e) => {
-                  handleGetAddressBlur(e)
-                  const formattedValue = cepMask(e.target.value)
-                  e.target.value = formattedValue
-                  trigger('CEP')
-                }}
-              />
-              {errors.CEP && (
-                <FormError>
-                  <Text>{errors.CEP?.message}</Text>
-                </FormError>
-              )}
-            </TextInputContainer>
-
-            <TextInputContainer>
-              <Text>Cidade:</Text>
-              <TextInput
-                contentEditable={false}
-                readOnly={true}
-                placeholder="Cidade"
-                style={{ width: '100%', pointerEvents: 'none' }}
-                value={addressInfo.city ?? 'Aguardando informações...'}
-                onChange={(event) =>
-                  setAddressInfo({ ...addressInfo, city: event.target.value })
-                }
-                onInput={(event: React.FormEvent<HTMLInputElement>) => {
-                  event.currentTarget.value =
-                    event.currentTarget.value.toUpperCase()
-                }}
-              />
-            </TextInputContainer>
-          </FormDataTelSexo>
-          {/* Grupo Endereço, Numero e Estado */}
-          <FormDataTelSexo>
-            <TextInputContainer>
-              <Text>Endereço:</Text>
-              <TextInput
-                contentEditable={false}
-                readOnly={true}
-                placeholder="Endereço completo"
-                style={{ width: '100%', pointerEvents: 'none' }}
-                value={addressInfo.address ?? 'Aguardando informações...'}
-                onChange={(event) =>
-                  setAddressInfo({
-                    ...addressInfo,
-                    address: event.target.value,
-                  })
-                }
-              />
-            </TextInputContainer>
-            <TextInputContainer>
-              <Text>Numero:</Text>
-              <TextInput
-                {...register('number', {
-                  required: true,
-                })}
-                defaultValue={student.number}
-                placeholder="Digite o numero da casa"
-                style={{ width: '100%' }}
-              />
-              {errors.number && (
-                <FormError>
-                  <Text>{errors.number?.message}</Text>
-                </FormError>
-              )}
-            </TextInputContainer>
-            <TextInputContainer>
-              <Text>Estado:</Text>
-              <TextInput
-                contentEditable={false}
-                readOnly={true}
-                placeholder="Estado"
-                style={{ width: '100%', pointerEvents: 'none' }}
-                value={addressInfo.state ?? 'Aguardando informações...'}
-                onChange={(event) =>
-                  setAddressInfo({ ...addressInfo, state: event.target.value })
-                }
-              />
-            </TextInputContainer>
-          </FormDataTelSexo>
-          <Line />
-          <ButtonContainer>
-            <ButtonUpdate
-              type="button"
-              style={{ marginTop: 27, marginBottom: 20 }}
-              onClick={() => {
-                student && handleUpdate(student)
+            )}
+          </TextInputContainer>
+        </FormDataTelSexo>
+        <FormDataTelSexo>
+          <TextInputContainer>
+            <Text>E-Mail:</Text>
+            <TextInput
+              {...register('email', {
+                required: true,
+              })}
+              defaultValue={student.email}
+              placeholder="Entre com e-Mail completo"
+              style={{ width: '100%' }}
+            />
+            {errors.email && (
+              <FormError>
+                <Text>{errors.email?.message}</Text>
+              </FormError>
+            )}
+          </TextInputContainer>
+          <TextInputContainer>
+            <Text>Password</Text>
+            <TextInput
+              id="password"
+              placeholder="Enter your password"
+              {...register('password')}
+              autoComplete="new-password"
+            />
+            <FormError>
+              <Text>{errors.password?.message}</Text>
+            </FormError>
+          </TextInputContainer>
+        </FormDataTelSexo>
+        <FormDataTelSexo>
+          <TextInputContainer>
+            <Text>CPF:</Text>
+            <TextInput
+              {...register('cpf', {
+                required: true,
+              })}
+              id="CPF"
+              defaultValue={student.cpf}
+              placeholder="Digite seu CPF completo"
+              style={{ width: '100%' }}
+              onBlur={(e) => {
+                e.target.value = cpfMask(e.target.value)
+                trigger('cpf')
               }}
-              disabled={buttonDeleteDisabled}
+            />
+            {errors.cpf && (
+              <FormError>
+                <Text>{errors.cpf?.message}</Text>
+              </FormError>
+            )}
+          </TextInputContainer>
+
+          <TextInputContainer>
+            <Text>Plano:</Text>
+            <Select
+              style={{ width: '100%' }}
+              {...register('plan', { required: true })}
+              defaultValue={planNameRef.current}
+              onChange={handlePlanChange}
             >
-              Atualizar
-              <Pencil />
-            </ButtonUpdate>
-            <ButtonDelete
-              type="button"
-              style={{ marginTop: 27, marginBottom: 20 }}
-              onClick={() => {
-                butonDelete()
+              {plans.map((plan) => (
+                <option key={plan.id} value={plan.name}>
+                  {plan.name}
+                </option>
+              ))}
+            </Select>
+            {errors.plan && (
+              <FormError>
+                <Text>{errors.plan?.message}</Text>
+              </FormError>
+            )}
+          </TextInputContainer>
+        </FormDataTelSexo>
+        <FormDataTelSexo>
+          <TextInputContainer>
+            <Text>Data de Nascimento:</Text>
+            <TextInput
+              {...register('birthDate', {
+                required: true,
+              })}
+              defaultValue={birthdayRef.current}
+              placeholder="Digite sua data de Nascimento completo"
+              style={{ width: '100%' }}
+              onBlur={(e) => {
+                e.target.value = dataMask(e.target.value)
+                trigger('birthDate')
               }}
-              disabled={buttonDeleteDisabled}
+            />
+            {errors.birthDate && (
+              <FormError>
+                <Text>{errors.birthDate?.message}</Text>
+              </FormError>
+            )}
+          </TextInputContainer>
+
+          <TextInputContainer>
+            <Text>Peso:</Text>
+            <TextInput
+              {...register('weight', {
+                required: true,
+              })}
+              defaultValue={student.weight}
+              placeholder="Entre com o peso do aluno"
+              style={{ width: '100%' }}
+              type="number"
+              inputMode="numeric"
+            />
+            {errors.weight && (
+              <FormError>
+                <Text>{errors.weight?.message}</Text>
+              </FormError>
+            )}
+          </TextInputContainer>
+
+          <TextInputContainer>
+            <Text>Sexo:</Text>
+            <Select
+              style={{ width: '100%' }}
+              {...register('gender', { required: true })}
+              defaultValue={student.gender}
             >
-              Deletar
-              <Trash />
-            </ButtonDelete>
-          </ButtonContainer>
-        </Form>
-        {/* <button onClick={() => setModalOpen(true)} style={{ marginTop: 27, marginBottom: 20 }} /> */}
-      </Container>
+              {genders.map((gender) => (
+                <Option key={gender.id} value={gender.value}>
+                  {gender.label}
+                </Option>
+              ))}
+            </Select>
+            {errors.gender && (
+              <FormError>
+                <Text>{errors.gender?.message}</Text>
+              </FormError>
+            )}
+          </TextInputContainer>
+        </FormDataTelSexo>
+        <Line />
+
+        <FormDataTelSexo>
+          <TextInputContainer>
+            <Text>Telefone:</Text>
+            <TextInput
+              {...register('phone', {
+                required: true,
+              })}
+              defaultValue={student.phone}
+              placeholder="Entre com o numero de telefone "
+              style={{ width: '100%' }}
+              onBlur={(e) => {
+                e.target.value = phoneMask(e.target.value)
+                trigger('phone')
+              }}
+            />
+            {errors.phone && (
+              <FormError>
+                <Text>{errors.phone?.message}</Text>
+              </FormError>
+            )}
+          </TextInputContainer>
+          <TextInputContainer>
+            <Text>CEP:</Text>
+            <TextInput
+              {...register('CEP', {
+                required: true,
+              })}
+              defaultValue={student.CEP}
+              placeholder="Digite o CEP"
+              style={{ width: '100%' }}
+              onBlur={(e) => {
+                handleGetAddressBlur(e)
+                const formattedValue = cepMask(e.target.value)
+                e.target.value = formattedValue
+                trigger('CEP')
+              }}
+            />
+            {errors.CEP && (
+              <FormError>
+                <Text>{errors.CEP?.message}</Text>
+              </FormError>
+            )}
+          </TextInputContainer>
+
+          <TextInputContainer>
+            <Text>Cidade:</Text>
+            <TextInput
+              contentEditable={false}
+              readOnly={true}
+              placeholder="Cidade"
+              style={{ width: '100%', pointerEvents: 'none' }}
+              value={addressInfo.city ?? 'Aguardando informações...'}
+              onChange={(event) =>
+                setAddressInfo({ ...addressInfo, city: event.target.value })
+              }
+              onInput={(event: React.FormEvent<HTMLInputElement>) => {
+                event.currentTarget.value =
+                  event.currentTarget.value.toUpperCase()
+              }}
+            />
+          </TextInputContainer>
+        </FormDataTelSexo>
+        {/* Grupo Endereço, Numero e Estado */}
+        <FormDataTelSexo>
+          <TextInputContainer>
+            <Text>Endereço:</Text>
+            <TextInput
+              contentEditable={false}
+              readOnly={true}
+              placeholder="Endereço completo"
+              style={{ width: '100%', pointerEvents: 'none' }}
+              value={addressInfo.address ?? 'Aguardando informações...'}
+              onChange={(event) =>
+                setAddressInfo({
+                  ...addressInfo,
+                  address: event.target.value,
+                })
+              }
+            />
+          </TextInputContainer>
+          <TextInputContainer>
+            <Text>Numero:</Text>
+            <TextInput
+              {...register('number', {
+                required: true,
+              })}
+              defaultValue={student.number}
+              placeholder="Digite o numero da casa"
+              style={{ width: '100%' }}
+            />
+            {errors.number && (
+              <FormError>
+                <Text>{errors.number?.message}</Text>
+              </FormError>
+            )}
+          </TextInputContainer>
+          <TextInputContainer>
+            <Text>Estado:</Text>
+            <TextInput
+              contentEditable={false}
+              readOnly={true}
+              placeholder="Estado"
+              style={{ width: '100%', pointerEvents: 'none' }}
+              value={addressInfo.state ?? 'Aguardando informações...'}
+              onChange={(event) =>
+                setAddressInfo({ ...addressInfo, state: event.target.value })
+              }
+            />
+          </TextInputContainer>
+        </FormDataTelSexo>
+        <Line />
+        <ButtonContainer>
+          <ButtonUpdate
+            type="button"
+            style={{ marginTop: 27, marginBottom: 20 }}
+            onClick={() => {
+              student && handleUpdate(student)
+            }}
+            disabled={buttonDeleteDisabled}
+          >
+            Atualizar
+            <Pencil />
+          </ButtonUpdate>
+          <ButtonDelete
+            type="button"
+            style={{ marginTop: 27, marginBottom: 20 }}
+            onClick={() => {
+              butonDelete()
+            }}
+            disabled={buttonDeleteDisabled}
+          >
+            Deletar
+            <Trash />
+          </ButtonDelete>
+        </ButtonContainer>
+      </Form>
+      {/* <button onClick={() => setModalOpen(true)} style={{ marginTop: 27, marginBottom: 20 }} /> */}
     </>
   )
 }
+
+export { StudentEdit }

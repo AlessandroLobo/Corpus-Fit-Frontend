@@ -84,6 +84,7 @@ export const ButtonCad = styled('button', {
 
   '&:active': {
     transform: 'scale(0.98)',
+    color: '#00e7f9',
   },
 
   '@media screen and (max-width: 768px)': {

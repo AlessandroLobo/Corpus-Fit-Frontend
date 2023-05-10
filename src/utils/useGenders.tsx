@@ -1,11 +1,5 @@
 import { useState } from 'react'
 
-// interface Genders {
-//   id: number
-//   value: string
-//   label: string
-// }
-
 export const useGenders = () => {
   const [genders] = useState([
     { id: 0, value: '', label: '' },

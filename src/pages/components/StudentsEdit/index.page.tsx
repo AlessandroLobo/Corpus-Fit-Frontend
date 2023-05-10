@@ -38,6 +38,7 @@ import { Pencil, Trash } from '@phosphor-icons/react'
 import { FindStudent } from '@/pages/api/getAllStudents/index.api'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
+import { useStudentStatus } from '@/utils/useStudentStatus'
 
 dayjs.extend(utc)
 interface Genders {
@@ -123,6 +124,8 @@ const StudentEdit = ({ studentParansId }: StudentEditProps) => {
   const [err, setError] = useState('')
 
   const genders: Genders[] = useGenders()
+
+  const studentStatus: UseStudentStatus[] = useStudentStatus()
 
   const { plans, loading } = usePlans()
 
@@ -430,10 +433,10 @@ const StudentEdit = ({ studentParansId }: StudentEditProps) => {
               defaultValue={planNameRef.current}
               onChange={handlePlanChange}
             >
-              {plans.map((plan) => (
-                <option key={plan.id} value={plan.name}>
-                  {plan.name}
-                </option>
+              {studentStatus.map((status) => (
+                <Option key={status.id} value={status.value}>
+                  {status.label}
+                </Option>
               ))}
             </Select>
             {errors.plan && (

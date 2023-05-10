@@ -1,7 +1,7 @@
 import { styled, Box } from '@ignite-ui/react'
 
 export const Form = styled(Box, {
-  display: 'flex',
+  display: 'block',
   flexDirection: 'column',
   width: '38rem',
   height: '41rem',
@@ -27,6 +27,57 @@ export const FormData = styled('div', {
   },
 })
 
+export const Container = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  paddingBottom: '1rem',
+})
+
+export const ContainerPlan = styled('div', {
+  gap: '1rem',
+  display: 'flex',
+  justifyContent: 'space-between',
+  width: '100%',
+  // border: '1px solid red',
+})
+
+export const ContainerPlanTitle = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+})
+
+export const TextInput = styled('input', {
+  height: '45px',
+  color: '$gray100',
+  borderRadius: '8px',
+  padding: '$2 $4',
+  fontSize: '15px',
+  backgroundColor: '$gray900',
+  border: 'none',
+  appearance: 'none',
+
+  '&:focus': {
+    outline: 'none',
+    boxShadow: '0 0 0 1px $colors$ignite300',
+  },
+})
+
+export const Select = styled('select', {
+  height: '45px',
+  color: '$gray100',
+  borderRadius: '8px',
+  padding: '$2 $4',
+  fontSize: '15px',
+  backgroundColor: '$gray900',
+  border: 'none',
+  appearance: 'none',
+
+  '&:focus': {
+    outline: 'none',
+    boxShadow: '0 0 0 1px $colors$ignite300',
+  },
+})
+
 export const TextInputContainer = styled('div', {
   flex: '1',
   display: 'block',
@@ -38,6 +89,13 @@ export const TextInputContainer = styled('div', {
 export const Text = styled('text', {
   textAlign: 'left',
   fontSize: '0.95rem',
+})
+
+export const Line = styled('div', {
+  color: '$gray100',
+  flexGrow: '1',
+  height: '1px',
+  backgroundColor: '$gray500',
 })
 
 export const FormError = styled('div', {

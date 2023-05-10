@@ -22,6 +22,7 @@ export const PlanGeneratePage = ({
   studentParansId,
 }: PlanGeneratePageProps) => {
   const [studentEditVisible, setStudentEditVisible] = useState(false)
+
   const [studentsPlansGeneratorVisible, setStudentsPlansGeneratorVisible] =
     useState(true)
 
@@ -44,11 +45,19 @@ export const PlanGeneratePage = ({
     <Container>
       <ButtonCadContainer>
         <ButtonContainer>
-          <ButtonCad onClick={() => handleToggle(' studentEdit')}>
+          <ButtonCad
+            onClick={() => handleToggle(' studentEdit')}
+            style={studentEditVisible ? { color: '#00e7f9' } : undefined}
+          >
             <UserPlus size={50} />
             Dados do Alunos
           </ButtonCad>
-          <ButtonCad onClick={() => handleToggle('studentsPlansGenerator')}>
+          <ButtonCad
+            onClick={() => handleToggle('studentsPlansGenerator')}
+            style={
+              studentsPlansGeneratorVisible ? { color: '#00e7f9' } : undefined
+            }
+          >
             <CalendarPlus size={50} />
             Area de Pagamentos
           </ButtonCad>

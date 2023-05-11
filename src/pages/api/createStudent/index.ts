@@ -4,7 +4,8 @@ export interface LoginParams {
   name: string
   email: string
   cpf: string
-  planId: string
+  status: boolean
+  // planId: string
   password: string
   birthDate: string
   weight: string
@@ -22,7 +23,8 @@ export interface UpdateParams {
   name: string
   email: string
   cpf: string
-  planId: string
+  status: boolean
+  // planId: string
   password: string
   birthDate: string
   weight: string
@@ -39,7 +41,8 @@ export function createStudent({
   name,
   email,
   cpf,
-  planId,
+  status,
+  // planId,
   password,
   birthDate,
   weight,
@@ -51,12 +54,14 @@ export function createStudent({
   number,
   state,
 }: LoginParams) {
+  console.log(name)
   return axios
-    .post('http://localhost:3333/users/', {
+    .post('http://localhost:3333/students/', {
       name,
       email,
       cpf,
-      planId,
+      status,
+      // planId,
       password,
       birthDate,
       weight,
@@ -89,8 +94,9 @@ export function updateStudent({
   id,
   name,
   email,
+  status,
   cpf,
-  planId,
+  // planId,
   password,
   birthDate,
   weight,
@@ -103,12 +109,13 @@ export function updateStudent({
   state,
 }: UpdateParams) {
   return axios
-    .put('http://localhost:3333/users/update', {
+    .put('http://localhost:3333/student/update', {
       id,
       name,
       email,
+      status,
       cpf,
-      planId,
+      // planId,
       password,
       birthDate,
       weight,
@@ -139,7 +146,7 @@ export function updateStudent({
 
 export function deleteStudent(id: string) {
   return axios
-    .delete(`http://localhost:3333/users/delete/${id}`)
+    .delete(`http://localhost:3333/student/delete/${id}`)
     .then((response) => response.data)
     .catch((error: AxiosError) => {
       if (error.response) {

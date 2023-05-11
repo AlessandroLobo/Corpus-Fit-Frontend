@@ -22,10 +22,16 @@ import { useForm } from 'react-hook-form'
 import { cpf } from 'cpf-cnpj-validator'
 import { cepMask, cpfMask, dataMask, phoneMask } from '../../../utils/maskUtils'
 import { ModalInfo } from '../Modal/modalInfo'
-import { usePlans } from '@/pages/api/plans/index.api'
+// import { usePlans } from '@/pages/api/plans/index.api'
 import { LoginParams, createStudent } from '@/pages/api/createStudent'
+import { useStudentStatus } from '@/utils/useStudentStatus'
 
 interface Genders {
+  id: number
+  value: string
+  label: string
+}
+interface StudentStatus {
   id: number
   value: string
   label: string
@@ -39,6 +45,7 @@ const registerFormSchema = z.object({
     .refine((value) => cpf.isValid(value), 'CPF inválido')
     .transform((value) => value.replace(/[^\d]/g, '')),
   email: z.string().email('Endereço de e-mail inválido'),
+  status: z.string(),
   password: z
     .string()
     .min(8, 'A senha deve ter pelo menos 8 caracteres.')
@@ -47,7 +54,6 @@ const registerFormSchema = z.object({
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
       'A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.',
     ),
-  plan: z.string().nonempty({ message: 'Escolha um Plano' }),
   birthdate: z.string().length(8, 'Digite uma data valida'),
   peso: z.string().nonempty({ message: 'Entre com um peso valido' }),
   phone: z
@@ -84,15 +90,26 @@ export const StudentRegistration = () => {
     state: '',
   })
 
-  const [error, setError] = useState('')
+  const [err, setError] = useState('')
+
+  const studentStatus: StudentStatus[] = useStudentStatus()
+
+  const [statusValue, setstatusValue] = useState(true)
 
   const genders: Genders[] = useGenders()
-
-  const { plans, loading } = usePlans()
 
   const [registerError, setRegisterError] = useState<string | null>(null)
 
   const [modalOpen, setModalOpen] = useState(false)
+
+  function handlePlanChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    const selectedName = event.target.value
+    if (selectedName === '0') {
+      setstatusValue(false)
+    } else {
+      setstatusValue(true)
+    }
+  }
 
   async function handleGetAddressBlur(
     event: React.FocusEvent<HTMLInputElement>,
@@ -110,13 +127,9 @@ export const StudentRegistration = () => {
       setAddressInfo(addressInfo)
       // Re-validate the form fields after updating the address information
     } catch (error) {
-      console.log(error)
+      console.log(err)
       setError('Something went wrong')
     }
-  }
-
-  if (loading) {
-    return <p>Carregando planos...</p>
   }
 
   async function handleRegister(data: RegisterFormData) {
@@ -125,8 +138,8 @@ export const StudentRegistration = () => {
         name: data.name.toUpperCase(),
         email: data.email,
         password: data.password,
+        status: statusValue,
         cpf: data.cpf,
-        planId: data.plan,
         birthDate: data.birthdate,
         weight: data.peso,
         phone: data.phone,
@@ -245,20 +258,21 @@ export const StudentRegistration = () => {
             </TextInputContainer>
 
             <TextInputContainer>
-              <Text>Plano:</Text>
+              <Text>Status:</Text>
               <Select
                 style={{ width: '100%' }}
-                {...register('plan', { required: true })}
+                {...register('status', { required: true })}
+                onChange={handlePlanChange}
               >
-                {plans.map((plan) => (
-                  <option key={plan.id} value={plan.id}>
-                    {plan.name}
+                {studentStatus.map((studentStatus) => (
+                  <option key={studentStatus.id} value={studentStatus.id}>
+                    {studentStatus.label}
                   </option>
                 ))}
               </Select>
-              {errors.plan && (
+              {errors.status && (
                 <FormError>
-                  <Text>{errors.plan?.message}</Text>
+                  <Text>{errors.status?.message}</Text>
                 </FormError>
               )}
             </TextInputContainer>

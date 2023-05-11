@@ -28,7 +28,6 @@ import { useForm } from 'react-hook-form'
 import { cpf } from 'cpf-cnpj-validator'
 import { cepMask, cpfMask, dataMask, phoneMask } from '../../../utils/maskUtils'
 import { ModalInfo } from '../Modal/modalInfo'
-import { usePlans } from '@/pages/api/plans/index.api'
 import {
   UpdateParams,
   deleteStudent,
@@ -47,6 +46,11 @@ interface Genders {
   label: string
 }
 
+interface UseStudentStatus {
+  id: number
+  value: string
+  label: string
+}
 interface StudentEditProps {
   studentParansId: string
 }
@@ -56,7 +60,7 @@ interface Data {
   cpf: string
   email: string
   password: string
-  plan: string
+  status: string
   birthDate: string
   weight: string
   phone: string
@@ -84,7 +88,7 @@ const registerFormSchema = z.object({
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
       'A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.',
     ),
-  plan: z.string().nonempty({ message: 'Escolha um Plano' }),
+  status: z.string().nonempty({ message: 'Escolha um Plano' }),
   birthDate: z.string().length(8, 'Digite uma data valida'),
   weight: z.string().nonempty({ message: 'Entre com um peso valido' }),
   phone: z
@@ -127,7 +131,7 @@ const StudentEdit = ({ studentParansId }: StudentEditProps) => {
 
   const studentStatus: UseStudentStatus[] = useStudentStatus()
 
-  const { plans, loading } = usePlans()
+  const [statusValue, setstatusValue] = useState<boolean>(true)
 
   const [registerError, setRegisterError] = useState<string | null>(null)
 
@@ -139,21 +143,21 @@ const StudentEdit = ({ studentParansId }: StudentEditProps) => {
 
   const birthdayRef = useRef('')
 
-  const planNameRef = useRef('')
+  const studentStatusValueRef = useRef('')
 
-  const [planObjectid, setPlanObjetcId] = useState('')
+  // const [planObjectid, setPlanObjetcId] = useState('')
 
   const [textMOdal, setTextModal] = useState('')
 
   function handlePlanChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const selectedName = event.target.value
-
-    // Procura o objeto do plano selecionado no array "plans"
-    const selectedPlanObj = plans.find((plan) => plan.name === selectedName)
-    // Atualiza o valor de "ide" com o ID do objeto encontrado
-    if (selectedPlanObj) {
-      setPlanObjetcId(selectedPlanObj.id)
+    console.log('SelectedName', selectedName)
+    if (selectedName === 'Ativo') {
+      setstatusValue(true)
+    } else {
+      setstatusValue(false)
     }
+    console.log(statusValue)
   }
 
   useEffect(() => {
@@ -177,9 +181,17 @@ const StudentEdit = ({ studentParansId }: StudentEditProps) => {
         setStudent(studentData)
         setAddressInfo(addressInfo)
 
-        const planName = studentData.Plan.name
+        // console.log('StudanteVindo_Banco', studentData)
 
-        planNameRef.current = planName
+        const statusValueData = studentData.status
+        // console.log('StatusValueData', statusValueData)
+        if (statusValueData === true) {
+          studentStatusValueRef.current = 'Ativo'
+        } else {
+          studentStatusValueRef.current = 'Desativado'
+        }
+
+        // console.log(studentStatusValueRef.current)
       } catch (error) {
         setError(err)
       }
@@ -213,14 +225,15 @@ const StudentEdit = ({ studentParansId }: StudentEditProps) => {
     }
   }
 
-  if (loading) {
-    return <Form>Carregando planos...</Form>
-  }
+  // if (loading) {
+  //   return <Form>Carregando planos...</Form>
+  // }
 
   async function handleUpdate(student: RegisterFormData) {
+    console.log(statusValue)
     try {
       const studentId = studentParansId
-      const studentPlanId = planObjectid || student.Plan.id
+      // const studentPlanId = planObjectid || student.Plan.id
 
       const data = getValues()
       const params: UpdateParams = {
@@ -228,8 +241,8 @@ const StudentEdit = ({ studentParansId }: StudentEditProps) => {
         name: data.name.toUpperCase(),
         email: data.email,
         password: data.password,
+        status: statusValue,
         cpf: data.cpf,
-        planId: studentPlanId,
         birthDate: data.birthDate,
         weight: data.weight,
         phone: data.phone,
@@ -426,11 +439,11 @@ const StudentEdit = ({ studentParansId }: StudentEditProps) => {
           </TextInputContainer>
 
           <TextInputContainer>
-            <Text>Plano:</Text>
+            <Text>Status:</Text>
             <Select
               style={{ width: '100%' }}
-              {...register('plan', { required: true })}
-              defaultValue={planNameRef.current}
+              {...register('status', { required: true })}
+              defaultValue={studentStatusValueRef.current}
               onChange={handlePlanChange}
             >
               {studentStatus.map((status) => (
@@ -439,9 +452,9 @@ const StudentEdit = ({ studentParansId }: StudentEditProps) => {
                 </Option>
               ))}
             </Select>
-            {errors.plan && (
+            {errors.status && (
               <FormError>
-                <Text>{errors.plan?.message}</Text>
+                <Text>{errors.status?.message}</Text>
               </FormError>
             )}
           </TextInputContainer>

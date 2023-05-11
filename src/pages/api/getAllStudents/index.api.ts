@@ -14,7 +14,7 @@ export const FindStudent = ({
   studentParansId: string
 }) => {
   return axios
-    .get(`http://localhost:3333/users/findUser/${studentParansId}`)
+    .get(`http://localhost:3333/students/findStudent/${studentParansId}`)
     .then((response) => response.data)
     .catch((error: AxiosError) => {
       if (error.response) {
@@ -40,7 +40,7 @@ export const GetAllStudents = async (
 ): Promise<{ students: Student[]; total: number }> => {
   try {
     const response = await axios.get(
-      'http://localhost:3333/users/listStudents',
+      'http://localhost:3333/students/listStudents',
       {
         params: {
           name,

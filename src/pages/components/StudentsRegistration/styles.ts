@@ -36,8 +36,12 @@ export const TextInfo = styled('div', {
 })
 
 export const Text = styled('text', {
+  display: 'flex',
   textAlign: 'left',
   fontSize: '0.95rem',
+  paddingBottom: '0.5rem',
+
+  // border: '1px solid red',
 })
 
 export const Select = styled('select', {

@@ -4,7 +4,7 @@ export const Form = styled(Box, {
   display: 'block',
   flexDirection: 'column',
   width: '38rem',
-  height: '41rem',
+  height: '43rem',
   gap: '$4',
   // border: '1px solid red',
 
@@ -35,6 +35,8 @@ export const Container = styled('div', {
 
 export const ContainerPlan = styled('div', {
   gap: '1rem',
+  paddingTop: '1rem',
+  // paddingBottom: '1rem',
   display: 'flex',
   justifyContent: 'space-between',
   width: '100%',
@@ -87,8 +89,60 @@ export const TextInputContainer = styled('div', {
 })
 
 export const Text = styled('text', {
+  display: 'flex',
   textAlign: 'left',
   fontSize: '0.95rem',
+  paddingBottom: '0.5rem',
+})
+
+export const ButtonContainer = styled('div', {
+  height: '5rem',
+  marginTop: '0rem',
+  paddingBottom: '1rem',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  flexDirection: 'row',
+  gap: '$4',
+
+  label: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: '$2',
+  },
+
+  '@media (max-width: 767px)': {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 0,
+    // border: 'solid 1px red',
+  },
+})
+
+export const Button = styled('button', {
+  flex: '1',
+  gap: '0.3rem',
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: '12px 24px',
+  borderRadius: '4px',
+  backgroundColor: '#007bff',
+  color: '#fff',
+  fontSize: '16px',
+  fontWeight: '600',
+  border: 'none',
+  cursor: 'pointer',
+  transition: '.2s ease-in-out',
+
+  '&:hover': {
+    backgroundColor: '#0069d9',
+  },
+
+  '&:active': {
+    transform: 'scale(0.98)',
+  },
 })
 
 export const Line = styled('div', {

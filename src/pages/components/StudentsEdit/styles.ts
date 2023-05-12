@@ -4,7 +4,7 @@ export const Form = styled(Box, {
   display: 'flex',
   flexDirection: 'column',
   width: '38rem',
-  height: '41rem',
+  height: '43rem',
   gap: '$4',
   // border: '1px solid red',
 
@@ -125,10 +125,11 @@ export const TextInput = styled('input', {
 })
 
 export const Text = styled('text', {
+  display: 'flex',
   textAlign: 'left',
   fontSize: '0.95rem',
+  paddingBottom: '0.5rem',
 })
-
 export const ProfilePhoto = styled('div', {
   maxWidth: '50px',
   maxHeight: '50px',

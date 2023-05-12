@@ -1,4 +1,6 @@
 import {
+  Button,
+  ButtonContainer,
   Container,
   ContainerPlan,
   ContainerPlanTitle,
@@ -18,6 +20,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import { FindStudent } from '@/pages/api/getAllStudents/index.api'
 import { getAddress } from '@/utils/getAddress'
 import { usePlans } from '@/pages/api/plans/index.api'
+import { dataMask } from '@/utils/maskUtils'
+import { CalendarPlus } from '@phosphor-icons/react'
 
 interface StudentEditProps {
   studentParansId: string
@@ -31,11 +35,23 @@ const registerFormSchema = z.object({
   name: z.string().min(3, 'O nome deve ter pelo menos 3 caracteres'),
   plan: z.string().nonempty({ message: 'Escolha um Plano' }),
   price: z.number().min(0.01, 'O valor mínimo é de R$ 10,00'),
+  dueData: z.string().length(8, 'Digite uma data valida'),
 })
 
 type RegisterFormData = z.infer<typeof registerFormSchema>
 
 const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
+  const {
+    register,
+    // handleSubmit,
+    // reset,
+    formState: { errors },
+    trigger,
+    // getValues,
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerFormSchema),
+  })
+
   const [student, setStudent] = useState<Data | null>(null)
 
   const [err, setError] = useState('')
@@ -87,13 +103,6 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
     fetchData()
   }, [studentParansId, err])
 
-  const {
-    register,
-    formState: { errors },
-  } = useForm<RegisterFormData>({
-    resolver: zodResolver(registerFormSchema),
-  })
-
   if (!student) {
     return <Form>Carregando dados...</Form>
   }
@@ -103,75 +112,109 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
   }
 
   return (
-    <Form as="form">
-      {' '}
-      <FormData>
-        <TextInputContainer>
-          <Container>
-            <Text>Nome:</Text>
-            <TextInput
-              {...register('name', {
-                required: true,
-              })}
-              defaultValue={student?.name || ''}
-              placeholder="Digite seu nome completo"
-              style={{ width: '100%' }}
-              onBlur={(event) =>
-                (event.target.value = event.target.value.toUpperCase())
-              }
-            />
-            {errors.name && (
-              <FormError>
-                <Text>{errors.name?.message}</Text>{' '}
-              </FormError>
-            )}
-          </Container>
-          <Container>
-            <ContainerPlan>
-              <ContainerPlanTitle>
-                <Text>Plano:</Text>
-                <Select
-                  style={{ width: '20rem' }}
-                  {...register('plan', { required: true })}
-                  defaultValue={planNameRef.current}
-                  onChange={handlePlanChange}
-                >
-                  {plans.map((plan) => (
-                    <option key={plan.id} value={plan.name}>
-                      {plan.name}
-                    </option>
-                  ))}
-                </Select>
-                {errors.plan && (
-                  <FormError>
-                    <Text>{errors.plan?.message}</Text>
-                  </FormError>
-                )}
-              </ContainerPlanTitle>
-              <ContainerPlanTitle>
-                <Text>Valor:</Text>
-                <TextInput
-                  {...register('price', {
-                    required: true,
-                  })}
-                  contentEditable={false}
-                  readOnly={true}
-                  defaultValue={planObjectPrice}
-                  placeholder="Digite seu nome completo"
-                  style={{ width: '20' }}
-                />
-                {errors.name && (
-                  <FormError>
-                    <Text>{errors.name?.message}</Text>{' '}
-                  </FormError>
-                )}
-              </ContainerPlanTitle>
-            </ContainerPlan>
-          </Container>
-        </TextInputContainer>
-      </FormData>
-      <Line />
-    </Form>
+    <>
+      <Form
+        as="form"
+        onSubmit={(event) => {
+          event.preventDefault()
+          // handleDelete(clientId)
+          // handleUpdate(student)
+        }}
+      >
+        <FormData>
+          <TextInputContainer>
+            <Container>
+              <Text>Nome:</Text>
+              <TextInput
+                {...register('name', {
+                  required: true,
+                })}
+                defaultValue={student?.name || ''}
+                placeholder="Digite seu nome completo"
+                style={{ width: '100%' }}
+                onBlur={(event) =>
+                  (event.target.value = event.target.value.toUpperCase())
+                }
+              />
+              {errors.name && (
+                <FormError>
+                  <Text>{errors.name?.message}</Text>{' '}
+                </FormError>
+              )}
+            </Container>
+            <Container>
+              <Text>Plano:</Text>
+              <Select
+                style={{ width: '100%' }}
+                {...register('plan', { required: true })}
+                defaultValue={planNameRef.current}
+                onChange={handlePlanChange}
+              >
+                {plans.map((plan) => (
+                  <option key={plan.id} value={plan.name}>
+                    {plan.name}
+                  </option>
+                ))}
+              </Select>
+              {errors.plan && (
+                <FormError>
+                  <Text>{errors.plan?.message}</Text>
+                </FormError>
+              )}
+              <ContainerPlan>
+                <ContainerPlanTitle>
+                  <Text>Valor:</Text>
+                  <TextInput
+                    {...register('price', {
+                      required: true,
+                    })}
+                    contentEditable={false}
+                    readOnly={true}
+                    defaultValue={planObjectPrice}
+                    placeholder="Digite seu nome completo"
+                    style={{ width: '20' }}
+                  />
+                  {errors.name && (
+                    <FormError>
+                      <Text>{errors.name?.message}</Text>{' '}
+                    </FormError>
+                  )}
+                </ContainerPlanTitle>
+                <ContainerPlanTitle>
+                  <Text>Final do plano:</Text>
+                  <TextInput
+                    {...register('dueData', {
+                      required: true,
+                    })}
+                    placeholder="Digite sua data de Nascimento completo"
+                    style={{ width: '100%' }}
+                    onBlur={(e) => {
+                      e.target.value = dataMask(e.target.value)
+                      trigger('dueData')
+                    }}
+                  />
+                  {errors.dueData && (
+                    <FormError>
+                      <Text>{errors.dueData?.message}</Text>
+                    </FormError>
+                  )}
+                </ContainerPlanTitle>
+              </ContainerPlan>
+            </Container>
+          </TextInputContainer>
+        </FormData>
+        <ButtonContainer>
+          <Button
+            type="submit"
+            style={{ marginTop: 17, marginBottom: 10, width: '100%' }}
+          >
+            Gerar plano do aluno
+            <CalendarPlus size={18} />
+          </Button>
+        </ButtonContainer>
+        <Line />
+      </Form>
+    </>
   )
 }
 

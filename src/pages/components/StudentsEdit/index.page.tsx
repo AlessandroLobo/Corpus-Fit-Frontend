@@ -147,7 +147,7 @@ const StudentEdit = ({ studentParansId }: StudentEditProps) => {
 
   // const [planObjectid, setPlanObjetcId] = useState('')
 
-  const [textMOdal, setTextModal] = useState('')
+  const [textModal, setTextModal] = useState('')
 
   function handlePlanChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const selectedName = event.target.value
@@ -346,7 +346,7 @@ const StudentEdit = ({ studentParansId }: StudentEditProps) => {
       )}
       <ModalInfo isOpen={modalOpen} setIsOpen={setModalOpen}>
         <TextInfo>
-          <h1>{textMOdal}</h1>
+          <h1>{textModal}</h1>
         </TextInfo>
       </ModalInfo>
 

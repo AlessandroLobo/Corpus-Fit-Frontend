@@ -1,15 +1,23 @@
 import {
   Button,
+  ButtonAlert,
   ButtonContainer,
+  ButtonContainerAlert,
+  ButtonCreatePlan,
   Container,
+  ContainerAlert,
+  ContainerModalAlert,
   ContainerPlan,
   ContainerPlanTitle,
   Form,
   FormData,
   FormError,
   Line,
+  OverlayAlert,
   Select,
   Text,
+  TextAlert,
+  TextInfo,
   TextInput,
   TextInputContainer,
 } from './styles'
@@ -22,6 +30,7 @@ import { getAddress } from '@/utils/getAddress'
 import { usePlans } from '@/pages/api/plans/index.api'
 import { dataMask } from '@/utils/maskUtils'
 import { CalendarPlus } from '@phosphor-icons/react'
+import { ModalInfo } from '../Modal/modalInfo'
 
 interface StudentEditProps {
   studentParansId: string
@@ -64,16 +73,29 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
 
   const planPriceRef = useRef('')
 
+  const [modalOpen, setModalOpen] = useState(false)
+
+  const [isOpen, setIsOpen] = useState(false)
+
+  const [textModal, setTextModal] = useState('')
+
+  const [textModalAlert, setTextModalAlert] = useState('')
+
+  const [usePlanId, setUsePlanId] = useState('')
+
+  const [buttonCreatePlanDisabled, setButtonCreatePlanDisabled] =
+    useState(false)
+
   function handlePlanChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const selectedName = event.target.value
-    console.log('selectedName', selectedName)
     // Procura o objeto do plano selecionado no array "plans"
     const selectedPlanObj = plans.find((plan) => plan.name === selectedName)
     // Atualiza o valor de "ide" com o ID do objeto encontrado
     if (selectedPlanObj) {
       setPlanObjetcPrice(selectedPlanObj.price.toString())
+      setUsePlanId(selectedPlanObj.id)
     }
-    console.log('selectedPlanObj', selectedPlanObj?.price)
+    setButtonCreatePlanDisabled(true)
   }
 
   useEffect(() => {
@@ -110,9 +132,53 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
   if (loading) {
     return <Form>Carregando planos...</Form>
   }
+  function handleAlertGeneratePlan() {
+    setIsOpen(true)
+  }
+
+  function handlerGeneratePlan() {
+    setTextModalAlert('Plano gerado com sucesso!')
+    console.log('Text Modal Alert', textModalAlert)
+    console.log('PlanId', usePlanId)
+    console.log('Student Id', student?.id)
+  }
 
   return (
     <>
+      {isOpen && (
+        <OverlayAlert>
+          <ContainerAlert>
+            <ContainerModalAlert>
+              <TextAlert>
+                <h2>{textModalAlert}</h2>
+              </TextAlert>
+              <ButtonContainerAlert>
+                <ButtonAlert
+                  onClick={() => {
+                    handlerGeneratePlan()
+                    setIsOpen(false)
+                  }}
+                >
+                  Ok
+                </ButtonAlert>
+                <ButtonAlert
+                  onClick={() => {
+                    setIsOpen(false)
+                  }}
+                >
+                  Cancelar
+                </ButtonAlert>
+              </ButtonContainerAlert>
+            </ContainerModalAlert>
+          </ContainerAlert>
+        </OverlayAlert>
+      )}
+      <ModalInfo isOpen={modalOpen} setIsOpen={setModalOpen}>
+        <TextInfo>
+          <h1>{textModal}</h1>
+        </TextInfo>
+      </ModalInfo>
+
       <Form
         as="form"
         onSubmit={(event) => {
@@ -150,6 +216,7 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
                 defaultValue={planNameRef.current}
                 onChange={handlePlanChange}
               >
+                <option value=""></option>
                 {plans.map((plan) => (
                   <option key={plan.id} value={plan.name}>
                     {plan.name}
@@ -204,13 +271,15 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
           </TextInputContainer>
         </FormData>
         <ButtonContainer>
-          <Button
+          <ButtonCreatePlan
+            onClick={handleAlertGeneratePlan}
             type="submit"
+            disabled={!buttonCreatePlanDisabled}
             style={{ marginTop: 17, marginBottom: 10, width: '100%' }}
           >
             Gerar plano do aluno
             <CalendarPlus size={18} />
-          </Button>
+          </ButtonCreatePlan>
         </ButtonContainer>
         <Line />
       </Form>

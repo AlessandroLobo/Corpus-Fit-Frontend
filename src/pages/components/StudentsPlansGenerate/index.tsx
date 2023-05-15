@@ -1,11 +1,11 @@
 import {
-  Button,
   ButtonAlert,
   ButtonContainer,
   ButtonContainerAlert,
   ButtonCreatePlan,
   Container,
   ContainerAlert,
+  ContainerList,
   ContainerModalAlert,
   ContainerPlan,
   ContainerPlanTitle,
@@ -15,11 +15,15 @@ import {
   Line,
   OverlayAlert,
   Select,
+  Table,
+  TbodyResult,
   Text,
   TextAlert,
   TextInfo,
   TextInput,
   TextInputContainer,
+  TextInputFindContainer,
+  Thead,
 } from './styles'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -31,6 +35,11 @@ import { usePlans } from '@/pages/api/plans/index.api'
 import { dataMask } from '@/utils/maskUtils'
 import { CalendarPlus } from '@phosphor-icons/react'
 import { ModalInfo } from '../Modal/modalInfo'
+import {
+  ICreateStudentPLanParans,
+  CreateStudentPlans,
+  FindPlansGenerate,
+} from '@/pages/api/createStudentPLans'
 
 interface StudentEditProps {
   studentParansId: string
@@ -40,11 +49,21 @@ interface Data {
   id: string
   name: string
 }
+
+interface PlanGenerateData {
+  id: string
+  createdAt: Date
+  dueDate: Date
+  planId: string
+  planValue: number
+  studentId: string
+}
+
 const registerFormSchema = z.object({
   name: z.string().min(3, 'O nome deve ter pelo menos 3 caracteres'),
   plan: z.string().nonempty({ message: 'Escolha um Plano' }),
   price: z.number().min(0.01, 'O valor mínimo é de R$ 10,00'),
-  dueData: z.string().length(8, 'Digite uma data valida'),
+  dueData: z.string(),
 })
 
 type RegisterFormData = z.infer<typeof registerFormSchema>
@@ -52,7 +71,7 @@ type RegisterFormData = z.infer<typeof registerFormSchema>
 const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
   const {
     register,
-    // handleSubmit,
+    handleSubmit,
     // reset,
     formState: { errors },
     trigger,
@@ -62,6 +81,10 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
   })
 
   const [student, setStudent] = useState<Data | null>(null)
+
+  const [plansGenerate, setPlansGenerate] = useState<PlanGenerateData | null>(
+    null,
+  )
 
   const [err, setError] = useState('')
 
@@ -73,11 +96,15 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
 
   const planPriceRef = useRef('')
 
+  const dueDateRef = useRef('')
+
   const [modalOpen, setModalOpen] = useState(false)
 
   const [isOpen, setIsOpen] = useState(false)
 
   const [textModal, setTextModal] = useState('')
+
+  const [registerError, setRegisterError] = useState<string | null>(null)
 
   const [textModalAlert, setTextModalAlert] = useState('')
 
@@ -97,6 +124,29 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
     }
     setButtonCreatePlanDisabled(true)
   }
+
+  useEffect(() => {
+    console.log('Primeiro consoleLog', studentParansId)
+
+    const fetchData = async () => {
+      try {
+        const data = await FindPlansGenerate({
+          studentParansId,
+        })
+
+        // const { planGenerate } = data
+
+        setPlansGenerate(data)
+        console.log('PlanGenerate', plansGenerate)
+      } catch (err) {
+        setError(err)
+      }
+    }
+
+    if (studentParansId) {
+      fetchData()
+    }
+  }, [planObjectPrice, studentParansId])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -137,10 +187,41 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
   }
 
   function handlerGeneratePlan() {
-    setTextModalAlert('Plano gerado com sucesso!')
+    handleRegister()
+  }
+
+  async function handleRegister() {
+    console.log('Valor do plano', planObjectPrice)
     console.log('Text Modal Alert', textModalAlert)
     console.log('PlanId', usePlanId)
     console.log('Student Id', student?.id)
+
+    try {
+      const params: ICreateStudentPLanParans = {
+        planId: usePlanId,
+        studentId: student?.id,
+        planValue: planObjectPrice,
+      }
+      await CreateStudentPlans(params)
+
+      setTextModalAlert('Plano gerado com sucesso!')
+    } catch (err: any) {
+      if (err.response && err.response.status === 400) {
+        if (
+          err.response.data.message === 'Error creating user: Cpf já cadastrado'
+        ) {
+          setRegisterError('O CPF informado já está cadastrado.')
+        } else {
+          setRegisterError(
+            'Ocorreu um erro ao criar usuário. Por favor, tente novamente mais tarde.',
+          )
+        }
+      } else {
+        setRegisterError(
+          'Ocorreu um erro interno do servidor. Por favor, tente novamente mais tarde.',
+        )
+      }
+    }
   }
 
   return (
@@ -179,14 +260,7 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
         </TextInfo>
       </ModalInfo>
 
-      <Form
-        as="form"
-        onSubmit={(event) => {
-          event.preventDefault()
-          // handleDelete(clientId)
-          // handleUpdate(student)
-        }}
-      >
+      <Form as="form" onSubmit={handleSubmit(handleRegister)}>
         <FormData>
           <TextInputContainer>
             <Container>
@@ -250,9 +324,7 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
                 <ContainerPlanTitle>
                   <Text>Final do plano:</Text>
                   <TextInput
-                    {...register('dueData', {
-                      required: true,
-                    })}
+                    {...register('dueData', {})}
                     placeholder="Digite sua data de Nascimento completo"
                     style={{ width: '100%' }}
                     onBlur={(e) => {
@@ -282,6 +354,52 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
           </ButtonCreatePlan>
         </ButtonContainer>
         <Line />
+
+        <ContainerList>
+          <Table>
+            <Thead>
+              <tr>
+                <td style={{ width: '20%' }}>Vencimento:</td>
+                <td style={{ width: '10%' }}>Parcela:</td>
+                <td style={{ width: '10%' }}>Pagament:</td>
+              </tr>
+            </Thead>
+            <TbodyResult>
+              {plansGenerate.map((plansGenerate) => (
+                <tr key={plansGenerate?.Id}>
+                  <td
+                  // onClick={() => handleEdit(plan.id)}
+                  // style={{
+                  //   width: '60%',
+                  //   paddingLeft: '1rem',
+                  //   textAlign: 'left',
+                  //   textTransform: 'uppercase',
+                  // }}
+                  >
+                    {plansGenerate.dueDate}
+                  </td>
+
+                  <td
+                    // onClick={() => handleEdit(plan.id)}
+                    style={{
+                      width: '10%',
+                      paddingLeft: '1rem',
+                    }}
+                  >
+                    {plansGenerate.planValue}
+                  </td>
+
+                  <td
+                    // onClick={() => handleEdit(plan.id)}
+                    style={{ width: '10%', paddingLeft: '1rem' }}
+                  >
+                    {plansGenerate.createdAt}
+                  </td>
+                </tr>
+              ))}
+            </TbodyResult>
+          </Table>
+        </ContainerList>
       </Form>
     </>
   )

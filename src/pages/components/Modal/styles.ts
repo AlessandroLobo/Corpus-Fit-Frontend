@@ -61,7 +61,7 @@ export const ContainerButton = styled('div', {
 
 export const ButtonModal = styled('button', {
   color: '$ignite300',
-  zIndex: 1002,
+  zIndex: 1001,
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',

@@ -40,6 +40,7 @@ import {
   CreateStudentPlans,
   FindPlansGenerate,
 } from '@/pages/api/createStudentPLans'
+import { PaymentReceiving } from '../PaymentReceiving'
 
 interface StudentEditProps {
   studentParansId: string
@@ -48,15 +49,6 @@ interface StudentEditProps {
 interface Data {
   id: string
   name: string
-}
-
-interface PlanGenerateData {
-  id: string
-  createdAt: Date
-  dueDate: Date
-  planId: string
-  planValue: number
-  studentId: string
 }
 
 const registerFormSchema = z.object({
@@ -82,9 +74,11 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
 
   const [student, setStudent] = useState<Data | null>(null)
 
-  const [plansGenerate, setPlansGenerate] = useState<PlanGenerateData | null>(
-    null,
-  )
+  const [studentSelect, setStudentSelect] = useState('')
+
+  const [plansGenerate, setPlansGenerate] = useState('')
+
+  const [selectPlansGenerate, setSelectPlansGenerate] = useState('')
 
   const [err, setError] = useState('')
 
@@ -92,11 +86,11 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
 
   const [planObjectPrice, setPlanObjetcPrice] = useState('')
 
+  const [editingPlanGenerate, setEditingPlanGenerate] = useState(false)
+
   const planNameRef = useRef('')
 
   const planPriceRef = useRef('')
-
-  const dueDateRef = useRef('')
 
   const [modalOpen, setModalOpen] = useState(false)
 
@@ -126,8 +120,6 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
   }
 
   useEffect(() => {
-    console.log('Primeiro consoleLog', studentParansId)
-
     const fetchData = async () => {
       try {
         const data = await FindPlansGenerate({
@@ -137,7 +129,7 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
         // const { planGenerate } = data
 
         setPlansGenerate(data)
-        console.log('PlanGenerate', plansGenerate)
+        // console.log('PlanGenerate', data)
       } catch (err) {
         setError(err)
       }
@@ -190,12 +182,15 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
     handleRegister()
   }
 
-  async function handleRegister() {
-    console.log('Valor do plano', planObjectPrice)
-    console.log('Text Modal Alert', textModalAlert)
-    console.log('PlanId', usePlanId)
-    console.log('Student Id', student?.id)
+  function handleEdit(plansGenerateId: any) {
+    console.log('plansGenerateId', plansGenerateId)
+    setSelectPlansGenerate(plansGenerateId)
+    setStudentSelect(student)
+    setEditingPlanGenerate(true)
+    // setModalOpen(true)
+  }
 
+  async function handleRegister() {
     try {
       const params: ICreateStudentPLanParans = {
         planId: usePlanId,
@@ -226,6 +221,35 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
 
   return (
     <>
+      {editingPlanGenerate && (
+        <OverlayAlert>
+          <ContainerAlert>
+            <ContainerModalAlert>
+              <PaymentReceiving
+                plansGenerateId={selectPlansGenerate.Id}
+                studentSelect={student}
+              />
+              <ButtonContainerAlert>
+                <ButtonAlert
+                  onClick={() => {
+                    handlerGeneratePlan()
+                    setIsOpen(false)
+                  }}
+                >
+                  Ok
+                </ButtonAlert>
+                <ButtonAlert
+                  onClick={() => {
+                    setEditingPlanGenerate(false)
+                  }}
+                >
+                  Cancelar
+                </ButtonAlert>
+              </ButtonContainerAlert>
+            </ContainerModalAlert>
+          </ContainerAlert>
+        </OverlayAlert>
+      )}
       {isOpen && (
         <OverlayAlert>
           <ContainerAlert>
@@ -254,6 +278,7 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
           </ContainerAlert>
         </OverlayAlert>
       )}
+
       <ModalInfo isOpen={modalOpen} setIsOpen={setModalOpen}>
         <TextInfo>
           <h1>{textModal}</h1>
@@ -312,7 +337,6 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
                     contentEditable={false}
                     readOnly={true}
                     defaultValue={planObjectPrice}
-                    placeholder="Digite seu nome completo"
                     style={{ width: '20' }}
                   />
                   {errors.name && (
@@ -325,7 +349,6 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
                   <Text>Final do plano:</Text>
                   <TextInput
                     {...register('dueData', {})}
-                    placeholder="Digite sua data de Nascimento completo"
                     style={{ width: '100%' }}
                     onBlur={(e) => {
                       e.target.value = dataMask(e.target.value)
@@ -359,14 +382,19 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
           <Table>
             <Thead>
               <tr>
-                <td style={{ width: '20%' }}>Vencimento:</td>
-                <td style={{ width: '10%' }}>Parcela:</td>
-                <td style={{ width: '10%' }}>Pagament:</td>
+                <td style={{ width: '20%' }}>Descrição:</td>
+                <td style={{ width: '10%' }}>Vencimento:</td>
+                <td style={{ width: '10%' }}>Valor:</td>
+                <td style={{ width: '10%' }}>Pagamento:</td>
+                <td style={{ width: '10%' }}>Forma:</td>
               </tr>
             </Thead>
             <TbodyResult>
               {plansGenerate.map((plansGenerate) => (
                 <tr key={plansGenerate?.Id}>
+                  <td onClick={() => handleEdit(plansGenerate.id)}>
+                    {plansGenerate.plan.name}
+                  </td>
                   <td
                   // onClick={() => handleEdit(plan.id)}
                   // style={{
@@ -386,6 +414,7 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
                       paddingLeft: '1rem',
                     }}
                   >
+                    R$
                     {plansGenerate.planValue}
                   </td>
 
@@ -393,7 +422,14 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
                     // onClick={() => handleEdit(plan.id)}
                     style={{ width: '10%', paddingLeft: '1rem' }}
                   >
-                    {plansGenerate.createdAt}
+                    {plansGenerate.plan.paymentDate}
+                  </td>
+
+                  <td
+                    // onClick={() => handleEdit(plan.id)}
+                    style={{ width: '10%', paddingLeft: '1rem' }}
+                  >
+                    {/* {plansGenerate.createdAt} */}
                   </td>
                 </tr>
               ))}

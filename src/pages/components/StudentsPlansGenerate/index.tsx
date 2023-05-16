@@ -183,11 +183,11 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
   }
 
   function handleEdit(plansGenerateId: any) {
-    console.log('plansGenerateId', plansGenerateId)
+    // console.log('plansGenerateId', plansGenerateId)
     setSelectPlansGenerate(plansGenerateId)
     setStudentSelect(student)
     setEditingPlanGenerate(true)
-    // setModalOpen(true)
+    setModalOpen(true)
   }
 
   async function handleRegister() {
@@ -221,35 +221,6 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
 
   return (
     <>
-      {editingPlanGenerate && (
-        <OverlayAlert>
-          <ContainerAlert>
-            <ContainerModalAlert>
-              <PaymentReceiving
-                plansGenerateId={selectPlansGenerate.Id}
-                studentSelect={student}
-              />
-              <ButtonContainerAlert>
-                <ButtonAlert
-                  onClick={() => {
-                    handlerGeneratePlan()
-                    setIsOpen(false)
-                  }}
-                >
-                  Ok
-                </ButtonAlert>
-                <ButtonAlert
-                  onClick={() => {
-                    setEditingPlanGenerate(false)
-                  }}
-                >
-                  Cancelar
-                </ButtonAlert>
-              </ButtonContainerAlert>
-            </ContainerModalAlert>
-          </ContainerAlert>
-        </OverlayAlert>
-      )}
       {isOpen && (
         <OverlayAlert>
           <ContainerAlert>
@@ -280,9 +251,16 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
       )}
 
       <ModalInfo isOpen={modalOpen} setIsOpen={setModalOpen}>
-        <TextInfo>
-          <h1>{textModal}</h1>
-        </TextInfo>
+        {editingPlanGenerate ? (
+          <PaymentReceiving
+            plansGenerateId={selectPlansGenerate}
+            studentSelect={student}
+          />
+        ) : (
+          <TextInfo>
+            <h1>{textModal}</h1>
+          </TextInfo>
+        )}
       </ModalInfo>
 
       <Form as="form" onSubmit={handleSubmit(handleRegister)}>

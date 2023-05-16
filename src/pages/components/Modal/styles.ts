@@ -30,7 +30,7 @@ export const ContainerModal = styled('div', {
   top: 'calc(55% - 280px)', // move o modal 100 pixels para cima
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  zIndex: 1000,
+  zIndex: 999,
   backgroundColor: '$gray700',
   border: 'none',
   borderRadius: '8px',
@@ -61,7 +61,7 @@ export const ContainerButton = styled('div', {
 
 export const ButtonModal = styled('button', {
   color: '$ignite300',
-  zIndex: 1001,
+  zIndex: 1000,
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',

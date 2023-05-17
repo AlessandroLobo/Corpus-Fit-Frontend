@@ -261,6 +261,25 @@ export const TextAlert = styled('div', {
   },
 })
 
+export const ButtonContainerAlert = styled('div', {
+  display: 'flex',
+  gap: '4rem',
+  justifyContent: 'center',
+  borderRadius: '8px',
+  fontSize: '20px',
+  alignItems: 'center',
+  width: '100%',
+  marginTop: '2rem',
+
+  color: '$gray400',
+  // border: '1px solid red',
+
+  '&:hover': {
+    color: '$ignite300',
+    cursor: 'pointer',
+  },
+})
+
 export const ButtonAlert = styled('button', {
   gap: '0.3rem',
   flex: '1',
@@ -286,25 +305,6 @@ export const ButtonAlert = styled('button', {
 
   '&:active': {
     transform: 'scale(0.98)',
-  },
-})
-
-export const ButtonContainerAlert = styled('div', {
-  display: 'flex',
-  gap: '4rem',
-  justifyContent: 'center',
-  borderRadius: '8px',
-  fontSize: '20px',
-  alignItems: 'center',
-  width: '100%',
-  marginTop: '2rem',
-
-  color: '$gray400',
-  // border: '1px solid red',
-
-  '&:hover': {
-    color: '$ignite300',
-    cursor: 'pointer',
   },
 })
 

@@ -12,6 +12,8 @@ export const Form = styled(Box, {
   marginLeft: '1rem',
   display: 'block',
   flexDirection: 'column',
+  zIndex: '1002',
+
   width: '38rem',
   height: '20rem',
   gap: '$4',
@@ -45,6 +47,57 @@ export const Text = styled('text', {
   textAlign: 'left',
   fontSize: '0.95rem',
   paddingBottom: '0.5rem',
+})
+
+// ------------------ Cancelar Alert ------------------//
+
+export const ContainerAlert = styled('main', {
+  maxWidth: 872,
+  margin: '$20 auto $4',
+  padding: '0 $4',
+  zIndex: 1005,
+  // border: '1px solid red',
+})
+
+export const OverlayAlert = styled('div', {
+  position: 'fixed',
+  width: '100%',
+  height: '100%',
+  top: 0,
+  left: 0,
+  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  zIndex: 1005,
+  backdropFilter: 'blur(5px)', // define o efeito de desfoque
+})
+
+export const ContainerModalAlert = styled('div', {
+  display: 'flex  ',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  maxWidth: 872,
+  width: '25rem',
+  height: '10rem',
+  margin: '$20 auto $4',
+
+  position: 'fixed',
+  top: 'calc(55% - 280px)', // move o modal 100 pixels para cima
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  zIndex: 1000,
+  backgroundColor: '$gray700',
+  border: 'none',
+  borderRadius: '8px',
+  // boxShadow: '0 0 10px rgba(0, 0, 0, 0.25)',
+  // border: '1px solid red',
+})
+
+export const TextAlert = styled('div', {
+  paddingTop: '1rem',
+
+  h2: {
+    color: '$gray100',
+  },
 })
 
 // -------------------------- Lista --------------------------------
@@ -183,4 +236,82 @@ export const TbodyResult = styled('tbody', {
       },
     },
   },
+})
+
+export const ButtonContainerAlert = styled('div', {
+  display: 'flex',
+  gap: '4rem',
+  justifyContent: 'center',
+  borderRadius: '8px',
+  fontSize: '20px',
+  alignItems: 'center',
+  width: '100%',
+  marginTop: '2rem',
+  paddingLeft: '2rem',
+  paddingRight: '2rem',
+  paddingBottom: '2rem',
+  zIndex: '1002',
+  color: '$gray400',
+  // border: '1px solid red',
+
+  '&:hover': {
+    color: '$ignite300',
+    cursor: 'pointer',
+  },
+})
+
+export const ButtonAlert = styled('button', {
+  gap: '0.3rem',
+  flex: '1',
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  lineHeight: '1.5rem',
+  maxWidth: '100%',
+  justifyContent: 'center',
+  padding: '12px 24px',
+  borderRadius: '4px',
+  backgroundColor: '#007bff',
+  color: '#fff',
+  fontSize: '16px',
+  fontWeight: '600',
+  border: 'none',
+  cursor: 'pointer',
+  transition: '.2s ease-in-out',
+
+  '&:hover': {
+    backgroundColor: '#0069d9',
+  },
+
+  '&:active': {
+    transform: 'scale(0.98)',
+  },
+  '&:disabled': {
+    backgroundColor: '$gray500',
+    cursor: 'not-allowed',
+    color: '$gray400',
+  },
+})
+
+export const Select = styled('select', {
+  height: '45px',
+  color: '$gray100',
+  borderRadius: '8px',
+  padding: '$2 $4',
+  zIndex: '1002',
+  fontSize: '15px',
+  backgroundColor: '$gray900',
+  border: 'none',
+  appearance: 'none',
+
+  '&:focus': {
+    outline: 'none',
+    boxShadow: '0 0 0 1px $colors$ignite300',
+  },
+})
+
+export const Option = styled('option', {
+  backgroundColor: '$gray900',
+  color: '$gray100',
+  zIndex: '1002',
 })

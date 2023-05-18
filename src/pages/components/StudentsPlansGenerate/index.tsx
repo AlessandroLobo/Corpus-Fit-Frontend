@@ -126,11 +126,9 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
           studentParansId,
         })
 
-        // const { planGenerate } = data
-
         setPlansGenerate(data)
-        // console.log('PlanGenerate', data)
-      } catch (err) {
+        console.log('data', data)
+      } catch (error) {
         setError(err)
       }
     }
@@ -138,7 +136,7 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
     if (studentParansId) {
       fetchData()
     }
-  }, [planObjectPrice, studentParansId])
+  }, [err, planObjectPrice, studentParansId])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -373,17 +371,7 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
                   <td onClick={() => handleEdit(plansGenerate.id)}>
                     {plansGenerate.plan.name}
                   </td>
-                  <td
-                  // onClick={() => handleEdit(plan.id)}
-                  // style={{
-                  //   width: '60%',
-                  //   paddingLeft: '1rem',
-                  //   textAlign: 'left',
-                  //   textTransform: 'uppercase',
-                  // }}
-                  >
-                    {plansGenerate.dueDate}
-                  </td>
+                  <td>{plansGenerate.dueDate}</td>
 
                   <td
                     // onClick={() => handleEdit(plan.id)}
@@ -400,14 +388,14 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
                     // onClick={() => handleEdit(plan.id)}
                     style={{ width: '10%', paddingLeft: '1rem' }}
                   >
-                    {plansGenerate.plan.paymentDate}
+                    {plansGenerate.financials[0]?.paymentDate}
                   </td>
 
                   <td
                     // onClick={() => handleEdit(plan.id)}
                     style={{ width: '10%', paddingLeft: '1rem' }}
                   >
-                    {/* {plansGenerate.createdAt} */}
+                    {plansGenerate.financials[0]?.paymentType}
                   </td>
                 </tr>
               ))}

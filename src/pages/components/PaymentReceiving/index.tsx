@@ -40,7 +40,11 @@ export const PaymentReceiving = ({
 }: PaymentReceivingProps) => {
   const [err, setError] = useState('')
 
-  const [plansGenerate, setPlansGenerate] = useState([])
+  const [plansGenerate, setPlansGenerate] = useState<{
+    dueDate: string
+    planValue: number
+    financials?: any[]
+  }>({ dueDate: '', planValue: 0 })
 
   const [isOpen, setIsOpen] = useState(false)
 
@@ -171,7 +175,7 @@ export const PaymentReceiving = ({
               </Thead>
               <TbodyResult>
                 <tr>
-                  <td>{plansGenerate.dueDate}</td>
+                  <td>{plansGenerate && plansGenerate.dueDate}</td>
 
                   <td
                     style={{
@@ -180,21 +184,25 @@ export const PaymentReceiving = ({
                     }}
                   >
                     R$
-                    {plansGenerate.planValue}
+                    {plansGenerate && plansGenerate.planValue}
                   </td>
 
                   <td
                     // onClick={() => handleEdit(plan.id)}
                     style={{ width: '10%', paddingLeft: '1rem' }}
                   >
-                    {plansGenerate.paymentDate}
+                    {plansGenerate.financials &&
+                      plansGenerate.financials.length > 0 &&
+                      plansGenerate.financials[0].paymentDate}
                   </td>
 
                   <td
                     // onClick={() => handleEdit(plan.id)}
                     style={{ width: '10%', paddingLeft: '1rem' }}
                   >
-                    {/* {plansGenerate.createdAt} */}
+                    {plansGenerate.financials &&
+                      plansGenerate.financials.length > 0 &&
+                      plansGenerate.financials[0].paymentType}
                   </td>
                 </tr>
               </TbodyResult>

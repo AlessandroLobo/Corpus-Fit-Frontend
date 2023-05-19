@@ -23,6 +23,7 @@ import {
   IMonthlyCreateParans,
   createMonthlyPayment,
 } from '@/pages/api/createMonthlyPayment'
+import { CurrencyDollar, Trash } from '@phosphor-icons/react'
 
 interface PaymentReceivingProps {
   plansGenerateId: any
@@ -34,17 +35,26 @@ interface PaymentMethod {
   value: string
   label: string
 }
+
+interface IPlan {
+  id: string
+  dueDate: string
+  planValue: number
+  financials?: any[] | undefined
+}
+
 export const PaymentReceiving = ({
   plansGenerateId,
   studentSelect,
 }: PaymentReceivingProps) => {
   const [err, setError] = useState('')
 
-  const [plansGenerate, setPlansGenerate] = useState<{
-    dueDate: string
-    planValue: number
-    financials?: any[]
-  }>({ dueDate: '', planValue: 0 })
+  const [plansGenerate, setPlansGenerate] = useState<IPlan>({
+    id: '',
+    dueDate: '',
+    planValue: 0,
+    financials: [],
+  })
 
   const [isOpen, setIsOpen] = useState(false)
 
@@ -141,9 +151,6 @@ export const PaymentReceiving = ({
         <Form>
           <Text>Nome:</Text>
           <TextInput
-            // {...register('name', {
-            //   required: true,
-            // })}
             defaultValue={studentSelect.name || ''}
             placeholder="Digite seu nome completo"
             style={{ width: '100%' }}
@@ -152,11 +159,7 @@ export const PaymentReceiving = ({
             }
           />
           <Text>Forma de pagamento:</Text>
-          <Select
-            style={{ width: '100%' }}
-            onChange={handleSelectOption}
-          // value={selectedValue}
-          >
+          <Select style={{ width: '100%' }} onChange={handleSelectOption}>
             {paymentMethod.map((paymentMethod) => (
               <Option key={paymentMethod.id} value={paymentMethod.value}>
                 {paymentMethod.label}
@@ -187,19 +190,13 @@ export const PaymentReceiving = ({
                     {plansGenerate && plansGenerate.planValue}
                   </td>
 
-                  <td
-                    // onClick={() => handleEdit(plan.id)}
-                    style={{ width: '10%', paddingLeft: '1rem' }}
-                  >
+                  <td style={{ width: '10%', paddingLeft: '1rem' }}>
                     {plansGenerate.financials &&
                       plansGenerate.financials.length > 0 &&
                       plansGenerate.financials[0].paymentDate}
                   </td>
 
-                  <td
-                    // onClick={() => handleEdit(plan.id)}
-                    style={{ width: '10%', paddingLeft: '1rem' }}
-                  >
+                  <td style={{ width: '10%', paddingLeft: '1rem' }}>
                     {plansGenerate.financials &&
                       plansGenerate.financials.length > 0 &&
                       plansGenerate.financials[0].paymentType}
@@ -215,20 +212,20 @@ export const PaymentReceiving = ({
             type="button"
             onClick={() => {
               handleRegister()
-              // setIsOpen(false)
             }}
           >
             Efetuar pagamento
+            <CurrencyDollar />
           </ButtonAlert>
           <ButtonAlert
             disabled={!buttonDisabled}
             type="button"
             onClick={() => {
               handleRegister()
-              // setIsOpen(false)
             }}
           >
             Excluir Pagamento
+            <Trash />
           </ButtonAlert>
         </ButtonContainerAlert>
       </Container>

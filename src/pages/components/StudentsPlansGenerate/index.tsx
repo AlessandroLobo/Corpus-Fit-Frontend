@@ -22,10 +22,9 @@ import {
   TextInfo,
   TextInput,
   TextInputContainer,
-  TextInputFindContainer,
   Thead,
 } from './styles'
-import { z } from 'zod'
+import { date, z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import React, { useEffect, useRef, useState } from 'react'
@@ -41,6 +40,7 @@ import {
   FindPlansGenerate,
 } from '@/pages/api/createStudentPLans'
 import { PaymentReceiving } from '../PaymentReceiving'
+import dayjs from 'dayjs'
 
 interface StudentEditProps {
   studentParansId: string
@@ -55,7 +55,8 @@ const registerFormSchema = z.object({
   name: z.string().min(3, 'O nome deve ter pelo menos 3 caracteres'),
   plan: z.string().nonempty({ message: 'Escolha um Plano' }),
   price: z.number().min(0.01, 'O valor mínimo é de R$ 10,00'),
-  dueData: z.string(),
+  dueDate: z.string(),
+  studentStatus: z.string(),
 })
 
 type RegisterFormData = z.infer<typeof registerFormSchema>
@@ -75,6 +76,10 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
   const [student, setStudent] = useState<Data | null>(null)
 
   const [studentSelect, setStudentSelect] = useState('')
+
+  const [studentActive, setStudentActive] = useState('')
+
+  const [maxDueDate, setMaxDueDate] = useState('')
 
   const [plansGenerate, setPlansGenerate] = useState('')
 
@@ -122,21 +127,41 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await FindPlansGenerate({
-          studentParansId,
-        })
+        const data = await FindPlansGenerate({ studentParansId })
 
-        setPlansGenerate(data)
+        setPlansGenerate(data.formattedStudentPlans)
+
+        const maxDueDateFormat = dayjs(data.maxDueDate)
+        const formattedMaxDueDate = maxDueDateFormat.isValid()
+          ? maxDueDateFormat.format('DD/MM/YYYY')
+          : 'Sem Plano'
+        setMaxDueDate(formattedMaxDueDate)
+
+        const dateNow = dayjs()
+        const maxDueDate = dayjs(data.maxDueDate, 'DD/MM/YYYY')
+
+        console.log('dateNow', dateNow)
+        console.log('maxDueDate', maxDueDate)
         console.log('data', data)
+
+        if (maxDueDate.diff(dateNow, 'day') > 0) {
+          setStudentActive('Ativo')
+          console.log('Ativo -------------')
+        } else {
+          setStudentActive('Inativo')
+          console.log('Inativo=========')
+        }
+
+        console.log('studentActive', studentActive)
       } catch (error) {
-        setError(err)
+        setError(err) // Atualizar a variável de erro corretamente
       }
     }
 
     if (studentParansId) {
       fetchData()
     }
-  }, [err, planObjectPrice, studentParansId])
+  }, [studentActive, err, studentParansId])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -155,7 +180,6 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
 
         const planName = studentData.Plan.name
         const planPrice = studentData.Plan.price
-
         planNameRef.current = planName
         planPriceRef.current = planPrice
       } catch (error) {
@@ -183,7 +207,7 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
   function handleEdit(plansGenerateId: any) {
     // console.log('plansGenerateId', plansGenerateId)
     setSelectPlansGenerate(plansGenerateId)
-    setStudentSelect(student)
+    setStudentSelect(student ? student.id : '')
     setEditingPlanGenerate(true)
     setModalOpen(true)
   }
@@ -192,8 +216,8 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
     try {
       const params: ICreateStudentPLanParans = {
         planId: usePlanId,
-        studentId: student?.id,
-        planValue: planObjectPrice,
+        studentId: student?.id ?? '',
+        planValue: parseFloat(planObjectPrice),
       }
       await CreateStudentPlans(params)
 
@@ -313,7 +337,7 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
                     contentEditable={false}
                     readOnly={true}
                     defaultValue={planObjectPrice}
-                    style={{ width: '20' }}
+                    style={{ width: '7rem', textAlign: 'center' }}
                   />
                   {errors.name && (
                     <FormError>
@@ -324,16 +348,39 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
                 <ContainerPlanTitle>
                   <Text>Final do plano:</Text>
                   <TextInput
-                    {...register('dueData', {})}
-                    style={{ width: '100%' }}
-                    onBlur={(e) => {
-                      e.target.value = dataMask(e.target.value)
-                      trigger('dueData')
-                    }}
+                    {...register('dueDate', {
+                      required: true,
+                    })}
+                    defaultValue={maxDueDate || ''}
+                    placeholder="Digite seu nome completo"
+                    style={{ width: '7rem', textAlign: 'center' }}
+                    onBlur={(event) =>
+                      (event.target.value = event.target.value.toUpperCase())
+                    }
                   />
-                  {errors.dueData && (
+                  {errors.dueDate && (
                     <FormError>
-                      <Text>{errors.dueData?.message}</Text>
+                      <Text>{errors.dueDate?.message}</Text>
+                    </FormError>
+                  )}
+                </ContainerPlanTitle>
+                <ContainerPlanTitle>
+                  {' '}
+                  <Text>Status:</Text>
+                  <TextInput
+                    {...register('studentStatus', {
+                      required: true,
+                    })}
+                    defaultValue={studentActive || ''}
+                    placeholder="Digite seu nome completo"
+                    style={{ width: '7rem', textAlign: 'center' }}
+                    onBlur={(event) =>
+                      (event.target.value = event.target.value.toUpperCase())
+                    }
+                  />
+                  {errors.dueDate && (
+                    <FormError>
+                      <Text>{errors.dueDate?.message}</Text>
                     </FormError>
                   )}
                 </ContainerPlanTitle>
@@ -366,39 +413,42 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
               </tr>
             </Thead>
             <TbodyResult>
-              {plansGenerate.map((plansGenerate) => (
-                <tr key={plansGenerate?.Id}>
-                  <td onClick={() => handleEdit(plansGenerate.id)}>
-                    {plansGenerate.plan.name}
-                  </td>
-                  <td>{plansGenerate.dueDate}</td>
+              {Array.isArray(plansGenerate) &&
+                plansGenerate.map((plansGenerate) => (
+                  <tr key={plansGenerate?.Id}>
+                    <td onClick={() => handleEdit(plansGenerate.id)}>
+                      {plansGenerate.plan.name}
+                    </td>
+                    <td onClick={() => handleEdit(plansGenerate.id)}>
+                      {plansGenerate.dueDate}
+                    </td>
 
-                  <td
-                    // onClick={() => handleEdit(plan.id)}
-                    style={{
-                      width: '10%',
-                      paddingLeft: '1rem',
-                    }}
-                  >
-                    R$
-                    {plansGenerate.planValue}
-                  </td>
+                    <td
+                      onClick={() => handleEdit(plansGenerate.id)}
+                      style={{
+                        // width: '10%',
+                        paddingLeft: '1rem',
+                      }}
+                    >
+                      R$
+                      {plansGenerate.planValue}
+                    </td>
 
-                  <td
-                    // onClick={() => handleEdit(plan.id)}
-                    style={{ width: '10%', paddingLeft: '1rem' }}
-                  >
-                    {plansGenerate.financials[0]?.paymentDate}
-                  </td>
+                    <td
+                      onClick={() => handleEdit(plansGenerate.id)}
+                      style={{ paddingLeft: '1rem' }}
+                    >
+                      {plansGenerate.financials[0]?.paymentDate}
+                    </td>
 
-                  <td
-                    // onClick={() => handleEdit(plan.id)}
-                    style={{ width: '10%', paddingLeft: '1rem' }}
-                  >
-                    {plansGenerate.financials[0]?.paymentType}
-                  </td>
-                </tr>
-              ))}
+                    <td
+                      onClick={() => handleEdit(plansGenerate.id)}
+                      style={{ paddingLeft: '1rem' }}
+                    >
+                      {plansGenerate.financials[0]?.paymentType}
+                    </td>
+                  </tr>
+                ))}
             </TbodyResult>
           </Table>
         </ContainerList>

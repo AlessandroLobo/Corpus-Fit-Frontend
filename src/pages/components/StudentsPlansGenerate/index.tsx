@@ -79,6 +79,8 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
 
   const [studentActive, setStudentActive] = useState('')
 
+  const [studentActiveColor, setStudentActiveColor] = useState('')
+
   const [maxDueDate, setMaxDueDate] = useState('')
 
   const [plansGenerate, setPlansGenerate] = useState('')
@@ -125,43 +127,8 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
   }
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await FindPlansGenerate({ studentParansId })
-
-        setPlansGenerate(data.formattedStudentPlans)
-
-        const maxDueDateFormat = dayjs(data.maxDueDate)
-        const formattedMaxDueDate = maxDueDateFormat.isValid()
-          ? maxDueDateFormat.format('DD/MM/YYYY')
-          : 'Sem Plano'
-        setMaxDueDate(formattedMaxDueDate)
-
-        const dateNow = dayjs()
-        const maxDueDate = dayjs(data.maxDueDate, 'DD/MM/YYYY')
-
-        console.log('dateNow', dateNow)
-        console.log('maxDueDate', maxDueDate)
-        console.log('data', data)
-
-        if (maxDueDate.diff(dateNow, 'day') > 0) {
-          setStudentActive('Ativo')
-          console.log('Ativo -------------')
-        } else {
-          setStudentActive('Inativo')
-          console.log('Inativo=========')
-        }
-
-        console.log('studentActive', studentActive)
-      } catch (error) {
-        setError(err) // Atualizar a variável de erro corretamente
-      }
-    }
-
-    if (studentParansId) {
-      fetchData()
-    }
-  }, [studentActive, err, studentParansId])
+    FindPlansGenerateFunction()
+  }, [modalOpen])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -187,7 +154,7 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
       }
     }
     fetchData()
-  }, [studentParansId, err])
+  }, [studentParansId, err, modalOpen])
 
   if (!student) {
     return <Form>Carregando dados...</Form>
@@ -196,8 +163,53 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
   if (loading) {
     return <Form>Carregando planos...</Form>
   }
+
+  function FindPlansGenerateFunction() {
+    const fetchData = async () => {
+      try {
+        const data = await FindPlansGenerate({ studentParansId })
+
+        setPlansGenerate(data.formattedStudentPlans)
+
+        const maxDueDateFormat = dayjs(data.maxDueDate)
+        const formattedMaxDueDate = maxDueDateFormat.isValid()
+          ? maxDueDateFormat.format('DD/MM/YYYY')
+          : 'Sem Plano'
+
+        const dateNow = dayjs()
+        const maxDueDateInput = dayjs(data.maxDueDate, 'DD/MM/YYYY')
+
+        console.log(formattedMaxDueDate)
+
+        if (maxDueDateInput.diff(dateNow, 'day') > 0) {
+          setMaxDueDate(formattedMaxDueDate)
+          setStudentActive('Ativo')
+
+          setStudentActiveColor('#00e7f9')
+          console.log('Ativo -------------')
+        } else {
+          setMaxDueDate(formattedMaxDueDate)
+          setStudentActive('Inativo')
+
+          setStudentActiveColor('#FF0000')
+          console.log('Inativo=========')
+        }
+
+        console.log('studentActive', studentActive)
+      } catch (error) {
+        setError(err) // Atualizar a variável de erro corretamente
+      }
+    }
+
+    if (studentParansId) {
+      fetchData()
+    }
+  }
+
   function handleAlertGeneratePlan() {
+    setTextModalAlert('Deseja gerar um novo plano?')
     setIsOpen(true)
+    FindPlansGenerateFunction()
   }
 
   function handlerGeneratePlan() {
@@ -220,8 +232,7 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
         planValue: parseFloat(planObjectPrice),
       }
       await CreateStudentPlans(params)
-
-      setTextModalAlert('Plano gerado com sucesso!')
+      await FindPlansGenerateFunction()
     } catch (err: any) {
       if (err.response && err.response.status === 400) {
         if (
@@ -255,6 +266,8 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
                   onClick={() => {
                     handlerGeneratePlan()
                     setIsOpen(false)
+                    FindPlansGenerateFunction()
+                    setButtonCreatePlanDisabled(false)
                   }}
                 >
                   Ok
@@ -262,6 +275,7 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
                 <ButtonAlert
                   onClick={() => {
                     setIsOpen(false)
+                    FindPlansGenerateFunction()
                   }}
                 >
                   Cancelar
@@ -351,8 +365,8 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
                     {...register('dueDate', {
                       required: true,
                     })}
-                    defaultValue={maxDueDate || ''}
-                    placeholder="Digite seu nome completo"
+                    value={maxDueDate || ''}
+                    id="dueDate"
                     style={{ width: '7rem', textAlign: 'center' }}
                     onBlur={(event) =>
                       (event.target.value = event.target.value.toUpperCase())
@@ -371,9 +385,15 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
                     {...register('studentStatus', {
                       required: true,
                     })}
-                    defaultValue={studentActive || ''}
+                    value={studentActive || ''}
                     placeholder="Digite seu nome completo"
-                    style={{ width: '7rem', textAlign: 'center' }}
+                    style={{
+                      width: '7rem',
+                      textAlign: 'center',
+                      color: studentActiveColor,
+                      fontWeight: 'bold',
+                      fontSize: '1.2rem',
+                    }}
                     onBlur={(event) =>
                       (event.target.value = event.target.value.toUpperCase())
                     }

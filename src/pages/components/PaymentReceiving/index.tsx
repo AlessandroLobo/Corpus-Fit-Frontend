@@ -17,13 +17,17 @@ import {
   TextInput,
   Thead,
 } from './styles'
-import { FindUniquePlans } from '@/pages/api/createStudentPLans'
+import {
+  DeletePlansGenerate,
+  FindUniquePlans,
+} from '@/pages/api/createStudentPLans'
 import { usePaymentMethod } from '@/utils/usePaymentMethod'
 import {
   IMonthlyCreateParans,
   createMonthlyPayment,
+  deleteMonthlyPayment,
 } from '@/pages/api/createMonthlyPayment'
-import { CurrencyDollar, Trash } from '@phosphor-icons/react'
+import { ArrowUUpLeft, CurrencyDollar, Trash } from '@phosphor-icons/react'
 
 interface PaymentReceivingProps {
   plansGenerateId: any
@@ -58,7 +62,17 @@ export const PaymentReceiving = ({
 
   const [isOpen, setIsOpen] = useState(false)
 
+  const [isOpenDelete, setIsOpenDelete] = useState(false)
+
+  const [isOpenRefund, setIsOpenRefund] = useState(false)
+
   const [buttonDisabled, setButtonDisabled] = useState(false)
+
+  const [buttonDeleteDisabled, setButtonDeleteDisabled] = useState(true)
+
+  const [inputSelect, setInputSelect] = useState(false)
+
+  const [refundDelete, setRefundDelete] = useState(false)
 
   const [registerError, setRegisterError] = useState<string | null>(null)
 
@@ -66,17 +80,27 @@ export const PaymentReceiving = ({
 
   const paymentMethod: PaymentMethod[] = usePaymentMethod()
 
-  console.log('Planid enviando parametro', plansGenerate)
-  // console.log('Aluno', studentSelect)
-
-  useEffect(() => {
+  // console.log('Planid enviando parametro', plansGenerate)
+  function FindUniquePlansFunction() {
     const fetchData = async () => {
       try {
         const data = await FindUniquePlans({
           plansGenerateId,
         })
 
-        // const { planGenerate } = data
+        console.log(data.id)
+
+        const financials = data.financials
+        console.log(data.financials)
+
+        if (financials.length > 0) {
+          console.log('entrou no if')
+          setButtonDeleteDisabled(true)
+          setRefundDelete(false)
+          setInputSelect(true)
+        } else {
+          setRefundDelete(true)
+        }
 
         setPlansGenerate(data)
       } catch (error) {
@@ -87,8 +111,12 @@ export const PaymentReceiving = ({
     if (plansGenerateId) {
       fetchData()
     }
-  }, [err, plansGenerateId])
-  // console.log(studentSelect)
+  }
+
+  useEffect(() => {
+    console.log('teste useEffect')
+    FindUniquePlansFunction()
+  }, [isOpenRefund, isOpenDelete, isOpen, refundDelete])
 
   function handleSelectOption(event: React.ChangeEvent<HTMLSelectElement>) {
     setButtonDisabled(true)
@@ -96,7 +124,6 @@ export const PaymentReceiving = ({
   }
 
   async function handleRegister() {
-    console.log(selectedValue)
     try {
       const params: IMonthlyCreateParans = {
         studentId: studentSelect.id,
@@ -106,22 +133,38 @@ export const PaymentReceiving = ({
       }
       await createMonthlyPayment(params)
       setIsOpen(true)
+      setButtonDisabled(false)
     } catch (err: any) {
-      if (err.response && err.response.status === 400) {
-        if (
-          err.response.data.message === 'Error creating user: Cpf já cadastrado'
-        ) {
-          setRegisterError('O CPF informado já está cadastrado.')
-        } else {
-          setRegisterError(
-            'Ocorreu um erro ao criar usuário. Por favor, tente novamente mais tarde.',
-          )
-        }
-      } else {
-        setRegisterError(
-          'Ocorreu um erro interno do servidor. Por favor, tente novamente mais tarde.',
-        )
-      }
+      console.log(err)
+      setError('Something went wrong')
+    }
+  }
+
+  async function handleDelete() {
+    try {
+      await DeletePlansGenerate(plansGenerate.id)
+      setButtonDeleteDisabled(false)
+      setPlansGenerate({
+        id: '',
+        dueDate: '',
+        planValue: 0,
+        financials: [],
+      })
+      setInputSelect(true)
+      // setTextModal('Aluno deletado com sucesso!')
+    } catch (err: any) {
+      // handle errors...
+    }
+  }
+
+  async function handleRefund() {
+    try {
+      await deleteMonthlyPayment(plansGenerate.financials[0].id)
+      setRefundDelete(true)
+      setInputSelect(false)
+      // setTextModal('Aluno deletado com sucesso!')
+    } catch (err: any) {
+      // handle errors...
     }
   }
 
@@ -147,11 +190,67 @@ export const PaymentReceiving = ({
           </ContainerAlert>
         </OverlayAlert>
       )}
+      {isOpenDelete && (
+        <OverlayAlert>
+          <ContainerAlert>
+            <ContainerModalAlert>
+              <TextAlert>
+                <h2>Deseja excluir esse pagamento?</h2>
+              </TextAlert>
+              <ButtonContainerAlert>
+                <ButtonAlert
+                  onClick={() => {
+                    handleDelete()
+                    setIsOpenDelete(false)
+                  }}
+                >
+                  Deletar
+                </ButtonAlert>
+                <ButtonAlert
+                  onClick={() => {
+                    setIsOpenDelete(false)
+                  }}
+                >
+                  Cancelar
+                </ButtonAlert>
+              </ButtonContainerAlert>
+            </ContainerModalAlert>
+          </ContainerAlert>
+        </OverlayAlert>
+      )}
+      {isOpenRefund && (
+        <OverlayAlert>
+          <ContainerAlert>
+            <ContainerModalAlert>
+              <TextAlert>
+                <h2>Deseja estornar esse pagamento?</h2>
+              </TextAlert>
+              <ButtonContainerAlert>
+                <ButtonAlert
+                  onClick={() => {
+                    handleRefund()
+                    setIsOpenRefund(false)
+                  }}
+                >
+                  Estornar
+                </ButtonAlert>
+                <ButtonAlert
+                  onClick={() => {
+                    setIsOpenRefund(false)
+                  }}
+                >
+                  Cancelar
+                </ButtonAlert>
+              </ButtonContainerAlert>
+            </ContainerModalAlert>
+          </ContainerAlert>
+        </OverlayAlert>
+      )}
       <Container>
         <Form>
           <Text>Nome:</Text>
           <TextInput
-            defaultValue={studentSelect.name || ''}
+            value={studentSelect.name || ''}
             placeholder="Digite seu nome completo"
             style={{ width: '100%' }}
             onBlur={(event) =>
@@ -159,7 +258,11 @@ export const PaymentReceiving = ({
             }
           />
           <Text>Forma de pagamento:</Text>
-          <Select style={{ width: '100%' }} onChange={handleSelectOption}>
+          <Select
+            disabled={inputSelect}
+            style={{ width: '100%' }}
+            onChange={handleSelectOption}
+          >
             {paymentMethod.map((paymentMethod) => (
               <Option key={paymentMethod.id} value={paymentMethod.value}>
                 {paymentMethod.label}
@@ -217,16 +320,29 @@ export const PaymentReceiving = ({
             Efetuar pagamento
             <CurrencyDollar />
           </ButtonAlert>
-          <ButtonAlert
-            disabled={!buttonDisabled}
-            type="button"
-            onClick={() => {
-              handleRegister()
-            }}
-          >
-            Excluir Pagamento
-            <Trash />
-          </ButtonAlert>
+          {refundDelete ? (
+            <ButtonAlert
+              disabled={!buttonDeleteDisabled}
+              type="button"
+              onClick={() => {
+                setIsOpenDelete(true)
+              }}
+            >
+              Deletar Plano
+              <Trash />
+            </ButtonAlert>
+          ) : (
+            <ButtonAlert
+              disabled={!buttonDeleteDisabled}
+              type="button"
+              onClick={() => {
+                setIsOpenRefund(true)
+              }}
+            >
+              Estornar Pagamento
+              <ArrowUUpLeft />
+            </ButtonAlert>
+          )}
         </ButtonContainerAlert>
       </Container>
     </>

@@ -24,14 +24,13 @@ import {
   TextInputContainer,
   Thead,
 } from './styles'
-import { date, z } from 'zod'
+import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import React, { useEffect, useRef, useState } from 'react'
 import { FindStudent } from '@/pages/api/getAllStudents/index.api'
 import { getAddress } from '@/utils/getAddress'
 import { usePlans } from '@/pages/api/plans/index.api'
-import { dataMask } from '@/utils/maskUtils'
 import { CalendarPlus } from '@phosphor-icons/react'
 import { ModalInfo } from '../Modal/modalInfo'
 import {
@@ -67,8 +66,6 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
     handleSubmit,
     // reset,
     formState: { errors },
-    trigger,
-    // getValues,
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerFormSchema),
   })
@@ -179,23 +176,17 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
         const dateNow = dayjs()
         const maxDueDateInput = dayjs(data.maxDueDate, 'DD/MM/YYYY')
 
-        console.log(formattedMaxDueDate)
-
         if (maxDueDateInput.diff(dateNow, 'day') > 0) {
           setMaxDueDate(formattedMaxDueDate)
           setStudentActive('Ativo')
 
           setStudentActiveColor('#00e7f9')
-          console.log('Ativo -------------')
         } else {
           setMaxDueDate(formattedMaxDueDate)
           setStudentActive('Inativo')
 
           setStudentActiveColor('#FF0000')
-          console.log('Inativo=========')
         }
-
-        console.log('studentActive', studentActive)
       } catch (error) {
         setError(err) // Atualizar a variável de erro corretamente
       }
@@ -217,7 +208,6 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
   }
 
   function handleEdit(plansGenerateId: any) {
-    // console.log('plansGenerateId', plansGenerateId)
     setSelectPlansGenerate(plansGenerateId)
     setStudentSelect(student ? student.id : '')
     setEditingPlanGenerate(true)
@@ -234,21 +224,8 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
       await CreateStudentPlans(params)
       await FindPlansGenerateFunction()
     } catch (err: any) {
-      if (err.response && err.response.status === 400) {
-        if (
-          err.response.data.message === 'Error creating user: Cpf já cadastrado'
-        ) {
-          setRegisterError('O CPF informado já está cadastrado.')
-        } else {
-          setRegisterError(
-            'Ocorreu um erro ao criar usuário. Por favor, tente novamente mais tarde.',
-          )
-        }
-      } else {
-        setRegisterError(
-          'Ocorreu um erro interno do servidor. Por favor, tente novamente mais tarde.',
-        )
-      }
+      console.log(err)
+      setError('Something went wrong')
     }
   }
 

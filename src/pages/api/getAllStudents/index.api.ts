@@ -37,7 +37,7 @@ export const GetAllStudents = async (
   email: string,
   limit: number,
   offset: number,
-): Promise<{ students: Student[]; total: number }> => {
+): Promise<{ students: Student[]; total: number; maxDueDate: string }> => {
   try {
     const response = await axios.get(
       'http://localhost:3333/students/listStudents',
@@ -50,10 +50,14 @@ export const GetAllStudents = async (
         },
       },
     )
-
-    return { students: response.data.users, total: response.data.total }
+    console.log('GetAllStudents', response.data)
+    return {
+      students: response.data.users,
+      total: response.data.total,
+      maxDueDate: response.data.maxDueDate,
+    }
   } catch (error) {
     console.log(error)
-    return { students: [], total: 0 }
+    return { students: [], total: 0, maxDueDate: '' }
   }
 }

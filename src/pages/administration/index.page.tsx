@@ -90,7 +90,6 @@ export default function Administration({ studentId }: StudentEditProps) {
       console.log('offset menor que 0', offset)
     }
     const data = await GetAllStudents(searchTerm, searchTerm, LIMIT, offset)
-
     // console.log('offset Administration', offset)
 
     // Desestrutura os dados retornados por GetAllStudents
@@ -99,6 +98,7 @@ export default function Administration({ studentId }: StudentEditProps) {
     // Define os estados de students e totalResults com os dados retornados
     setStudents(students)
     setTotalResults(total)
+    console.log(students)
   }
 
   function handleStudentRegistration() {
@@ -230,7 +230,7 @@ export default function Administration({ studentId }: StudentEditProps) {
                         onClick={() => handleEdit(student.id)}
                         style={{ width: '20%', paddingLeft: '10px' }}
                       >
-                        {student.expirationDate}
+                        {student.maxDueDate}
                       </td>
                     </tr>
                   ))}

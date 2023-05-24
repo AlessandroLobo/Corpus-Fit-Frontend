@@ -40,6 +40,7 @@ interface Student {
   email: string
   phone: string
   expirationDate: string
+  maxDueDate: string
 }
 
 interface StudentEditProps {
@@ -87,10 +88,8 @@ export default function Administration({ studentId }: StudentEditProps) {
       (document.querySelector('#search-input') as HTMLInputElement)?.value || ''
     if (offset < 0) {
       setOffset(1)
-      console.log('offset menor que 0', offset)
     }
     const data = await GetAllStudents(searchTerm, searchTerm, LIMIT, offset)
-    // console.log('offset Administration', offset)
 
     // Desestrutura os dados retornados por GetAllStudents
     const { students, total } = data
@@ -98,7 +97,6 @@ export default function Administration({ studentId }: StudentEditProps) {
     // Define os estados de students e totalResults com os dados retornados
     setStudents(students)
     setTotalResults(total)
-    console.log(students)
   }
 
   function handleStudentRegistration() {

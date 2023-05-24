@@ -50,7 +50,6 @@ export const GetAllStudents = async (
         },
       },
     )
-    console.log('GetAllStudents', response.data)
     return {
       students: response.data.users,
       total: response.data.total,

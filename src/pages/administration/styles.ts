@@ -57,9 +57,9 @@ export const ButtonContainer = styled('div', {
   marginTop: '0rem',
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'space-between',
+  justifyContent: 'center',
   flexDirection: 'row',
-  gap: '$4',
+  gap: '12rem',
 
   label: {
     display: 'flex',

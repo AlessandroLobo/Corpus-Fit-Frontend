@@ -20,10 +20,10 @@ import {
 } from './styles'
 import {
   ArrowClockwise,
-  Barbell,
   CalendarPlus,
-  Person,
   UserPlus,
+  Barbell,
+  Person,
 } from '@phosphor-icons/react'
 import { parseCookies } from 'nookies'
 import { validateToken } from '../api/authService'
@@ -139,20 +139,20 @@ export default function Administration({ studentId }: StudentEditProps) {
             <UserPlus size={50} />
             Cadastro de Alunos
           </ButtonCad>
-          <ButtonCad>
-            <Barbell size={50} />
-            Cadastro de Treinos
-          </ButtonCad>
-          <ButtonCad>
-            <Person size={50} />
-            Cadastro de Exercícios
+          <ButtonCad onClick={handlePlanRegistration}>
+            <CalendarPlus size={50} />
+            Cadastro de Planos
           </ButtonCad>
         </ButtonContainer>
         <Line />
         <ButtonContainer>
-          <ButtonCad onClick={handlePlanRegistration}>
-            <CalendarPlus size={50} />
-            Cadastro de Planos
+          <ButtonCad>
+            <Person size={50} />
+            Grupos Musculares
+          </ButtonCad>
+          <ButtonCad>
+            <Barbell size={50} />
+            Cadastro de Exercícios
           </ButtonCad>
         </ButtonContainer>
       </ButtonCadContainer>

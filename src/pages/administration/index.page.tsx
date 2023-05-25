@@ -33,6 +33,7 @@ import { StudentRegistration } from '../components/StudentsRegistration/index.pa
 import Pagination from '../components/Pagination'
 import { PlanRegistration } from '../components/PlanRegistration'
 import { PlanGeneratePage } from '../planGeneratePage'
+import { MuscleGroupRegistration } from '../components/MuscleGroupRegistration'
 
 interface Student {
   id: string
@@ -61,6 +62,8 @@ export default function Administration({ studentId }: StudentEditProps) {
   const [selectedStudent, setSelectedStudent] = useState<any>(null)
 
   const [createPlan, setCreatePlan] = useState(false)
+
+  const [createMuscleGroup, setCreateMuscleGroup] = useState(false)
 
   const [totalResults, setTotalResults] = useState(0)
 
@@ -95,7 +98,7 @@ export default function Administration({ studentId }: StudentEditProps) {
     const { students, total } = data
 
     // Define os estados de students e totalResults com os dados retornados
-    setStudents(students)
+    setStudents(students as Student[])
     setTotalResults(total)
   }
 
@@ -111,6 +114,14 @@ export default function Administration({ studentId }: StudentEditProps) {
     setCreateStudent(false)
     setEditingStudent(false)
     setCreatePlan(true)
+    setModalOpen(true)
+  }
+
+  function handleMuscleGroupRegistration() {
+    setCreateStudent(false)
+    setEditingStudent(false)
+    setCreatePlan(false)
+    setCreateMuscleGroup(true)
     setModalOpen(true)
   }
 
@@ -130,6 +141,8 @@ export default function Administration({ studentId }: StudentEditProps) {
           <PlanRegistration />
         ) : createStudent ? (
           <StudentRegistration />
+        ) : createMuscleGroup ? (
+          <MuscleGroupRegistration />
         ) : null}
       </ModalInfo>
 
@@ -146,7 +159,7 @@ export default function Administration({ studentId }: StudentEditProps) {
         </ButtonContainer>
         <Line />
         <ButtonContainer>
-          <ButtonCad>
+          <ButtonCad onClick={handleMuscleGroupRegistration}>
             <Person size={50} />
             Grupos Musculares
           </ButtonCad>

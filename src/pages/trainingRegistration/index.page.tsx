@@ -1,11 +1,11 @@
 import { Barbell, Person } from '@phosphor-icons/react'
 import {
-  Container,
   Form,
   ButtonCad,
   ButtonContainer,
   ButtonCadContainer,
   Line,
+  Container,
 } from './styles'
 import { validateToken } from '../api/authService'
 import { GetServerSidePropsContext } from 'next'

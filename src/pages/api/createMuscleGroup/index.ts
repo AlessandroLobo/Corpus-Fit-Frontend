@@ -1,6 +1,7 @@
 import axios, { AxiosError } from 'axios'
 
 export interface IcreateMuscleGroup {
+  id?: string
   name: string
 }
 

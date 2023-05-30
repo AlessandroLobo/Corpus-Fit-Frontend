@@ -354,7 +354,6 @@ const StudentEdit = ({ studentParansId }: StudentEditProps) => {
         as="form"
         onSubmit={(event) => {
           event.preventDefault()
-          // handleDelete(clientId)
           handleUpdate(student)
         }}
       >

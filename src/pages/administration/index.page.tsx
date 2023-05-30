@@ -34,6 +34,7 @@ import Pagination from '../components/Pagination'
 import { PlanRegistration } from '../components/PlanRegistration'
 import { PlanGeneratePage } from '../planGeneratePage'
 import { MuscleGroupRegistration } from '../components/MuscleGroupRegistration'
+import { ExercisesRegistration } from '../components/ExercisesRegistration'
 
 interface Student {
   id: string
@@ -64,6 +65,9 @@ export default function Administration({ studentId }: StudentEditProps) {
   const [createPlan, setCreatePlan] = useState(false)
 
   const [createMuscleGroup, setCreateMuscleGroup] = useState(false)
+
+  const [createExercisesRegistration, setExercisesRegistration] =
+    useState(false)
 
   const [totalResults, setTotalResults] = useState(0)
 
@@ -125,6 +129,15 @@ export default function Administration({ studentId }: StudentEditProps) {
     setModalOpen(true)
   }
 
+  function handleExercisesRegistration() {
+    setCreateStudent(false)
+    setEditingStudent(false)
+    setCreatePlan(false)
+    setCreateMuscleGroup(false)
+    setExercisesRegistration(true)
+    setModalOpen(true)
+  }
+
   function handleEdit(studentParansId: any) {
     setSelectedStudent(studentParansId)
     setEditingStudent(true)
@@ -143,6 +156,8 @@ export default function Administration({ studentId }: StudentEditProps) {
           <StudentRegistration />
         ) : createMuscleGroup ? (
           <MuscleGroupRegistration />
+        ) : createExercisesRegistration ? (
+          <ExercisesRegistration />
         ) : null}
       </ModalInfo>
 
@@ -163,7 +178,7 @@ export default function Administration({ studentId }: StudentEditProps) {
             <Person size={50} />
             Grupos Musculares
           </ButtonCad>
-          <ButtonCad>
+          <ButtonCad onClick={handleExercisesRegistration}>
             <Barbell size={50} />
             Cadastro de Exercícios
           </ButtonCad>

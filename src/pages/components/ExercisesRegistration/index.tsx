@@ -14,9 +14,9 @@ import {
   ContainerModalAlert,
   Form,
   FormError,
-  InputContainer,
   Line,
   OverlayAlert,
+  Select,
   Table,
   TbodyResult,
   Text,
@@ -31,31 +31,51 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Pencil, Trash } from '@phosphor-icons/react'
 import {
-  CreateMuscleGroup,
-  DeleteMuscleGroup,
   GetAllMuscleGroup,
-  IcreateMuscleGroup,
   UpdateMuscleGroup,
   UpdateParans,
 } from '@/pages/api/createMuscleGroup'
+import {
+  CreateExercises,
+  DeleteExercise,
+  GetAllExercises,
+  IcreateExercises,
+} from '@/pages/api/createExercises'
 
 interface MuscleGroup {
   id: string
   name: string
 }
 
+interface Exercises {
+  id: string
+  name: string
+  description: string
+  url: string
+  muscleGroupId: string
+}
+
 interface Data {
   id: string
   name: string
+  description: string
+  url: string
+  muscleGroupId: string
 }
 
 const registerFormSchema = z.object({
+  muscularGroup: z.string(),
   name: z.string().min(3, 'O nome deve ter pelo menos 3 caracteres'),
+  url: z.string().url('URL inválida'),
 })
 
 type RegisterFormData = z.infer<typeof registerFormSchema>
 
-export const MuscleGroupRegistration = () => {
+export const ExercisesRegistration = () => {
+  const [selectedValue, setSelectedValue] = useState('')
+
+  const [exercises, setExercises] = useState<Exercises[]>([])
+
   const [muscleGroups, setMuscleGroups] = useState<MuscleGroup[]>([])
 
   const [isOpen, setIsOpen] = useState(false)
@@ -64,9 +84,12 @@ export const MuscleGroupRegistration = () => {
 
   const [textMOdal, setTextModal] = useState('')
 
-  const [muscleGroupInfo, setMuscleGroupInfo] = useState<Data>({
+  const [exerciseInfo, setExerciseInfo] = useState<Data>({
     id: '',
     name: '',
+    description: '',
+    url: '',
+    muscleGroupId: '',
   })
 
   const [buttonDeleteDisabled, setButtonDeleteDisabled] = useState(false)
@@ -81,30 +104,43 @@ export const MuscleGroupRegistration = () => {
     resolver: zodResolver(registerFormSchema),
   })
 
-  const handleSearch = async () => {
+  const handleSearchExercises = async () => {
     const searchTerm =
       (document.querySelector('#search-input') as HTMLInputElement)?.value || ''
-    const data = await GetAllMuscleGroup(searchTerm)
+    const data = await GetAllExercises(searchTerm, selectedValue)
 
-    const muscleGroups = data.muscleGroup
-
-    setMuscleGroups(muscleGroups)
+    const exercises = data.exercises
+    setExercises(exercises)
   }
 
+  const handleSearch = async () => {
+    const data = await GetAllMuscleGroup('')
+    const muscleGroups = data.muscleGroup
+    setMuscleGroups(muscleGroups)
+  }
   useEffect(() => {
+    handleSearchExercises()
+  }, [selectedValue])
+
+  useEffect(() => {
+    handleSearchExercises()
     handleSearch()
   }, [])
 
   async function handleRegister(data: RegisterFormData) {
     try {
-      const params: IcreateMuscleGroup = {
+      const params: IcreateExercises = {
         name: data.name.toUpperCase(),
+        muscleGroupId: selectedValue,
+        url: data.url,
       }
-      await CreateMuscleGroup(params)
+      // console.log('parametros sendo passados', params)
+      await CreateExercises(params)
       setModalOpen(true)
       setTextModal('Alteração realizada com sucesso!')
       reset()
       handleSearch()
+      handleSearchExercises()
     } catch (err: any) {
       // handle errors...
     }
@@ -116,7 +152,7 @@ export const MuscleGroupRegistration = () => {
 
   async function handleUpdate(muscleGroup: Data) {
     try {
-      const data = muscleGroupInfo
+      const data = exerciseInfo
       const params: UpdateParans = {
         id: data.id,
         name: data.name.toUpperCase(),
@@ -131,12 +167,14 @@ export const MuscleGroupRegistration = () => {
     }
   }
 
-  async function handleDelete(plan: Data) {
+  async function handleDelete(exerciseInfo: Data) {
+    // console.log(exerciseInfo.id)
     try {
-      await DeleteMuscleGroup(muscleGroupInfo.id)
+      await DeleteExercise(exerciseInfo.id)
       // alert('Exclusão feita')
       reset({
         name: '',
+        url: '',
       })
       setModalOpen(true)
       setTextModal('Aluno deletado com sucesso!')
@@ -147,23 +185,18 @@ export const MuscleGroupRegistration = () => {
     }
   }
 
-  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const { name, value } = event.target
+  function handleEdit(id: string) {
+    const exerciseInfo = exercises.filter((exercises) => exercises.id === id)[0]
 
-    setMuscleGroupInfo((prevMuscleGroupInfo) => ({
-      ...prevMuscleGroupInfo,
-      [name]: value,
-    }))
+    setValue('name', exerciseInfo.name)
+    setValue('url', exerciseInfo.url)
+    setExerciseInfo(exerciseInfo)
+    setButtonDeleteDisabled(true)
   }
 
-  function handleEdit(id: string) {
-    const muscleGroupInfo = muscleGroups.filter(
-      (muscleGroup) => muscleGroup.id === id,
-    )[0]
-
-    setValue('name', muscleGroupInfo.name)
-    setMuscleGroupInfo(muscleGroupInfo)
-    setButtonDeleteDisabled(true)
+  const handleSelectChange = (event: any) => {
+    setSelectedValue(event.target.value)
+    console.log('selectedValue', selectedValue)
   }
 
   return (
@@ -173,12 +206,12 @@ export const MuscleGroupRegistration = () => {
           <ContainerAlert>
             <ContainerModalAlert>
               <TextAlert>
-                <h2>Deseja excluir esse grupo muscular?</h2>
+                <h2>Deseja excluir esse exercicio?</h2>
               </TextAlert>
               <ButtonContainerAlert>
                 <ButtonAlert
                   onClick={() => {
-                    muscleGroupInfo && handleDelete(muscleGroupInfo)
+                    exerciseInfo && handleDelete(exerciseInfo)
                     setIsOpen(false)
                   }}
                 >
@@ -201,36 +234,63 @@ export const MuscleGroupRegistration = () => {
       </ModalInfo>
       <Form as="form" onSubmit={handleSubmit(handleRegister)}>
         <TextInputContainer>
-          <Text>Nome:</Text>
+          <Text>Grupo Muscular:</Text>
 
-          {!buttonDeleteDisabled ? (
-            <TextInput
-              {...register('name', {
-                required: true,
-              })}
-              placeholder="Digite o nome do grupo muscular"
-              onBlur={(event) =>
-                (event.target.value = event.target.value.toUpperCase())
-              }
-            />
-          ) : (
-            <TextInput
-              {...register('name', {
-                required: true,
-              })}
-              placeholder="Digite o nome do plano"
-              value={muscleGroupInfo.name ?? 'Aguardando informações...'}
-              onChange={handleInputChange}
-              onBlur={(event) =>
-                (event.target.value = event.target.value.toUpperCase())
-              }
-            />
-          )}
-          {errors.name && (
-            <FormError>{<Text>{errors.name?.message}</Text>}</FormError>
+          <Select
+            style={{ width: '100%' }}
+            {...register('muscularGroup', { required: true })}
+            onChange={handleSelectChange}
+            value={selectedValue}
+          >
+            {muscleGroups.map((muscleGroup) => (
+              <option key={muscleGroup.id} value={muscleGroup.id}>
+                {muscleGroup.name}
+              </option>
+            ))}
+          </Select>
+          {errors.muscularGroup && (
+            <FormError>
+              <Text>{errors.muscularGroup?.message}</Text>
+            </FormError>
           )}
         </TextInputContainer>
-        <InputContainer></InputContainer>
+
+        <TextInputContainer>
+          <Text>Nome:</Text>
+          <TextInput
+            {...register('name', {
+              required: true,
+            })}
+            // defaultValue={student?.name || ''}
+            placeholder="Digite seu nome do exercicio"
+            style={{ width: '100%' }}
+            onBlur={(event) =>
+              (event.target.value = event.target.value.toUpperCase())
+            }
+          />
+          {errors.name && (
+            <FormError>
+              <Text>{errors.name?.message}</Text>
+            </FormError>
+          )}
+        </TextInputContainer>
+        <TextInputContainer>
+          <Text>URL:</Text>
+          <TextInput
+            {...register('url', {
+              required: true,
+            })}
+            // defaultValue={student?.name || ''}
+            placeholder="Digite seu nome do exercicio"
+            style={{ width: '100%' }}
+          />
+          {errors.url && (
+            <FormError>
+              <Text>{errors.url?.message}</Text>
+            </FormError>
+          )}
+        </TextInputContainer>
+
         <Line />
         <ButtonContainer>
           {!buttonDeleteDisabled ? (
@@ -246,7 +306,7 @@ export const MuscleGroupRegistration = () => {
               type="button"
               style={{ marginTop: 27, marginBottom: 20 }}
               onClick={() => {
-                muscleGroupInfo && handleUpdate(muscleGroupInfo)
+                exerciseInfo && handleUpdate(exerciseInfo)
               }}
             >
               Atualizar
@@ -272,7 +332,7 @@ export const MuscleGroupRegistration = () => {
           <Text>Pesquise por plano:</Text>
           <TextInputFindContainer>
             <TextInput
-              onChange={handleSearch}
+              onChange={handleSearchExercises}
               id="search-input"
               placeholder="Digite o nome do plano"
             />
@@ -285,10 +345,10 @@ export const MuscleGroupRegistration = () => {
             </tr>
           </Thead>
           <TbodyResult>
-            {muscleGroups?.map((muscleGroup) => (
-              <tr key={muscleGroup.id}>
+            {exercises?.map((exercise) => (
+              <tr key={exercise.id}>
                 <td
-                  onClick={() => handleEdit(muscleGroup.id)}
+                  onClick={() => handleEdit(exercise.id)}
                   style={{
                     width: '60%',
                     paddingLeft: '1rem',
@@ -296,7 +356,7 @@ export const MuscleGroupRegistration = () => {
                     textTransform: 'uppercase',
                   }}
                 >
-                  {muscleGroup.name}
+                  {exercise.name}
                 </td>
               </tr>
             ))}

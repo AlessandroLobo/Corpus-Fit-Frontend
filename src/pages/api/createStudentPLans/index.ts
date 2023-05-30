@@ -6,10 +6,6 @@ export interface ICreateStudentPLanParans {
   planValue: number
 }
 
-interface IStudentPlan {
-  id: string
-}
-
 export function CreateStudentPlans({
   planId,
   studentId,

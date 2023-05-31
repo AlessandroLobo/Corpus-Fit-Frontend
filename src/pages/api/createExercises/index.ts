@@ -13,9 +13,12 @@ interface ApiResponse {
   // outras propriedades podem ser adicionadas se necessário
 }
 
-export interface UpdateParans {
+export interface UpdateParansExercises {
   id: string
   name: string
+  description?: string
+  url?: string
+  muscleGroupId?: string
 }
 
 export function CreateExercises({
@@ -69,28 +72,37 @@ export const GetAllExercises = async (
   }
 }
 
-// export function UpdateMuscleGroup({ id, name }: UpdateParans) {
-//   return axios
-//     .put('http://localhost:3333/trainings/updateMuscleGroup', {
-//       id,
-//       name,
-//     })
-//     .then((response) => response.data)
-//     .catch((error: AxiosError) => {
-//       if (error.response) {
-//         // O servidor respondeu com um status diferente de 2xx
-//         console.log(error.response.data)
-//       } else if (error.request) {
-//         // A requisição foi feita, mas não houve resposta
-//         console.log(error.request)
-//       } else {
-//         // Algum erro ocorreu durante a requisição
-//         console.log('Error', error.message)
-//       }
-//       console.log(error.config)
-//       throw error // adicione essa linha para lançar o erro novamente
-//     })
-// }
+export function UpdateExercises({
+  id,
+  name,
+  description,
+  url,
+  muscleGroupId,
+}: UpdateParansExercises) {
+  return axios
+    .put('http://localhost:3333/trainings/updateExercise', {
+      id,
+      name,
+      description,
+      url,
+      muscleGroupId,
+    })
+    .then((response) => response.data)
+    .catch((error: AxiosError) => {
+      if (error.response) {
+        // O servidor respondeu com um status diferente de 2xx
+        console.log(error.response.data)
+      } else if (error.request) {
+        // A requisição foi feita, mas não houve resposta
+        console.log(error.request)
+      } else {
+        // Algum erro ocorreu durante a requisição
+        console.log('Error', error.message)
+      }
+      console.log(error.config)
+      throw error // adicione essa linha para lançar o erro novamente
+    })
+}
 
 export function DeleteExercise(id: string) {
   console.log(id)

@@ -30,16 +30,14 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Pencil, Trash } from '@phosphor-icons/react'
-import {
-  GetAllMuscleGroup,
-  UpdateMuscleGroup,
-  UpdateParans,
-} from '@/pages/api/createMuscleGroup'
+import { GetAllMuscleGroup } from '@/pages/api/createMuscleGroup'
 import {
   CreateExercises,
   DeleteExercise,
   GetAllExercises,
   IcreateExercises,
+  UpdateParansExercises,
+  UpdateExercises,
 } from '@/pages/api/createExercises'
 
 interface MuscleGroup {
@@ -99,6 +97,7 @@ export const ExercisesRegistration = () => {
     reset,
     handleSubmit,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerFormSchema),
@@ -134,7 +133,6 @@ export const ExercisesRegistration = () => {
         muscleGroupId: selectedValue,
         url: data.url,
       }
-      // console.log('parametros sendo passados', params)
       await CreateExercises(params)
       setModalOpen(true)
       setTextModal('Alteração realizada com sucesso!')
@@ -150,28 +148,30 @@ export const ExercisesRegistration = () => {
     setIsOpen(true)
   }
 
-  async function handleUpdate(muscleGroup: Data) {
+  async function handleUpdate() {
     try {
       const data = exerciseInfo
-      const params: UpdateParans = {
+      const formState = getValues()
+      const params: UpdateParansExercises = {
         id: data.id,
-        name: data.name.toUpperCase(),
+        name: formState.name.toUpperCase(),
+        muscleGroupId: selectedValue,
+        url: formState.url,
       }
-      await UpdateMuscleGroup(params)
+      await UpdateExercises(params)
       handleSearch()
       setModalOpen(true)
       setTextModal('Alteração realizada com sucesso!')
       reset()
+      handleSearchExercises()
     } catch (err: any) {
       // handle errors...
     }
   }
 
   async function handleDelete(exerciseInfo: Data) {
-    // console.log(exerciseInfo.id)
     try {
       await DeleteExercise(exerciseInfo.id)
-      // alert('Exclusão feita')
       reset({
         name: '',
         url: '',
@@ -180,6 +180,7 @@ export const ExercisesRegistration = () => {
       setTextModal('Aluno deletado com sucesso!')
       setButtonDeleteDisabled(false)
       handleSearch()
+      handleSearchExercises()
     } catch (err: any) {
       // handle errors...
     }
@@ -196,9 +197,7 @@ export const ExercisesRegistration = () => {
 
   const handleSelectChange = (event: any) => {
     setSelectedValue(event.target.value)
-    console.log('selectedValue', selectedValue)
   }
-
   return (
     <Container>
       {isOpen && (
@@ -306,7 +305,7 @@ export const ExercisesRegistration = () => {
               type="button"
               style={{ marginTop: 27, marginBottom: 20 }}
               onClick={() => {
-                exerciseInfo && handleUpdate(exerciseInfo)
+                exerciseInfo && handleUpdate()
               }}
             >
               Atualizar

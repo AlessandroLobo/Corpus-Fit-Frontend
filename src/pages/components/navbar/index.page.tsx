@@ -54,7 +54,7 @@ export default function Header() {
           <Link href="/">Treinos</Link>
           {user?.email === 'admin@hotmail.com' ? (
             <>
-              <Link href="/trainingRegistration">Cadastro de Treinos</Link>
+              <Link href="/trainingRegistration">Biblioteca de Treinos</Link>
               <Link href="/administration">Administração</Link>
             </>
           ) : null}

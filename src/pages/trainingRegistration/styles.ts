@@ -48,7 +48,7 @@ export const ButtonCadContainer = styled(Box, {
     // marginBottom: '2rem',
     flexDirection: 'column',
     marginTop: 0,
-    border: 'solid 1px red',
+    // border: 'solid 1px red',
   },
 })
 
@@ -68,7 +68,10 @@ export const ButtonContainer = styled('div', {
   },
 
   '@media (max-width: 767px)': {
-    flexDirection: 'row',
+    display: 'flex',
+    gap: '5rem',
+    // flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
     marginTop: 0,
     // border: 'solid 1px red',

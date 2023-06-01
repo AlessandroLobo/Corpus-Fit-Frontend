@@ -62,7 +62,7 @@ export const MuscleGroupRegistration = () => {
 
   const [modalOpen, setModalOpen] = useState(false)
 
-  const [textMOdal, setTextModal] = useState('')
+  const [textModal, setTextModal] = useState('')
 
   const [muscleGroupInfo, setMuscleGroupInfo] = useState<Data>({
     id: '',
@@ -197,7 +197,7 @@ export const MuscleGroupRegistration = () => {
         </OverlayAlert>
       )}
       <ModalInfo isOpen={modalOpen} setIsOpen={setModalOpen}>
-        <TextInfo>{<h1>{textMOdal}</h1>}</TextInfo>
+        <TextInfo>{<h1>{textModal}</h1>}</TextInfo>
       </ModalInfo>
       <Form as="form" onSubmit={handleSubmit(handleRegister)}>
         <TextInputContainer>

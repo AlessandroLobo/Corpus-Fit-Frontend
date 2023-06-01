@@ -1,4 +1,4 @@
-import { Barbell, Person } from '@phosphor-icons/react'
+import { PersonArmsSpread } from '@phosphor-icons/react'
 import {
   Form,
   ButtonCad,
@@ -6,23 +6,35 @@ import {
   ButtonCadContainer,
   Line,
   Container,
+  Text,
 } from './styles'
 import { validateToken } from '../api/authService'
 import { GetServerSidePropsContext } from 'next'
 import { parseCookies } from 'nookies'
+import { ModalInfo } from '../components/Modal/modalInfo'
+import { WorkoutRoutineRegistration } from '../components/WorkoutLibraryComponents/WorkoutRoutineRegistration'
+import { useState } from 'react'
 
 export default function TrainingRegistration() {
+  const [modalOpen, setModalOpen] = useState(false)
+
+  function handleWorkoutRoutineRegistration() {
+    setModalOpen(true)
+    // console.log('handleRegisterStudent')
+  }
+
   return (
     <Container>
+      <ModalInfo isOpen={modalOpen} setIsOpen={setModalOpen}>
+        {modalOpen ? <WorkoutRoutineRegistration /> : null}
+      </ModalInfo>
+
       <ButtonCadContainer>
+        <Text style={{ color: '#00e7f9' }}>Biblioteca de Treino</Text>
         <ButtonContainer>
-          <ButtonCad>
-            <Person size={50} />
-            Grupos Musculares
-          </ButtonCad>
-          <ButtonCad>
-            <Barbell size={50} />
-            Cadastro de Exercícios
+          <ButtonCad onClick={handleWorkoutRoutineRegistration}>
+            <PersonArmsSpread size={50} />
+            Adicionar Rotina
           </ButtonCad>
         </ButtonContainer>
         <Line />

@@ -3,13 +3,11 @@ import {
   ButtonAlert,
   ButtonContainer,
   ButtonContainerAlert,
-  ButtonDelete,
   ButtonSave,
-  ButtonUpdate,
   Container,
   ContainerAlert,
-  ContainerList,
   ContainerModalAlert,
+  DatePickerContainer,
   Form,
   FormError,
   Line,
@@ -18,32 +16,38 @@ import {
   Text,
   TextAlert,
   TextArea,
+  TextDatePickerContainer,
   TextInfo,
   TextInput,
   TextInputContainer,
-  TextInputFindContainer,
+  TextInputContainerDataPiker,
 } from './styles'
 import { ModalInfo } from '../../Modal/modalInfo'
-import { Pencil, Trash } from '@phosphor-icons/react'
+import { Pencil } from '@phosphor-icons/react'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useWorkoutTypes } from '@/utils/useWorkoutTypes'
 import { useDifficultys } from '@/utils/useDifficultys'
 import { useObjectives } from '@/utils/useObjectives'
+import { CreateRoutine, ICreateRoutine } from '@/pages/api/createWorkout'
+import dayjs from 'dayjs'
 
+const utc = require('dayjs/plugin/utc')
+const timezone = require('dayjs/plugin/timezone')
+// Adiciona os plugins de UTC e timezone ao Day.js
+dayjs.extend(utc)
+dayjs.extend(timezone)
 interface WorkoutType {
   id: number
   value: string
   label: string
 }
-
 interface Difficultys {
   id: number
   value: string
   label: string
 }
-
 interface Objectives {
   id: number
   value: string
@@ -75,9 +79,12 @@ export const WorkoutRoutineRegistration = () => {
 
   const [textMOdal, setTextModal] = useState('')
 
+  const [startDate, setStartDate] = useState<Date | null>(null)
+  const [endDate, setEndDate] = useState<Date | null>(null)
+
   const {
     register,
-    // reset,
+    reset,
     handleSubmit,
     // setValue,
     formState: { errors },
@@ -86,19 +93,46 @@ export const WorkoutRoutineRegistration = () => {
   })
 
   async function handleRegister(data: RegisterFormData) {
-    console.log(data)
-    // try {
-    //   const params: IcreateMuscleGroup = {
-    //     name: data.name.toUpperCase(),
-    //   }
-    //   await CreateMuscleGroup(params)
-    //   setModalOpen(true)
-    //   setTextModal('Alteração realizada com sucesso!')
-    //   reset()
-    //   handleSearch()
-    // } catch (err: any) {
-    //   // handle errors...
-    // }
+    console.log('start', startDate)
+    console.log('end---', endDate)
+    try {
+      const dataObj = new Date()
+      const dataFormatadaStart: string = `${dataObj.getFullYear()}${String(
+        dataObj.getMonth() + 1,
+      ).padStart(2, '0')}${String(dataObj.getDate()).padStart(2, '0')}`
+
+      const formattedStartDate = dayjs(dataFormatadaStart, 'YYYYMMDD')
+        .utc()
+        .toDate()
+
+      const dataFormatadaEnd: string = `${dataObj.getFullYear()}${String(
+        dataObj.getMonth() + 1,
+      ).padStart(2, '0')}${String(dataObj.getDate()).padStart(2, '0')}`
+
+      const formattedEndDate = dayjs(dataFormatadaEnd, 'YYYYMMDD')
+        .utc()
+        .toDate()
+
+      const params: ICreateRoutine = {
+        name: data.name,
+        workoutType: data.workoutType,
+        objective: data.objective,
+        observation: data.observation,
+        // studentId,
+        startDate: formattedStartDate || null,
+        endDate: formattedEndDate || null,
+      }
+
+      await CreateRoutine(params)
+      setModalOpen(true)
+      setTextModal('Alteração realizada com sucesso!')
+      setStartDate(null)
+      setEndDate(null)
+      reset()
+      // handleSearch()
+    } catch (err: any) {
+      // handle errors...
+    }
   }
 
   return (
@@ -111,14 +145,7 @@ export const WorkoutRoutineRegistration = () => {
                 <h2>Deseja excluir esse grupo muscular?</h2>
               </TextAlert>
               <ButtonContainerAlert>
-                <ButtonAlert
-                // onClick={() => {
-                //   muscleGroupInfo && handleDelete(muscleGroupInfo)
-                //   setIsOpen(false)
-                // }}
-                >
-                  Deletar
-                </ButtonAlert>
+                <ButtonAlert>Deletar</ButtonAlert>
                 <ButtonAlert
                   onClick={() => {
                     setIsOpen(false)
@@ -137,16 +164,10 @@ export const WorkoutRoutineRegistration = () => {
       <Form as="form" onSubmit={handleSubmit(handleRegister)}>
         <TextInputContainer>
           <Text>Nome da Rotina:</Text>
-
-          {/* {!buttonDeleteDisabled ? ( */}
           <TextInput
             {...register('name', {
               required: true,
             })}
-          // placeholder="Digite o nome do grupo muscular"
-          // onBlur={(event) =>
-          //   (event.target.value = event.target.value.toUpperCase())
-          // }
           />
           {errors.name && (
             <FormError>
@@ -160,8 +181,6 @@ export const WorkoutRoutineRegistration = () => {
           <Select
             style={{ width: '100%' }}
             {...register('workoutType', { required: true })}
-          // onChange={handleSelectChange}
-          // value={selectedValue}
           >
             <option value=""></option>
             {workoutTypes.map((workoutTypes) => (
@@ -181,8 +200,6 @@ export const WorkoutRoutineRegistration = () => {
           <Select
             style={{ width: '100%' }}
             {...register('objective', { required: true })}
-          // onChange={handleSelectChange}
-          // value={selectedValue}
           >
             <option value=""></option>
             {objectives.map((objectives) => (
@@ -216,6 +233,26 @@ export const WorkoutRoutineRegistration = () => {
             </FormError>
           )}
         </TextInputContainer>
+
+        <TextDatePickerContainer>
+          <TextInputContainer>
+            <Text>Data de Início:</Text>
+            <DatePickerContainer
+              dateFormat="dd/MM/yyyy"
+              selected={startDate}
+              onChange={(date: Date | null) => setStartDate(date)}
+            />
+          </TextInputContainer>
+          <TextInputContainerDataPiker>
+            <Text>Data Final:</Text>
+            <DatePickerContainer
+              dateFormat="dd/MM/yyyy"
+              selected={endDate}
+              onChange={(date: Date | null) => setEndDate(date)}
+            />
+          </TextInputContainerDataPiker>
+        </TextDatePickerContainer>
+
         <TextInputContainer>
           <Text>Obs/Instruções:</Text>
           <TextArea {...register('observation', { required: true })} />
@@ -227,18 +264,6 @@ export const WorkoutRoutineRegistration = () => {
             Salvar
             <Pencil />
           </ButtonSave>
-
-          <ButtonDelete
-          // type="button"
-          // style={{ marginTop: 27, marginBottom: 20 }}
-          // onClick={() => {
-          //   butonDelete()
-          // }}
-          // disabled={!buttonDeleteDisabled}
-          >
-            Deletar
-            <Trash />
-          </ButtonDelete>
         </ButtonContainer>
       </Form>
     </Container>

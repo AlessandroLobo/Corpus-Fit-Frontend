@@ -1,4 +1,6 @@
 import { Box, styled } from '@ignite-ui/react'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 
 export const Container = styled('main', {
   display: 'block',
@@ -47,6 +49,8 @@ export const Form = styled(Box, {
   },
 })
 
+
+
 export const ContainerList = styled(Box, {
   width: '100%',
   maxWidth: '1120px',
@@ -71,6 +75,21 @@ export const TextInputContainer = styled('div', {
   alignItems: 'left',
   textAlign: 'left',
   // border: '1px solid red'
+})
+
+export const TextInputContainerDataPiker = styled('div', {
+  // flex: '1',
+  display: 'block',
+  // alignItems: 'right',
+  textAlign: 'right',
+  // border: '1px solid red',
+})
+
+export const TextDatePickerContainer = styled('div', {
+  display: 'flex',
+  justifyContent: 'space-around',
+  width: '100%',
+  // border: '1px solid red',
 })
 
 export const InputContainer = styled('div', {
@@ -111,6 +130,22 @@ export const TextInput = styled('input', {
     '-webkit-appearance': 'none',
     margin: 0,
   },
+
+  '&:focus': {
+    outline: 'none',
+    boxShadow: '0 0 0 1px $colors$ignite300',
+  },
+})
+
+export const DatePickerContainer = styled(DatePicker, {
+  height: '45px',
+  color: '$gray100',
+  borderRadius: '8px',
+  padding: '$2 $4',
+  fontSize: '15px',
+  backgroundColor: '$gray900',
+  border: 'none',
+  appearance: 'none',
 
   '&:focus': {
     outline: 'none',

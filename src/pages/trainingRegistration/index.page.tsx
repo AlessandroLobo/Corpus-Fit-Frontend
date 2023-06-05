@@ -40,7 +40,9 @@ export default function TrainingRegistration() {
         <Line />
         <ButtonContainer></ButtonContainer>
       </ButtonCadContainer>
-      <Form></Form>
+      <Form>
+        <div>Rotinas</div>
+      </Form>
     </Container>
   )
 }

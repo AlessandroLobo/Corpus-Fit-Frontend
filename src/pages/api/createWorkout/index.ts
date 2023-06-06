@@ -11,10 +11,10 @@ export interface ICreateRoutine {
   endDate: Date | null
 }
 
-// interface ApiResponse {
-//   exercises: IcreateExercises[]
-//   // outras propriedades podem ser adicionadas se necessário
-// }
+interface ApiResponse {
+  workoutRoutines: ICreateRoutine[]
+  // outras propriedades podem ser adicionadas se necessário
+}
 
 // export interface UpdateParansExercises {
 //   id: string
@@ -62,26 +62,26 @@ export function CreateRoutine({
     })
 }
 
-// export const GetAllExercises = async (
-//   name: string,
-//   muscleGroupId: string,
-// ): Promise<ApiResponse> => {
-//   try {
-//     const response = await axios.get(
-//       'http://localhost:3333/trainings/findExercises',
-//       {
-//         params: {
-//           name,
-//           muscleGroupId,
-//         },
-//       },
-//     )
-//     return { exercises: response.data.exercises }
-//   } catch (error) {
-//     console.log(error)
-//     return { exercises: [] }
-//   }
-// }
+export const GetAllRoutine = async (
+  name: string,
+  // muscleGroupId: string,
+): Promise<ApiResponse> => {
+  try {
+    const response = await axios.get(
+      'http://localhost:3333/workout/findRoutine',
+      {
+        params: {
+          name,
+          // muscleGroupId,
+        },
+      },
+    )
+    return { workoutRoutines: response.data.workoutRoutines }
+  } catch (error) {
+    console.log(error)
+    return { workoutRoutines: [] }
+  }
+}
 
 // export function UpdateExercises({
 //   id,

@@ -14,9 +14,10 @@ import {
 import HamburguerButton from '@/common/HamburguerButton'
 import { useContext, useState } from 'react'
 import Link from 'next/link'
-import logo from '../../../../public/images/LOGO CORPUSFIT-2.png'
 import { AuthContext } from '@/context/AuthContext'
 import nookies from 'nookies'
+
+import logo from '../../../../public/images/LOGO CORPUSFIT-2.png'
 
 export default function Header() {
   const { user } = useContext(AuthContext)

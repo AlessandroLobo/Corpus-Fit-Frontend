@@ -13,14 +13,27 @@ import { GetServerSidePropsContext } from 'next'
 import { parseCookies } from 'nookies'
 import { ModalInfo } from '../components/Modal/modalInfo'
 import { WorkoutRoutineRegistration } from '../components/WorkoutLibraryComponents/WorkoutRoutineRegistration'
-import { useState } from 'react'
+import React, { useState } from 'react'
+
+import Routines from '../components/WorkoutLibraryComponents/Routines'
+import Training from '../components/WorkoutLibraryComponents/Training'
+
+interface ISelectedComponent {
+  id: string
+  component: 'Routines' | 'Training'
+}
 
 export default function TrainingRegistration() {
   const [modalOpen, setModalOpen] = useState(false)
+  const [selectedComponent, setSelectedComponent] =
+    useState<ISelectedComponent | null>(null)
 
   function handleWorkoutRoutineRegistration() {
     setModalOpen(true)
-    // console.log('handleRegisterStudent')
+  }
+
+  function handleSelectedComponent(selectedComponent: ISelectedComponent) {
+    setSelectedComponent(selectedComponent)
   }
 
   return (
@@ -41,7 +54,14 @@ export default function TrainingRegistration() {
         <ButtonContainer></ButtonContainer>
       </ButtonCadContainer>
       <Form>
-        <div>Rotinas</div>
+        {selectedComponent?.component === 'Training' ? (
+          <Training handleSelectedComponent={handleSelectedComponent} />
+        ) : (
+          <Routines
+            selectedComponent={selectedComponent}
+            handleSelectedComponent={handleSelectedComponent}
+          />
+        )}
       </Form>
     </Container>
   )

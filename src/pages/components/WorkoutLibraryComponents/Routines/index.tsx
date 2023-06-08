@@ -1,5 +1,17 @@
 import Image from 'next/image'
-import { TextContainer, WorkoutRoutineContainer } from './styles'
+import {
+  Container,
+  ContainerList,
+  Form,
+  Table,
+  TbodyResult,
+  Text,
+  TextContainer,
+  TextInput,
+  TextInputContainer,
+  TextInputFindContainer,
+  WorkoutRoutineContainer,
+} from './styles'
 
 import WorkoutIco from '../../../../../public/images/Workout.png'
 import React, { useEffect, useState } from 'react'
@@ -27,7 +39,10 @@ export default function Routines(props: {
   }, [])
 
   const handleSearch = async () => {
-    const data = await GetAllRoutine('')
+    const searchTerm =
+      (document.querySelector('#search-input') as HTMLInputElement)?.value || ''
+    console.log(searchTerm)
+    const data = await GetAllRoutine(searchTerm)
     const workoutRoutines = data.workoutRoutines
     setWorkoutRoutine(workoutRoutines)
   }
@@ -38,48 +53,53 @@ export default function Routines(props: {
   }
 
   return (
-    <>
-      <TextContainer>Rotinas de Treino</TextContainer>
+    <ContainerList>
+      <TextInputContainer>
+        <Text>Pesquise por Nome:</Text>
+        <TextInputFindContainer>
+          <TextInput
+            onChange={handleSearch}
+            id="search-input"
+            placeholder="Digite o nome ou e-mail"
+          />
+        </TextInputFindContainer>
+      </TextInputContainer>
 
-      {workoutRoutine &&
-        workoutRoutine.map((workoutRoutine) => (
-          <tr key={workoutRoutine.id}>
-            <td
-              onClick={() => handleEdit(workoutRoutine.id)}
-              style={{
-                width: '60%',
-                paddingLeft: '1rem',
-                textAlign: 'left',
-                textTransform: 'uppercase',
-              }}
-            >
-              <WorkoutRoutineContainer>
-                <Image
-                  src={WorkoutIco}
-                  alt="logo"
-                  width={50}
-                  style={{
-                    filter: 'invert(1) contrast(0.8)',
-                    transition: 'transform 0.3s ease',
-                    cursor: 'pointer',
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.transform = 'scale(1.1)'
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.transform = 'scale(1)'
-                  }}
-                />
+      <Table>
+        <TbodyResult>
+          {workoutRoutine &&
+            workoutRoutine.map((workoutRoutine) => (
+              <tr key={workoutRoutine.id}>
+                <td onClick={() => handleEdit(workoutRoutine.id)}>
+                  <WorkoutRoutineContainer>
+                    <Image
+                      src={WorkoutIco}
+                      alt="logo"
+                      width={50}
+                      style={{
+                        filter: 'invert(1) contrast(0.8)',
+                        transition: 'transform 0.3s ease',
+                        cursor: 'pointer',
+                      }}
+                      onMouseOver={(e) => {
+                        e.currentTarget.style.transform = 'scale(1.1)'
+                      }}
+                      onMouseOut={(e) => {
+                        e.currentTarget.style.transform = 'scale(1)'
+                      }}
+                    />
 
-                <div>
-                  {workoutRoutine.name}
-                  <br />
-                  {workoutRoutine.objective}
-                </div>
-              </WorkoutRoutineContainer>
-            </td>
-          </tr>
-        ))}
-    </>
+                    <div>
+                      {workoutRoutine.name}
+                      <br />
+                      {workoutRoutine.objective}
+                    </div>
+                  </WorkoutRoutineContainer>
+                </td>
+              </tr>
+            ))}
+        </TbodyResult>
+      </Table>
+    </ContainerList>
   )
 }

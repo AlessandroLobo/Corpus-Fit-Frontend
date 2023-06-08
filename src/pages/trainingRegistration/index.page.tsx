@@ -1,4 +1,4 @@
-import { PersonArmsSpread } from '@phosphor-icons/react'
+import { CaretLeft, PersonArmsSpread } from '@phosphor-icons/react'
 import {
   Form,
   ButtonCad,
@@ -7,6 +7,8 @@ import {
   Line,
   Container,
   Text,
+  TextContainerBack,
+  TextVoltar,
 } from './styles'
 import { validateToken } from '../api/authService'
 import { GetServerSidePropsContext } from 'next'
@@ -36,6 +38,9 @@ export default function TrainingRegistration() {
     setSelectedComponent(selectedComponent)
   }
 
+  function handleTogle() {
+    setSelectedComponent('Routines')
+  }
   return (
     <Container>
       <ModalInfo isOpen={modalOpen} setIsOpen={setModalOpen}>
@@ -43,6 +48,10 @@ export default function TrainingRegistration() {
       </ModalInfo>
 
       <ButtonCadContainer>
+        <TextContainerBack>
+          <CaretLeft size={20} />
+          <TextVoltar onClick={handleSelectedComponent}>Voltar</TextVoltar>
+        </TextContainerBack>
         <Text style={{ color: '#00e7f9' }}>Biblioteca de Treino</Text>
         <ButtonContainer>
           <ButtonCad onClick={handleWorkoutRoutineRegistration}>
@@ -55,7 +64,7 @@ export default function TrainingRegistration() {
       </ButtonCadContainer>
       <Form>
         {selectedComponent?.component === 'Training' ? (
-          <Training handleSelectedComponent={handleSelectedComponent} />
+          <Training selectedComponent={selectedComponent} />
         ) : (
           <Routines
             selectedComponent={selectedComponent}

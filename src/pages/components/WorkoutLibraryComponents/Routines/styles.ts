@@ -133,7 +133,7 @@ export const WorkoutRoutineContainer = styled('div', {
   fontSize: '0.8rem',
   marginLeft: '0rem',
   paddingLeft: '0.5rem',
-  width: '49rem',
+  width: '48rem',
   height: '4rem',
   alignItems: 'center',
   borderRadius: '6px',

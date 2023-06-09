@@ -1,5 +1,8 @@
 import { GetRoutine } from '@/pages/api/createWorkout'
+import { Button } from '@ignite-ui/react'
+import { ClipboardText } from '@phosphor-icons/react'
 import React, { useEffect, useState } from 'react'
+import { ButtonInfo, ClipboardTButtonInfoContainer } from './styles'
 
 interface TrainingProps {
   id: string
@@ -38,8 +41,16 @@ export default function Training(props: TrainingProps) {
   return (
     <>
       <div>Treinos</div>
-      <div>id {routineData?.name}</div>
+      <div>{routineData?.name}</div>
       <div>{routineData?.objective}</div>
+      <ClipboardTButtonInfoContainer>
+        <ClipboardText size={150} />
+        <h3>
+          A sua rotina é como uma ficha, adicione vários treinos dentro dessa
+          rotina
+        </h3>
+        <ButtonInfo>Criar Primeiro Treino</ButtonInfo>
+      </ClipboardTButtonInfoContainer>
     </>
   )
 }

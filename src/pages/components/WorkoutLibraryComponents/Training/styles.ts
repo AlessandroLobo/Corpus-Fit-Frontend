@@ -1,4 +1,3 @@
-
 import { styled, Box } from '@ignite-ui/react'
 
 export const Container = styled('main', {
@@ -184,13 +183,53 @@ export const TextInputContainer = styled('div', {
   alignItems: 'center',
 })
 
+export const ClipboardTButtonInfoContainer = styled('div', {
+  display: 'block',
+  justifyContent: 'center',
+  textAlign: 'center',
+  alignItems: 'center',
+  // border: 'solid 1px red',
+
+  h3: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '$4',
+    paddingBottom: '1rem',
+  },
+})
+
+export const ButtonInfo = styled('button', {
+  gap: '0.3rem',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  textAlign: 'center',
+  padding: '12px 24px',
+  borderRadius: '4px',
+  backgroundColor: '#007bff',
+  color: '#fff',
+  fontSize: '16px',
+  fontWeight: '600',
+  border: 'none',
+  cursor: 'pointer',
+  margin: '0 auto',
+  transition: '.2s ease-in-out',
+
+  '&:hover': {
+    backgroundColor: '#0069d9',
+  },
+
+  '&:active': {
+    transform: 'scale(0.98)',
+  },
+})
+
 export const TextInput = styled('input', {
   flex: '1',
   display: 'block',
   height: '3rem',
   color: '$gray100',
   fontSize: '1.3rem',
-  maxWidth: '400px',
   width: '100%',
   padding: '0 1rem',
   border: 'none',

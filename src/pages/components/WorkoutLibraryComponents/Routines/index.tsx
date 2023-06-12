@@ -1,12 +1,9 @@
 import Image from 'next/image'
 import {
-  Container,
   ContainerList,
-  Form,
   Table,
   TbodyResult,
   Text,
-  TextContainer,
   TextInput,
   TextInputContainer,
   TextInputFindContainer,

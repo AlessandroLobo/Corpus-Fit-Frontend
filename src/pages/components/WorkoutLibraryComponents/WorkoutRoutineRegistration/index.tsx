@@ -114,11 +114,12 @@ export const WorkoutRoutineRegistration = () => {
         .toDate()
 
       const params: ICreateRoutine = {
+        id: '',
         name: data.name,
         workoutType: data.workoutType,
         objective: data.objective,
         observation: data.observation,
-        // studentId,
+        studentId: '',
         startDate: formattedStartDate || null,
         endDate: formattedEndDate || null,
       }
@@ -168,6 +169,9 @@ export const WorkoutRoutineRegistration = () => {
             {...register('name', {
               required: true,
             })}
+            onBlur={(event) =>
+              (event.target.value = event.target.value.toUpperCase())
+            }
           />
           {errors.name && (
             <FormError>

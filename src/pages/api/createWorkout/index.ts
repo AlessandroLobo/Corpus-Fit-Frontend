@@ -1,12 +1,12 @@
 import axios, { AxiosError } from 'axios'
 
 export interface ICreateRoutine {
-  id: string
+  id: string | null
   name: string
   workoutType?: string
   objective: string
   observation: string
-  studentId: string
+  studentId: string | null
   startDate: Date | null
   endDate: Date | null
 }

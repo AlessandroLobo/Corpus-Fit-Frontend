@@ -38,9 +38,9 @@ export default function TrainingRegistration() {
     setSelectedComponent(selectedComponent)
   }
 
-  function handleTogle() {
-    setSelectedComponent('Routines')
-  }
+  // function handleTogle() {
+  //   setSelectedComponent('Routines')
+  // }
   return (
     <Container>
       <ModalInfo isOpen={modalOpen} setIsOpen={setModalOpen}>

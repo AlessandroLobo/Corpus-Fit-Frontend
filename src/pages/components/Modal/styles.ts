@@ -27,15 +27,13 @@ export const ContainerModal = styled('div', {
   width: '40rem',
   margin: '$20 auto $4',
   position: 'fixed',
-  top: 'calc(55% - 280px)', // move o modal 100 pixels para cima
+  top: '42%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
   zIndex: 999,
   backgroundColor: '$gray700',
   border: 'none',
   borderRadius: '8px',
-  // boxShadow: '0 0 10px rgba(0, 0, 0, 0.25)',
-  // border: '1px solid red',
 
   '@media (max-width: 768px)': {
     top: 'calc(105% - 280px)',

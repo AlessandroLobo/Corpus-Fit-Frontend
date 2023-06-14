@@ -128,18 +128,22 @@ export const TextContainer = styled('div', {
   color: '#00e7f9',
 })
 
-export const WorkoutRoutineContainer = styled('div', {
-  display: 'flex',
+export const WorkoutTrainingSheetContainer = styled('div', {
+  display: 'block',
   fontSize: '0.8rem',
   marginLeft: '0rem',
   paddingLeft: '0.5rem',
   width: '49rem',
   height: '4rem',
-  alignItems: 'center',
   borderRadius: '6px',
   backgroundColor: '$gray700',
-  gap: '1rem',
-  // border: 'solid 1px red',
+  margin: '0.5rem',
+  border: 'solid 1px red',
+
+  /* Centraliza verticalmente */
+  position: 'relative',
+  top: '50%',
+  transform: 'translateY(-50%)',
 
   '&:hover': {
     backgroundColor: '$gray600',
@@ -152,17 +156,22 @@ export const WorkoutRoutineContainer = styled('div', {
   },
 })
 
+export const TrainingSheetContainer = styled('div', {
+  paddingBottom: '0.2rem',
+  // border: 'solid 1px red',
+})
+
 export const ContainerList = styled('div', {
   width: '100%',
   maxWidth: '1120px',
-  padding: '0 1.5rem',
-  overflowX: 'auto',
+  margin: '0.2rem auto',
+  padding: '0 $2',
   // border: 'solid 1px red',
 
   '@media screen and (max-width: 768px)': {
     /* Quando a largura da tela for menor ou igual a 768 pixels */
     maxWidth: '100%',
-    margin: '$20 auto',
+    margin: '0.2rem auto',
     padding: '0 $2',
     overflowX: 'auto',
   },
@@ -332,11 +341,14 @@ export const TbodyResult = styled('tbody', {
   borderBottomRightRadius: '6px',
 
   td: {
-    height: '40px',
+    paddingLeft: '1rem',
+    height: '4rem',
+    width: '49rem',
     background: '$gray700',
     fontSize: '1rem',
     fontWeight: '400',
     position: 'relative',
+    // border: '1px solid red',
 
     '&:first-child': {
       borderTopLeftRadius: '6px',

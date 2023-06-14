@@ -1,10 +1,11 @@
 import { styled, Box } from '@ignite-ui/react'
 
 export const Container = styled('main', {
-  maxWidth: 872,
+  width: 872,
   margin: '1.5rem auto $4',
   padding: '0 $4',
-  border: '1px solid red',
+  zIndex: 999,
+  // border: '1px solid red',
 
   '@media screen and (max-width: 768px)': {
     /* Quando a largura da tela for menor ou igual a 768 pixels */
@@ -42,6 +43,21 @@ export const TextInfo = styled('div', {
   width: '100%',
   // height: '100%',
   // border: '1px solid red'
+})
+export const Select = styled('select', {
+  height: '45px',
+  color: '$gray100',
+  borderRadius: '8px',
+  padding: '$2 $4',
+  fontSize: '15px',
+  backgroundColor: '$gray900',
+  border: 'none',
+  appearance: 'none',
+
+  '&:focus': {
+    outline: 'none',
+    boxShadow: '0 0 0 1px $colors$ignite300',
+  },
 })
 
 export const ButtonCadContainer = styled(Box, {
@@ -123,6 +139,39 @@ export const ButtonCad = styled('button', {
   '@media screen and (max-width: 768px)': {
     fontSize: '0rem',
     maxWidth: '6rem',
+  },
+})
+
+export const ButtonSave = styled('button', {
+  gap: '0.3rem',
+  flex: '1',
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  lineHeight: '1.5rem',
+  justifyContent: 'center',
+  padding: '12px 24px',
+  borderRadius: '4px',
+  backgroundColor: '$gray600',
+  color: '#fff',
+  fontSize: '16px',
+  fontWeight: '600',
+  border: 'none',
+  cursor: 'pointer',
+  transition: '.2s ease-in-out',
+
+  '&:hover': {
+    backgroundColor: '#B71C1C',
+  },
+
+  '&:active': {
+    transform: 'scale(0.98)',
+  },
+
+  '&:disabled': {
+    backgroundColor: '$gray500',
+    cursor: 'not-allowed',
+    color: '$gray400',
   },
 })
 
@@ -229,18 +278,26 @@ export const ButtonInfo = styled('button', {
 })
 
 export const TextInput = styled('input', {
-  flex: '1',
   display: 'block',
-  height: '3rem',
-  color: '$gray100',
-  fontSize: '1.3rem',
+  height: '45px',
   width: '100%',
-  padding: '0 1rem',
+  color: '$gray100',
+  borderRadius: '8px',
+  padding: '$2 $4',
+  fontSize: '15px',
+  backgroundColor: '$gray900',
   border: 'none',
-  borderRadius: '6px',
-  flexDirection: 'row',
-  alignItems: 'center',
-  backgroundColor: '$gray700',
+  appearance: 'none',
+
+  '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
+    '-webkit-appearance': 'none',
+    margin: 0,
+  },
+
+  '&:focus': {
+    outline: 'none',
+    boxShadow: '0 0 0 1px $colors$ignite300',
+  },
 })
 
 export const TextInputSelectPagination = styled('input', {

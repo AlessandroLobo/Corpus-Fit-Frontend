@@ -238,7 +238,7 @@ export const WorkoutRoutineRegistration = () => {
           )}
         </TextInputContainer>
 
-        <TextDatePickerContainer>
+        {/* <TextDatePickerContainer>
           <TextInputContainer>
             <Text>Data de Início:</Text>
             <DatePickerContainer
@@ -255,7 +255,7 @@ export const WorkoutRoutineRegistration = () => {
               onChange={(date: Date | null) => setEndDate(date)}
             />
           </TextInputContainerDataPiker>
-        </TextDatePickerContainer>
+        </TextDatePickerContainer> */}
 
         <TextInputContainer>
           <Text>Obs/Instruções:</Text>

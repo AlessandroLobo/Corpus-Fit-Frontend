@@ -19,7 +19,7 @@ import React, { useEffect, useState } from 'react'
 
 import Routines from '../components/WorkoutLibraryComponents/Routines'
 import Training from '../components/WorkoutLibraryComponents/Training'
-import ExerciceSheet from '../components/WorkoutLibraryComponents/ExerciceSheet'
+import ExerciceSheet from '../components/WorkoutLibraryComponents/ExerciseSheet'
 
 interface ISelectedComponent {
   id: string

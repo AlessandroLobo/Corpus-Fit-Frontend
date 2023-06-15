@@ -1,14 +1,13 @@
 import { GetRoutine } from '@/pages/api/createWorkout'
-import { ClipboardText } from '@phosphor-icons/react'
+import { ArrowClockwise, ClipboardText, Plus } from '@phosphor-icons/react'
 import React, { useEffect, useState } from 'react'
 import {
-  ButtonInfo,
+  Button,
   ClipboardTButtonInfoContainer,
   ContainerList,
   Table,
   TbodyResult,
   TrainingSheetContainer,
-  WorkoutTrainingSheetContainer,
 } from './styles'
 import { ModalInfo } from '../../Modal/modalInfo'
 import TrainingSheet from '../TtrainingSheet'
@@ -17,21 +16,20 @@ import {
   ICreateTrainingSheet,
 } from '@/pages/api/createTraining'
 
-interface TrainingProps {
+interface ISelectedComponent {
   id: string
-  selectedComponent: {
-    id: string
-    component: string
-  }
+  component: 'Routines' | 'Training' | 'ExerciceSheet'
 }
-
 interface IRoutineData {
+  id: string
   name: string
   objective: string
   workoutType: string
 }
-
-export default function Training(props: TrainingProps) {
+export default function Training(props: {
+  selectedComponent: ISelectedComponent
+  handleSelectedComponent: (selectedComponent: ISelectedComponent) => void
+}) {
   const { selectedComponent } = props
 
   const [routineData, setRoutineData] = useState<IRoutineData>()
@@ -44,70 +42,111 @@ export default function Training(props: TrainingProps) {
 
   useEffect(() => {
     listTrainingSheet()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     handleSearch()
+    console.log('SelectComponentTraining', selectedComponent.id)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  const listTrainingSheet = async () => {
-    const data = await GetAllTrainingSheet()
-    if (data.trainingSheets.length > 0) {
-      setStateListTrainingSheet(true)
-      settrainingSheet(data.trainingSheets)
-      console.log('data', data.trainingSheets)
-    }
-    // console.log('data', data.trainingSheets)
-  }
-  const handleEdit = (id: string) => {
-    console.log(id)
-  }
 
   const handleSearch = async () => {
     if (!selectedComponent) return
     try {
       const response = await GetRoutine(selectedComponent.id)
       setRoutineData(response.workoutRoutine)
-      console.log('RoutineData', response.workoutRoutine.id)
+      console.log('Training', response.workoutRoutine.id)
     } catch (error) {
       console.log(error)
     }
   }
+
+  const listTrainingSheet = async () => {
+    const data = await GetAllTrainingSheet(selectedComponent.id)
+    if (data.trainingSheets.length > 0) {
+      setStateListTrainingSheet(true)
+      settrainingSheet(data.trainingSheets)
+      // console.log('data', data.trainingSheets)
+    }
+  }
+
+  function handleEdit(id: string) {
+    const selectedComponent: ISelectedComponent = {
+      id,
+      component: 'ExerciceSheet',
+    }
+    // console.log('SelectComponenteTraining', selectedComponent)
+    props.handleSelectedComponent(selectedComponent)
+  }
+
   function handleClick() {
     setModalOpen(true)
   }
+
   return (
-    <>
+    <div>
       <ModalInfo isOpen={modalOpen} setIsOpen={setModalOpen}>
         {routineData ? <TrainingSheet routineData={routineData} /> : null}
       </ModalInfo>
       <div>Treinos</div>
       <div>{routineData?.name}</div>
       <div>{routineData?.objective}</div>
-      <div>
-        <ButtonInfo onClick={handleClick}>Treino</ButtonInfo>
-      </div>
+      {!stateListTrainingSheet ? (
+        <div>
+          {' '}
+          <Button
+            onClick={listTrainingSheet}
+            style={{ marginTop: 17, marginBottom: 10, width: '100%' }}
+          >
+            Atualizar dados
+            <ArrowClockwise size={18} />
+          </Button>
+        </div>
+      ) : null}
+
       {stateListTrainingSheet ? (
-        <ContainerList>
-          <Table>
-            <TbodyResult>
-              {trainingSheet &&
-                trainingSheet.map((trainingSheet) => (
-                  <tr key={trainingSheet.id}>
-                    <td onClick={() => handleEdit(trainingSheet.id)}>
-                      <TrainingSheetContainer>
-                        {trainingSheet.workoutType}
-                      </TrainingSheetContainer>
-                      <TrainingSheetContainer>
-                        {trainingSheet.name}
-                      </TrainingSheetContainer>
-                    </td>
-                  </tr>
-                ))}
-            </TbodyResult>
-          </Table>
-        </ContainerList>
+        <>
+          <div>
+            <Button
+              onClick={handleClick}
+              style={{ marginTop: 17, marginBottom: 10, width: '100%' }}
+            >
+              Treino
+              <Plus size={18} />
+            </Button>
+            <Button
+              onClick={listTrainingSheet}
+              style={{ marginTop: 17, marginBottom: 10, width: '100%' }}
+            >
+              Atualizar dados
+              <ArrowClockwise size={18} />
+            </Button>
+          </div>
+          <ContainerList>
+            <Table>
+              <TbodyResult>
+                {trainingSheet &&
+                  trainingSheet.map((trainingSheet) => (
+                    <tr key={trainingSheet.id}>
+                      <td
+                        onClick={() =>
+                          trainingSheet.id ? handleEdit(trainingSheet.id) : ''
+                        }
+                      >
+                        <TrainingSheetContainer>
+                          {trainingSheet.workoutType}
+                        </TrainingSheetContainer>
+                        <TrainingSheetContainer>
+                          {trainingSheet.name}
+                        </TrainingSheetContainer>
+                      </td>
+                    </tr>
+                  ))}
+              </TbodyResult>
+            </Table>
+          </ContainerList>
+        </>
       ) : (
         <ClipboardTButtonInfoContainer>
           <ClipboardText size={150} />
@@ -115,9 +154,14 @@ export default function Training(props: TrainingProps) {
             A sua rotina é como uma ficha, adicione vários treinos dentro dessa
             rotina
           </h3>
-          <ButtonInfo onClick={handleClick}>Criar Primeiro Treino</ButtonInfo>
+          <Button
+            onClick={handleClick}
+            style={{ marginTop: 17, marginBottom: 10, width: '100%' }}
+          >
+            Criar Primeiro Treino
+          </Button>
         </ClipboardTButtonInfoContainer>
       )}
-    </>
+    </div>
   )
 }

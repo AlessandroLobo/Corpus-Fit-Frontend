@@ -1,9 +1,10 @@
 import { styled, Box } from '@ignite-ui/react'
 
 export const Container = styled('main', {
-  maxWidth: 872,
+  width: 872,
   margin: '1.5rem auto $4',
   padding: '0 $4',
+  zIndex: 999,
   // border: '1px solid red',
 
   '@media screen and (max-width: 768px)': {
@@ -11,6 +12,23 @@ export const Container = styled('main', {
     maxWidth: '100%',
     margin: '2rem auto',
     padding: '0 $2',
+  },
+})
+
+export const Form = styled(Box, {
+  display: 'flex',
+  // justifyContent: 'space-between',
+  marginTop: '2rem',
+  marginBottom: '2rem',
+  flexDirection: 'column',
+  width: '100%',
+  gap: '$4',
+  // border: '1px solid red',
+
+  label: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '$2',
   },
 })
 
@@ -25,6 +43,21 @@ export const TextInfo = styled('div', {
   width: '100%',
   // height: '100%',
   // border: '1px solid red'
+})
+export const Select = styled('select', {
+  height: '45px',
+  color: '$gray100',
+  borderRadius: '8px',
+  padding: '$2 $4',
+  fontSize: '15px',
+  backgroundColor: '$gray900',
+  border: 'none',
+  appearance: 'none',
+
+  '&:focus': {
+    outline: 'none',
+    boxShadow: '0 0 0 1px $colors$ignite300',
+  },
 })
 
 export const ButtonCadContainer = styled(Box, {
@@ -109,18 +142,36 @@ export const ButtonCad = styled('button', {
   },
 })
 
-export const Form = styled(Box, {
+export const ButtonSave = styled('button', {
+  gap: '0.3rem',
+  flex: '1',
   display: 'flex',
-  marginTop: '$6',
-  paddingLeft: '0.8rem',
-  flexDirection: 'column',
-  gap: '$4',
-  // border: 'solid 1px red',
+  flexDirection: 'row',
+  alignItems: 'center',
+  lineHeight: '1.5rem',
+  justifyContent: 'center',
+  padding: '12px 24px',
+  borderRadius: '4px',
+  backgroundColor: '$gray600',
+  color: '#fff',
+  fontSize: '16px',
+  fontWeight: '600',
+  border: 'none',
+  cursor: 'pointer',
+  transition: '.2s ease-in-out',
 
-  label: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '$4',
+  '&:hover': {
+    backgroundColor: '#B71C1C',
+  },
+
+  '&:active': {
+    transform: 'scale(0.98)',
+  },
+
+  '&:disabled': {
+    backgroundColor: '$gray500',
+    cursor: 'not-allowed',
+    color: '$gray400',
   },
 })
 
@@ -128,22 +179,18 @@ export const TextContainer = styled('div', {
   color: '#00e7f9',
 })
 
-export const WorkoutTrainingSheetContainer = styled('div', {
-  display: 'block',
+export const WorkoutRoutineContainer = styled('div', {
+  display: 'flex',
   fontSize: '0.8rem',
   marginLeft: '0rem',
   paddingLeft: '0.5rem',
   width: '49rem',
   height: '4rem',
+  alignItems: 'center',
   borderRadius: '6px',
   backgroundColor: '$gray700',
-  margin: '0.5rem',
-  border: 'solid 1px red',
-
-  /* Centraliza verticalmente */
-  position: 'relative',
-  top: '50%',
-  transform: 'translateY(-50%)',
+  gap: '1rem',
+  // border: 'solid 1px red',
 
   '&:hover': {
     backgroundColor: '$gray600',
@@ -156,22 +203,17 @@ export const WorkoutTrainingSheetContainer = styled('div', {
   },
 })
 
-export const TrainingSheetContainer = styled('div', {
-  paddingBottom: '0.2rem',
-  // border: 'solid 1px red',
-})
-
 export const ContainerList = styled('div', {
   width: '100%',
   maxWidth: '1120px',
-  margin: '0.2rem auto',
-  padding: '0 $2',
+  padding: '0 1.5rem',
+  overflowX: 'auto',
   // border: 'solid 1px red',
 
   '@media screen and (max-width: 768px)': {
     /* Quando a largura da tela for menor ou igual a 768 pixels */
     maxWidth: '100%',
-    margin: '0.2rem auto',
+    margin: '$20 auto',
     padding: '0 $2',
     overflowX: 'auto',
   },
@@ -183,13 +225,15 @@ export const Table = styled('table', {
   width: '100%',
   height: '100%',
   display: 'block',
+  border: 'solid 1px red',
 })
 
 export const TextInputContainer = styled('div', {
   flex: '1',
   display: 'block',
   flexDirection: 'row',
-  alignItems: 'center',
+  alignItems: 'left',
+  // border: 'solid 1px red',
 })
 
 export const ClipboardTButtonInfoContainer = styled('div', {
@@ -204,7 +248,6 @@ export const ClipboardTButtonInfoContainer = styled('div', {
     flexDirection: 'column',
     gap: '$4',
     paddingBottom: '1rem',
-    // border: 'solid 1px red',
   },
 })
 
@@ -235,18 +278,26 @@ export const ButtonInfo = styled('button', {
 })
 
 export const TextInput = styled('input', {
-  flex: '1',
   display: 'block',
-  height: '3rem',
-  color: '$gray100',
-  fontSize: '1.3rem',
+  height: '45px',
   width: '100%',
-  padding: '0 1rem',
+  color: '$gray100',
+  borderRadius: '8px',
+  padding: '$2 $4',
+  fontSize: '15px',
+  backgroundColor: '$gray900',
   border: 'none',
-  borderRadius: '6px',
-  flexDirection: 'row',
-  alignItems: 'center',
-  backgroundColor: '$gray700',
+  appearance: 'none',
+
+  '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
+    '-webkit-appearance': 'none',
+    margin: 0,
+  },
+
+  '&:focus': {
+    outline: 'none',
+    boxShadow: '0 0 0 1px $colors$ignite300',
+  },
 })
 
 export const TextInputSelectPagination = styled('input', {
@@ -297,7 +348,9 @@ export const Button = styled('button', {
 })
 
 export const Text = styled('div', {
+  textAlign: 'left',
   paddingBottom: '$4',
+  // border: 'solid 1px red',
 })
 
 export const Line = styled('div', {
@@ -342,14 +395,11 @@ export const TbodyResult = styled('tbody', {
   borderBottomRightRadius: '6px',
 
   td: {
-    paddingLeft: '1rem',
-    height: '4rem',
-    width: '49rem',
+    height: '40px',
     background: '$gray700',
     fontSize: '1rem',
     fontWeight: '400',
     position: 'relative',
-    // border: '1px solid red',
 
     '&:first-child': {
       borderTopLeftRadius: '6px',

@@ -23,6 +23,7 @@ import { ModalInfo } from '../../Modal/modalInfo'
 
 interface IRoutineData {
   // Defina aqui o formato dos dados de retorno da API
+  id: string
   name: string
   objective: string
   workoutType: string
@@ -51,8 +52,6 @@ export default function TrainingSheet(props: TrainingSheetProps) {
 
   const [modalOpen, setModalOpen] = useState(false)
 
-  // const [statusValue, setstatusValue] = useState(true)
-
   const [textMOdal, setTextModal] = useState('')
 
   const [workoutTypeSelect, setWorkoutTypeSelect] = useState(false)
@@ -74,6 +73,7 @@ export default function TrainingSheet(props: TrainingSheetProps) {
     ) {
       setWorkoutTypeSelect(true)
     }
+    // console.log(props.routineData.id)
   }, [props.routineData.workoutType])
 
   // function handlePlanChange(event) {
@@ -96,6 +96,7 @@ export default function TrainingSheet(props: TrainingSheetProps) {
       const params: ICreateTrainingSheet = {
         name: data.name.toUpperCase(),
         workoutType: workoutTypeData,
+        routineId: props.routineData.id,
       }
       console.log(params)
       await CreateTrainingSheet(params)

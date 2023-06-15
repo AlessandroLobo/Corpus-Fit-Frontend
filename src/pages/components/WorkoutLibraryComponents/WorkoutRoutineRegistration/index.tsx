@@ -263,7 +263,6 @@ export const WorkoutRoutineRegistration = () => {
         </TextInputContainer>
         <Line />
         <ButtonContainer>
-          {/* {!buttonDeleteDisabled ? ( */}
           <ButtonSave type="submit" style={{ marginTop: 27, marginBottom: 20 }}>
             Salvar
             <Pencil />

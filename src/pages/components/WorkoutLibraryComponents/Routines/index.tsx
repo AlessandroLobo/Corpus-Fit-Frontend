@@ -38,7 +38,6 @@ export default function Routines(props: {
   const handleSearch = async () => {
     const searchTerm =
       (document.querySelector('#search-input') as HTMLInputElement)?.value || ''
-    console.log(searchTerm)
     const data = await GetAllRoutine(searchTerm)
     const workoutRoutines = data.workoutRoutines
     setWorkoutRoutine(workoutRoutines)

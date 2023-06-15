@@ -1,9 +1,10 @@
 import axios, { AxiosError } from 'axios'
 
 export interface ICreateTrainingSheet {
-  id: string
+  id?: string
   name: string
   workoutType?: string
+  routineId: string
 }
 
 interface ApiResponse {
@@ -14,11 +15,13 @@ interface ApiResponse {
 export function CreateTrainingSheet({
   name,
   workoutType,
+  routineId,
 }: ICreateTrainingSheet) {
   return axios
     .post('http://localhost:3333/workout/createTrainingSheet', {
       name,
       workoutType,
+      routineId,
     })
     .then((response) => response.data)
     .catch((error: AxiosError) => {
@@ -37,14 +40,13 @@ export function CreateTrainingSheet({
     })
 }
 
-export const GetAllTrainingSheet = async (): Promise<ApiResponse> => {
+export const GetAllTrainingSheet = async (id: any): Promise<ApiResponse> => {
   try {
     const response = await axios.get(
       'http://localhost:3333/workout/listTrainingSheet',
       {
         params: {
-          name,
-          
+          id,
         },
       },
     )

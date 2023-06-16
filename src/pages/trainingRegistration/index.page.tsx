@@ -19,11 +19,11 @@ import React, { useEffect, useState } from 'react'
 
 import Routines from '../components/WorkoutLibraryComponents/Routines'
 import Training from '../components/WorkoutLibraryComponents/Training'
-import ExerciceSheet from '../components/WorkoutLibraryComponents/ExerciseSheet'
+import ExerciseSheet from '../components/WorkoutLibraryComponents/ExerciseSheet'
 
 interface ISelectedComponent {
   id: string
-  component: 'Routines' | 'Training' | 'ExerciceSheet' | null
+  component: 'Routines' | 'Training' | 'ExerciseSheet' | null
 }
 
 interface IReturnComponent {
@@ -39,11 +39,13 @@ export default function TrainingRegistration() {
   const [selectedComponent, setSelectedComponent] =
     useState<ISelectedComponent | null>(null)
 
-  useEffect(() => {
-    setReturnComponent(selectedComponent ? selectedComponent.id : null)
-    console.log('returnComponent', returnComponent)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  // useEffect(() => {
+  //   setReturnComponent(
+  //     selectedComponent ? selectedComponent.workoutRoutineId : null,
+  //   )
+  //   console.log('returnComponent', returnComponent)
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [returnComponent])
 
   function handleWorkoutRoutineRegistration() {
     setModalOpen(true)
@@ -51,6 +53,7 @@ export default function TrainingRegistration() {
 
   function handleSelectedComponent(selectedComponent: ISelectedComponent) {
     setSelectedComponent(selectedComponent)
+    setReturnComponent(selectedComponent.workoutRoutineId)
     console.log('handleSelectedComponent', selectedComponent)
     console.log('returnComponent', returnComponent)
   }
@@ -63,12 +66,13 @@ export default function TrainingRegistration() {
 
       <ButtonCadContainer>
         <TextContainerBack>
-          {selectedComponent?.component === 'ExerciceSheet' ? (
+          {selectedComponent?.component === 'ExerciseSheet' ? (
             <>
               <CaretLeft size={20} />
               <TextVoltar
                 onClick={() =>
                   handleSelectedComponent({
+                    workoutRoutineId: returnComponent,
                     id: returnComponent,
                     component: 'Training',
                   })
@@ -83,6 +87,7 @@ export default function TrainingRegistration() {
               <TextVoltar
                 onClick={() =>
                   handleSelectedComponent({
+                    workoutRoutineId: returnComponent,
                     id: returnComponent,
                     component: 'Routines',
                   })
@@ -97,6 +102,7 @@ export default function TrainingRegistration() {
               <TextVoltar
                 onClick={() =>
                   handleSelectedComponent({
+                    workoutRoutineId: returnComponent,
                     id: returnComponent,
                     component: 'Routines',
                   })
@@ -118,20 +124,25 @@ export default function TrainingRegistration() {
         <ButtonContainer></ButtonContainer>
       </ButtonCadContainer>
       <Form>
-        {selectedComponent?.component === 'ExerciceSheet' ? (
-          <ExerciceSheet
+        {selectedComponent?.component === 'ExerciseSheet' ? (
+          <ExerciseSheet
+            // setWorkoutRoutineId={workoutRoutineId}
             selectedComponent={selectedComponent}
             handleSelectedComponent={handleSelectedComponent}
           />
         ) : selectedComponent?.component === 'Training' ? (
           <Training
+            // workoutRoutineId={workoutRoutineId}
             selectedComponent={selectedComponent}
             handleSelectedComponent={handleSelectedComponent}
+          // setWorkoutRoutineId={setWorkoutRoutineId}
           />
         ) : (
           <Routines
+            // workoutRoutineId={workoutRoutineId}
             selectedComponent={selectedComponent}
             handleSelectedComponent={handleSelectedComponent}
+          // setWorkoutRoutineId={setWorkoutRoutineId}
           />
         )}
       </Form>

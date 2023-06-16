@@ -1,6 +1,6 @@
 import { Container } from './styles'
 
-interface ExerciceSheetProps {
+interface ExerciseSheetProps {
   id: string
   selectedComponent: {
     id: string
@@ -8,7 +8,7 @@ interface ExerciceSheetProps {
   }
 }
 
-export default function ExerciceSheet(props: ExerciceSheetProps) {
+export default function ExerciseSheet(props: ExerciseSheetProps) {
   return (
     <Container>
       <h1>ExerciceSheet</h1>

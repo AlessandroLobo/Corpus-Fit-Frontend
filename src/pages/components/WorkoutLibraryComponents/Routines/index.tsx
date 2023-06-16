@@ -26,10 +26,13 @@ interface IWorkoutRoutine {
 }
 
 export default function Routines(props: {
+  workoutRoutineId: IWorkoutRoutine
   selectedComponent: ISelectedComponent
   handleSelectedComponent: (selectedComponent: ISelectedComponent) => void
 }) {
   const [workoutRoutine, setWorkoutRoutine] = useState<IWorkoutRoutine[]>([])
+
+  const [workoutRoutineId, setWorkoutRoutineId] = useState<IWorkoutRoutine>({})
 
   useEffect(() => {
     handleSearch()
@@ -44,8 +47,15 @@ export default function Routines(props: {
   }
 
   function handleEdit(id: string) {
-    const selectedComponent: ISelectedComponent = { id, component: 'Training' }
+    const selectedComponent: ISelectedComponent = {
+      workoutRoutineId: id,
+      id,
+      component: 'Training',
+    }
     props.handleSelectedComponent(selectedComponent)
+    // props.setWorkoutRoutineId(workoutRoutine.id)
+    setWorkoutRoutineId(id)
+    console.log('selectedComponent Enviado de routine', selectedComponent)
   }
 
   return (

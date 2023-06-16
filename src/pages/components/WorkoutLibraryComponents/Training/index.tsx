@@ -18,7 +18,7 @@ import {
 
 interface ISelectedComponent {
   id: string
-  component: 'Routines' | 'Training' | 'ExerciceSheet'
+  component: 'Routines' | 'Training' | 'ExerciseSheet'
 }
 interface IRoutineData {
   id: string
@@ -31,6 +31,9 @@ export default function Training(props: {
   handleSelectedComponent: (selectedComponent: ISelectedComponent) => void
 }) {
   const { selectedComponent } = props
+
+  const [selectWorkoutRoutineId, setSelectWorkoutRoutineId] =
+    useState<ISelectedComponent>({})
 
   const [routineData, setRoutineData] = useState<IRoutineData>()
 
@@ -47,14 +50,15 @@ export default function Training(props: {
 
   useEffect(() => {
     handleSearch()
-    console.log('SelectComponentTraining', selectedComponent.id)
+    console.log('SelectComponentTraining', selectedComponent)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleSearch = async () => {
     if (!selectedComponent) return
     try {
-      const response = await GetRoutine(selectedComponent.id)
+      const response = await GetRoutine(selectedComponent.workoutRoutineId)
+      setSelectWorkoutRoutineId(selectedComponent.workoutRoutineId)
       setRoutineData(response.workoutRoutine)
       console.log('Training', response.workoutRoutine.id)
     } catch (error) {
@@ -63,7 +67,7 @@ export default function Training(props: {
   }
 
   const listTrainingSheet = async () => {
-    const data = await GetAllTrainingSheet(selectedComponent.id)
+    const data = await GetAllTrainingSheet(selectedComponent.workoutRoutineId)
     if (data.trainingSheets.length > 0) {
       setStateListTrainingSheet(true)
       settrainingSheet(data.trainingSheets)
@@ -73,8 +77,9 @@ export default function Training(props: {
 
   function handleEdit(id: string) {
     const selectedComponent: ISelectedComponent = {
+      workoutRoutineId: selectWorkoutRoutineId,
       id,
-      component: 'ExerciceSheet',
+      component: 'ExerciseSheet',
     }
     // console.log('SelectComponenteTraining', selectedComponent)
     props.handleSelectedComponent(selectedComponent)

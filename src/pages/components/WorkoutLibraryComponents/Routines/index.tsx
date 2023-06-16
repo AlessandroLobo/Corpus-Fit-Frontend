@@ -16,23 +16,29 @@ import { GetAllRoutine } from '@/pages/api/createWorkout'
 
 interface ISelectedComponent {
   id: string
-  component: 'Routines' | 'Training'
+  component: 'Routines' | 'Training' | 'ExerciseSheet'
+  workoutRoutineId: string
 }
 
 interface IWorkoutRoutine {
   id: string
   name: string
+  workoutType?: string
   objective: string
+  observation: string
+  studentId: string | null
+  startDate: Date | null
+  endDate: Date | null
 }
 
 export default function Routines(props: {
-  workoutRoutineId: IWorkoutRoutine
-  selectedComponent: ISelectedComponent
+  workoutRoutineId: string
+  selectedComponent: ISelectedComponent | undefined
   handleSelectedComponent: (selectedComponent: ISelectedComponent) => void
 }) {
-  const [workoutRoutine, setWorkoutRoutine] = useState<IWorkoutRoutine[]>([])
-
-  const [workoutRoutineId, setWorkoutRoutineId] = useState<IWorkoutRoutine>({})
+  const [workoutRoutine, setWorkoutRoutine] = useState<
+    IWorkoutRoutine[] | undefined
+  >([])
 
   useEffect(() => {
     handleSearch()
@@ -53,8 +59,6 @@ export default function Routines(props: {
       component: 'Training',
     }
     props.handleSelectedComponent(selectedComponent)
-    // props.setWorkoutRoutineId(workoutRoutine.id)
-    setWorkoutRoutineId(id)
     console.log('selectedComponent Enviado de routine', selectedComponent)
   }
 

@@ -7,7 +7,6 @@ import {
   Container,
   ContainerAlert,
   ContainerModalAlert,
-  DatePickerContainer,
   Form,
   FormError,
   Line,
@@ -16,11 +15,9 @@ import {
   Text,
   TextAlert,
   TextArea,
-  TextDatePickerContainer,
   TextInfo,
   TextInput,
   TextInputContainer,
-  TextInputContainerDataPiker,
 } from './styles'
 import { ModalInfo } from '../../Modal/modalInfo'
 import { Pencil } from '@phosphor-icons/react'

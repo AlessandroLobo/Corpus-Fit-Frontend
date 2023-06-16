@@ -19,7 +19,9 @@ import {
 interface ISelectedComponent {
   id: string
   component: 'Routines' | 'Training' | 'ExerciseSheet'
+  workoutRoutineId: string
 }
+
 interface IRoutineData {
   id: string
   name: string
@@ -32,8 +34,9 @@ export default function Training(props: {
 }) {
   const { selectedComponent } = props
 
-  const [selectWorkoutRoutineId, setSelectWorkoutRoutineId] =
-    useState<ISelectedComponent>({})
+  const [selectWorkoutRoutineId, setSelectWorkoutRoutineId] = useState<
+    string | undefined
+  >()
 
   const [routineData, setRoutineData] = useState<IRoutineData>()
 
@@ -76,12 +79,12 @@ export default function Training(props: {
   }
 
   function handleEdit(id: string) {
+    const workoutRoutineId = selectWorkoutRoutineId || '' // Valor padrão em caso de undefined
     const selectedComponent: ISelectedComponent = {
-      workoutRoutineId: selectWorkoutRoutineId,
+      workoutRoutineId,
       id,
       component: 'ExerciseSheet',
     }
-    // console.log('SelectComponenteTraining', selectedComponent)
     props.handleSelectedComponent(selectedComponent)
   }
 

@@ -40,9 +40,9 @@ interface SelectWeeks {
 }
 
 const registerFormSchema = z.object({
-  tipo: z.string(),
+  tipo: z.string().optional(),
+  selectWeek: z.string().optional(),
   name: z.string().min(3, 'O nome deve ter pelo menos 3 caracteres'),
-  selectWeek: z.string(),
 })
 
 type RegisterFormData = z.infer<typeof registerFormSchema>
@@ -73,25 +73,17 @@ export default function TrainingSheet(props: TrainingSheetProps) {
     ) {
       setWorkoutTypeSelect(true)
     }
-    // console.log(props.routineData.id)
   }, [props.routineData.workoutType])
-
-  // function handlePlanChange(event) {
-  //   const selectedValue = event.target.value
-  //   console.log('Valor selecionado:', selectedValue)
-  //   // Faça algo com o valor selecionado aqui
-  // }
 
   async function handleRegister(data: RegisterFormData) {
     console.log('Data', data)
     let workoutTypeData = ''
     // verifica qual campo foi preenchido input ou select
-    if (data.tipo === '') {
-      workoutTypeData = data.selectWeek
-    } else {
+    if (data.tipo !== undefined && data.tipo !== '') {
       workoutTypeData = data.tipo.toUpperCase()
+    } else {
+      workoutTypeData = data.selectWeek || ''
     }
-
     try {
       const params: ICreateTrainingSheet = {
         name: data.name.toUpperCase(),
@@ -120,27 +112,41 @@ export default function TrainingSheet(props: TrainingSheetProps) {
         <TextInputContainer>
           <Text>Tipo:</Text>
           {workoutTypeSelect ? (
-            <Select
-              style={{ width: '100%' }}
-              {...register('selectWeek', { required: true })}
-            >
-              {selectWeeks.map((week) => (
-                <option key={week.id} value={week.label}>
-                  {week.label}
-                </option>
-              ))}
-            </Select>
+            <>
+              <Select
+                style={{ width: '100%' }}
+                {...register('selectWeek', { required: true })}
+              >
+                {selectWeeks.map((week) => (
+                  <option key={week.id} value={week.label}>
+                    {week.label}
+                  </option>
+                ))}
+              </Select>
+              {errors.selectWeek && (
+                <FormError>
+                  <Text>{errors.selectWeek?.message}</Text>
+                </FormError>
+              )}
+            </>
           ) : (
-            <TextInput
-              {...register('tipo', {
-                required: true,
-              })}
-              placeholder="Digite o tipo ex: Treino 1 , Treino 2 ou A, B, C..."
-              style={{ width: '100%' }}
-              onBlur={(event) =>
-                (event.target.value = event.target.value.toUpperCase())
-              }
-            />
+            <>
+              <TextInput
+                {...register('tipo', {
+                  required: true,
+                })}
+                placeholder="Digite o tipo ex: Treino 1 , Treino 2 ou A, B, C..."
+                style={{ width: '100%' }}
+                onBlur={(event) =>
+                  (event.target.value = event.target.value.toUpperCase())
+                }
+              />
+              {errors.tipo && (
+                <FormError>
+                  <Text>{errors.tipo?.message}</Text>
+                </FormError>
+              )}
+            </>
           )}
         </TextInputContainer>
         <TextInputContainer>
@@ -163,7 +169,6 @@ export default function TrainingSheet(props: TrainingSheetProps) {
         </TextInputContainer>
         <ButtonSave
           type="submit"
-          // onClick={handleSearch}
           style={{ marginTop: 17, marginBottom: 10, width: '100%' }}
         >
           Salvar

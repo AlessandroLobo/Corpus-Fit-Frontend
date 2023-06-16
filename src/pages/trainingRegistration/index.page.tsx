@@ -15,7 +15,7 @@ import { GetServerSidePropsContext } from 'next'
 import { parseCookies } from 'nookies'
 import { ModalInfo } from '../components/Modal/modalInfo'
 import { WorkoutRoutineRegistration } from '../components/WorkoutLibraryComponents/WorkoutRoutineRegistration'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import Routines from '../components/WorkoutLibraryComponents/Routines'
 import Training from '../components/WorkoutLibraryComponents/Training'
@@ -23,29 +23,17 @@ import ExerciseSheet from '../components/WorkoutLibraryComponents/ExerciseSheet'
 
 interface ISelectedComponent {
   id: string
-  component: 'Routines' | 'Training' | 'ExerciseSheet' | null
-}
-
-interface IReturnComponent {
-  id: string | null
-  selectedComponent: string | null
+  component: 'Routines' | 'Training' | 'ExerciseSheet'
+  workoutRoutineId: string
 }
 
 export default function TrainingRegistration() {
   const [modalOpen, setModalOpen] = useState(false)
 
-  const [returnComponent, setReturnComponent] = useState<IReturnComponent>()
+  const [returnComponent, setReturnComponent] = useState<string | null>(null)
 
   const [selectedComponent, setSelectedComponent] =
-    useState<ISelectedComponent | null>(null)
-
-  // useEffect(() => {
-  //   setReturnComponent(
-  //     selectedComponent ? selectedComponent.workoutRoutineId : null,
-  //   )
-  //   console.log('returnComponent', returnComponent)
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [returnComponent])
+    useState<ISelectedComponent>(null as any)
 
   function handleWorkoutRoutineRegistration() {
     setModalOpen(true)
@@ -72,8 +60,8 @@ export default function TrainingRegistration() {
               <TextVoltar
                 onClick={() =>
                   handleSelectedComponent({
-                    workoutRoutineId: returnComponent,
-                    id: returnComponent,
+                    workoutRoutineId: returnComponent ?? '',
+                    id: returnComponent ?? '',
                     component: 'Training',
                   })
                 }
@@ -87,8 +75,8 @@ export default function TrainingRegistration() {
               <TextVoltar
                 onClick={() =>
                   handleSelectedComponent({
-                    workoutRoutineId: returnComponent,
-                    id: returnComponent,
+                    workoutRoutineId: returnComponent ?? '',
+                    id: returnComponent ?? '',
                     component: 'Routines',
                   })
                 }
@@ -102,8 +90,8 @@ export default function TrainingRegistration() {
               <TextVoltar
                 onClick={() =>
                   handleSelectedComponent({
-                    workoutRoutineId: returnComponent,
-                    id: returnComponent,
+                    workoutRoutineId: returnComponent ?? '',
+                    id: returnComponent ?? '',
                     component: 'Routines',
                   })
                 }
@@ -126,23 +114,21 @@ export default function TrainingRegistration() {
       <Form>
         {selectedComponent?.component === 'ExerciseSheet' ? (
           <ExerciseSheet
-            // setWorkoutRoutineId={workoutRoutineId}
             selectedComponent={selectedComponent}
             handleSelectedComponent={handleSelectedComponent}
           />
         ) : selectedComponent?.component === 'Training' ? (
           <Training
-            // workoutRoutineId={workoutRoutineId}
             selectedComponent={selectedComponent}
             handleSelectedComponent={handleSelectedComponent}
-          // setWorkoutRoutineId={setWorkoutRoutineId}
           />
         ) : (
           <Routines
-            // workoutRoutineId={workoutRoutineId}
+            workoutRoutineId={
+              selectedComponent ? selectedComponent.workoutRoutineId : ''
+            }
             selectedComponent={selectedComponent}
             handleSelectedComponent={handleSelectedComponent}
-          // setWorkoutRoutineId={setWorkoutRoutineId}
           />
         )}
       </Form>

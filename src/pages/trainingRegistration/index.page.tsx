@@ -42,8 +42,8 @@ export default function TrainingRegistration() {
   function handleSelectedComponent(selectedComponent: ISelectedComponent) {
     setSelectedComponent(selectedComponent)
     setReturnComponent(selectedComponent.workoutRoutineId)
-    console.log('handleSelectedComponent', selectedComponent)
-    console.log('returnComponent', returnComponent)
+    // console.log('handleSelectedComponent', selectedComponent)
+    // console.log('returnComponent', returnComponent)
   }
 
   return (

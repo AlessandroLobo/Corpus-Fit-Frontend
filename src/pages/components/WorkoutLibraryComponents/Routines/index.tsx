@@ -59,7 +59,6 @@ export default function Routines(props: {
       component: 'Training',
     }
     props.handleSelectedComponent(selectedComponent)
-    console.log('selectedComponent Enviado de routine', selectedComponent)
   }
 
   return (

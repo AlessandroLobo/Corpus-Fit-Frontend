@@ -2,6 +2,8 @@ import { styled, Box } from '@ignite-ui/react'
 
 export const Container = styled('main', {
   width: 872,
+  maxWidth: '100%',
+
   margin: '1.5rem auto $4',
   padding: '0 $4',
   zIndex: 999,
@@ -15,7 +17,7 @@ export const Container = styled('main', {
   },
 })
 
-export const Form = styled(Box, {
+export const Form = styled('div', {
   display: 'flex',
   // justifyContent: 'space-between',
   marginTop: '2rem',
@@ -206,7 +208,6 @@ export const WorkoutRoutineContainer = styled('div', {
 export const ContainerList = styled('div', {
   width: '100%',
   maxWidth: '1120px',
-  padding: '0 1.5rem',
   overflowX: 'auto',
   // border: 'solid 1px red',
 
@@ -225,11 +226,12 @@ export const Table = styled('table', {
   width: '100%',
   height: '100%',
   display: 'block',
-  border: 'solid 1px red',
+  // border: 'solid 1px red',
 })
 
 export const TextInputContainer = styled('div', {
   flex: '1',
+  width: '100%',
   display: 'block',
   flexDirection: 'row',
   alignItems: 'left',
@@ -393,6 +395,7 @@ export const TbodyResult = styled('tbody', {
   borderSpacing: '0 .7rem',
   borderTopLeftRadius: '6px',
   borderBottomRightRadius: '6px',
+  // border: 'solid 1px red',
 
   td: {
     height: '40px',
@@ -400,6 +403,7 @@ export const TbodyResult = styled('tbody', {
     fontSize: '1rem',
     fontWeight: '400',
     position: 'relative',
+    // border: 'solid 1px red',
 
     '&:first-child': {
       borderTopLeftRadius: '6px',

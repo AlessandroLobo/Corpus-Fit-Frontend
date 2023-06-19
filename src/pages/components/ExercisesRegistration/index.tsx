@@ -119,11 +119,13 @@ export const ExercisesRegistration = () => {
   }
   useEffect(() => {
     handleSearchExercises()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedValue])
 
   useEffect(() => {
     handleSearchExercises()
     handleSearch()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   async function handleRegister(data: RegisterFormData) {
@@ -198,6 +200,7 @@ export const ExercisesRegistration = () => {
   const handleSelectChange = (event: any) => {
     setSelectedValue(event.target.value)
   }
+
   return (
     <Container>
       {isOpen && (
@@ -260,7 +263,6 @@ export const ExercisesRegistration = () => {
             {...register('name', {
               required: true,
             })}
-            // defaultValue={student?.name || ''}
             placeholder="Digite seu nome do exercicio"
             style={{ width: '100%' }}
             onBlur={(event) =>
@@ -279,7 +281,6 @@ export const ExercisesRegistration = () => {
             {...register('url', {
               required: true,
             })}
-            // defaultValue={student?.name || ''}
             placeholder="Digite seu nome do exercicio"
             style={{ width: '100%' }}
           />
@@ -328,7 +329,7 @@ export const ExercisesRegistration = () => {
       </Form>
       <ContainerList>
         <TextInputContainer>
-          <Text>Pesquise por plano:</Text>
+          <Text>Pesquise o exercício:</Text>
           <TextInputFindContainer>
             <TextInput
               onChange={handleSearchExercises}

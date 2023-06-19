@@ -76,7 +76,7 @@ export default function TrainingSheet(props: TrainingSheetProps) {
   }, [props.routineData.workoutType])
 
   async function handleRegister(data: RegisterFormData) {
-    console.log('Data', data)
+    // console.log('Data', data)
     let workoutTypeData = ''
     // verifica qual campo foi preenchido input ou select
     if (data.tipo !== undefined && data.tipo !== '') {
@@ -90,7 +90,7 @@ export default function TrainingSheet(props: TrainingSheetProps) {
         workoutType: workoutTypeData,
         routineId: props.routineData.id,
       }
-      console.log(params)
+      // console.log(params)
       await CreateTrainingSheet(params)
       setModalOpen(true)
       setTextModal('Treino cadastrado com sucesso!')

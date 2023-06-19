@@ -53,7 +53,6 @@ export default function Training(props: {
 
   useEffect(() => {
     handleSearch()
-    console.log('SelectComponentTraining', selectedComponent)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -63,7 +62,6 @@ export default function Training(props: {
       const response = await GetRoutine(selectedComponent.workoutRoutineId)
       setSelectWorkoutRoutineId(selectedComponent.workoutRoutineId)
       setRoutineData(response.workoutRoutine)
-      console.log('Training', response.workoutRoutine.id)
     } catch (error) {
       console.log(error)
     }
@@ -74,7 +72,6 @@ export default function Training(props: {
     if (data.trainingSheets.length > 0) {
       setStateListTrainingSheet(true)
       settrainingSheet(data.trainingSheets)
-      // console.log('data', data.trainingSheets)
     }
   }
 

@@ -1,5 +1,11 @@
 import { GetRoutine } from '@/pages/api/createWorkout'
-import { ArrowClockwise, ClipboardText, Plus } from '@phosphor-icons/react'
+import {
+  ArrowClockwise,
+  CaretRight,
+  ClipboardText,
+  Plus,
+  Trash,
+} from '@phosphor-icons/react'
 import React, { useEffect, useState } from 'react'
 import {
   Button,
@@ -7,11 +13,14 @@ import {
   ContainerList,
   Table,
   TbodyResult,
+  TrainerSheetContainer,
   TrainingSheetContainer,
+  TrashContainer,
 } from './styles'
 import { ModalInfo } from '../../Modal/modalInfo'
 import TrainingSheet from '../TtrainingSheet'
 import {
+  DeleteTrainingSheet,
   GetAllTrainingSheet,
   ICreateTrainingSheet,
 } from '@/pages/api/createTraining'
@@ -20,6 +29,7 @@ interface ISelectedComponent {
   id: string
   component: 'Routines' | 'Training' | 'ExerciseSheet'
   workoutRoutineId: string
+  workoutType: string
 }
 
 interface IRoutineData {
@@ -33,10 +43,8 @@ export default function Training(props: {
   handleSelectedComponent: (selectedComponent: ISelectedComponent) => void
 }) {
   const { selectedComponent } = props
-
-  const [selectWorkoutRoutineId, setSelectWorkoutRoutineId] = useState<
-    string | undefined
-  >()
+  const [selectWorkoutRoutineId, setSelectWorkoutRoutineId] =
+    useState<string>(undefined)
 
   const [routineData, setRoutineData] = useState<IRoutineData>()
 
@@ -45,6 +53,8 @@ export default function Training(props: {
   const [modalOpen, setModalOpen] = useState(false)
 
   const [stateListTrainingSheet, setStateListTrainingSheet] = useState(false)
+
+  // const [workoutTypeName, setWorkoutTypeName] = useState('')
 
   useEffect(() => {
     listTrainingSheet()
@@ -72,17 +82,30 @@ export default function Training(props: {
     if (data.trainingSheets.length > 0) {
       setStateListTrainingSheet(true)
       settrainingSheet(data.trainingSheets)
+      console.log(data)
     }
   }
 
-  function handleEdit(id: string) {
+  function handleEdit(id: string, workoutType: string) {
     const workoutRoutineId = selectWorkoutRoutineId || '' // Valor padrão em caso de undefined
     const selectedComponent: ISelectedComponent = {
       workoutRoutineId,
+      workoutType,
       id,
       component: 'ExerciseSheet',
     }
     props.handleSelectedComponent(selectedComponent)
+    console.log(trainingSheet.workoutType)
+  }
+
+  async function handleDelete(id: string) {
+    console.log('handleDelete', id)
+    try {
+      await DeleteTrainingSheet(id)
+      listTrainingSheet()
+    } catch (err: any) {
+      // handle errors...
+    }
   }
 
   function handleClick() {
@@ -134,17 +157,33 @@ export default function Training(props: {
                 {trainingSheet &&
                   trainingSheet.map((trainingSheet) => (
                     <tr key={trainingSheet.id}>
-                      <td
-                        onClick={() =>
-                          trainingSheet.id ? handleEdit(trainingSheet.id) : ''
-                        }
-                      >
-                        <TrainingSheetContainer>
-                          {trainingSheet.workoutType}
-                        </TrainingSheetContainer>
-                        <TrainingSheetContainer>
-                          {trainingSheet.name}
-                        </TrainingSheetContainer>
+                      <td>
+                        <TrainerSheetContainer
+                          onClick={() =>
+                            trainingSheet.id
+                              ? handleEdit(
+                                trainingSheet.id || '',
+                                trainingSheet.workoutType || '', // Valor padrão em caso de undefined
+                              )
+                              : undefined
+                          }
+                        >
+                          <TrainingSheetContainer>
+                            {trainingSheet.workoutType}
+                          </TrainingSheetContainer>
+                          <TrainingSheetContainer>
+                            {trainingSheet.name}
+                          </TrainingSheetContainer>
+                        </TrainerSheetContainer>
+                        <TrashContainer
+                          onClick={() =>
+                            trainingSheet.id
+                              ? handleDelete(trainingSheet.id || '')
+                              : undefined
+                          }
+                        >
+                          <Trash size={28} />
+                        </TrashContainer>
                       </td>
                     </tr>
                   ))}

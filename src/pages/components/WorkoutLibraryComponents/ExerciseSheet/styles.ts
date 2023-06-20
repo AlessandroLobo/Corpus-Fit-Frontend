@@ -50,7 +50,7 @@ export const Select = styled('select', {
   height: '45px',
   color: '$gray100',
   borderRadius: '8px',
-  padding: '$2 $4',
+  // padding: '$2 $4',
   fontSize: '15px',
   backgroundColor: '$gray900',
   border: 'none',
@@ -214,14 +214,22 @@ export const ContainerList = styled('div', {
   '@media screen and (max-width: 768px)': {
     /* Quando a largura da tela for menor ou igual a 768 pixels */
     maxWidth: '100%',
-    margin: '$20 auto',
-    padding: '0 $2',
+    // margin: '$20 auto',
+    // padding: '0 $2',
     overflowX: 'auto',
   },
 })
 
 export const Table = styled('table', {
   paddingTop: '1rem',
+  margin: '0',
+  width: '100%',
+  height: '100%',
+  display: 'block',
+  // border: 'solid 1px red',
+})
+
+export const TableExercices = styled('table', {
   margin: '0',
   width: '100%',
   height: '100%',
@@ -290,6 +298,7 @@ export const TextInput = styled('input', {
   backgroundColor: '$gray900',
   border: 'none',
   appearance: 'none',
+  // border: 'solid 1px red',
 
   '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
     '-webkit-appearance': 'none',
@@ -352,6 +361,11 @@ export const Button = styled('button', {
 export const Text = styled('div', {
   textAlign: 'left',
   paddingBottom: '$4',
+  // border: 'solid 1px red',
+})
+
+export const TextTableExercices = styled('div', {
+  textAlign: 'left',
   // border: 'solid 1px red',
 })
 

@@ -6,7 +6,7 @@ export const Container = styled('main', {
   width: '100%',
   marginTop: '1rem',
   padding: '0 $4',
-  zIndex: 1000,
+  zIndex: 999,
   // border: '1px solid red',
 
   '@media (max-width: 768px)': {

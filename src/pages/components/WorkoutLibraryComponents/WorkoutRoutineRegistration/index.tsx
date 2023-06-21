@@ -83,6 +83,7 @@ export const WorkoutRoutineRegistration = () => {
     register,
     reset,
     handleSubmit,
+
     // setValue,
     formState: { errors },
   } = useForm<RegisterFormData>({

@@ -16,6 +16,8 @@ import {
   TextTable,
   TextTableExercices,
   Thead,
+  TrainerSheetContainer,
+  TrashContainer,
 } from './styles'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
@@ -28,6 +30,7 @@ import {
   GetAllTraining,
   ICreateTrainings,
 } from '@/pages/api/createTraining'
+import { Plus, Trash } from '@phosphor-icons/react'
 
 interface ISelectedComponent {
   id: string
@@ -198,7 +201,7 @@ export default function ExerciseSheet(props: {
           <Table>
             <Thead>
               <tr>
-                <td style={{ width: '20%' }}>NOME:</td>
+                <td style={{ width: '10%' }}>NOME:</td>
               </tr>
             </Thead>
             <TbodyResult>
@@ -212,7 +215,12 @@ export default function ExerciseSheet(props: {
                       textTransform: 'uppercase',
                     }}
                   >
-                    {exercise.name}
+                    <TrainerSheetContainer>
+                      {exercise.name}
+                    </TrainerSheetContainer>
+                    <TrashContainer>
+                      <Plus size={20} />
+                    </TrashContainer>
                   </td>
                 </tr>
               ))}
@@ -226,7 +234,7 @@ export default function ExerciseSheet(props: {
         <TableExercices>
           <Thead>
             <tr>
-              <td style={{ width: '20%' }}>NOME:</td>
+              <td style={{ width: '10%' }}>NOME:</td>
             </tr>
           </Thead>
           <TbodyResult>
@@ -240,7 +248,10 @@ export default function ExerciseSheet(props: {
                     textTransform: 'uppercase',
                   }}
                 >
-                  {training.name}
+                  <TrainerSheetContainer>{training.name}</TrainerSheetContainer>
+                  <TrashContainer>
+                    <Trash size={20} />
+                  </TrashContainer>
                 </td>
               </tr>
             ))}

@@ -49,7 +49,7 @@ export const TextVoltar = styled('span', {
   textAlign: 'center',
   justifyContent: 'flex-start',
   fontWeight: 500,
-  fontSize: '14px',
+  fontSize: '20px',
   lineHeight: '20px',
   margin: 0,
 })

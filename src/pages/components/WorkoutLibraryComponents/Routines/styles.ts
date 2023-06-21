@@ -361,6 +361,40 @@ export const TbodyResult = styled('tbody', {
   },
 })
 
+export const TrainerSheetContainer = styled('div', {
+  gap: '1rem',
+  display: 'flex',
+  alignItems: 'center',
+  borderRadius: '6px',
+  width: '100%',
+  // border: '1px solid red',
+
+  '@media screen and (max-width: 768px)': {
+    /* Quando a largura da tela for menor ou igual a 768 pixels */
+    maxWidth: '13rem',
+    // border: '1px solid red',
+  },
+
+  '&:hover': {
+    backgroundColor: '$gray500',
+    cursor: 'pointer',
+  },
+})
+
+export const TrashContainer = styled('div', {
+  display: 'flex',
+  padding: '1rem',
+  margin: '1rem',
+  borderRadius: '6px',
+  justifyContent: 'flex-end',
+  // border: '1px solid red',
+
+  '&:hover': {
+    backgroundColor: '$gray500',
+    cursor: 'pointer',
+  },
+})
+
 export const FormError = styled('div', {
   [`${Text}`]: {
     color: '#ff3111',

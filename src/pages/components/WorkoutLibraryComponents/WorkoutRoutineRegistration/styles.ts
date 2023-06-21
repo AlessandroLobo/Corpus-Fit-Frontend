@@ -1,5 +1,4 @@
 import { Box, styled } from '@ignite-ui/react'
-import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
 export const Container = styled('main', {
@@ -8,7 +7,7 @@ export const Container = styled('main', {
   width: '100%',
   marginTop: '1rem',
   padding: '0 $4',
-  zIndex: 1000,
+  zIndex: 999,
   // border: '1px solid red',
 
   '@media (max-width: 768px)': {
@@ -48,8 +47,6 @@ export const Form = styled(Box, {
     gap: '$2',
   },
 })
-
-
 
 export const ContainerList = styled(Box, {
   width: '100%',
@@ -137,21 +134,21 @@ export const TextInput = styled('input', {
   },
 })
 
-export const DatePickerContainer = styled(DatePicker, {
-  height: '45px',
-  color: '$gray100',
-  borderRadius: '8px',
-  padding: '$2 $4',
-  fontSize: '15px',
-  backgroundColor: '$gray900',
-  border: 'none',
-  appearance: 'none',
+// export const DatePickerContainer = styled(DatePicker, {
+//   height: '45px',
+//   color: '$gray100',
+//   borderRadius: '8px',
+//   padding: '$2 $4',
+//   fontSize: '15px',
+//   backgroundColor: '$gray900',
+//   border: 'none',
+//   appearance: 'none',
 
-  '&:focus': {
-    outline: 'none',
-    boxShadow: '0 0 0 1px $colors$ignite300',
-  },
-})
+//   '&:focus': {
+//     outline: 'none',
+//     boxShadow: '0 0 0 1px $colors$ignite300',
+//   },
+// })
 
 export const TextArea = styled('textarea', {
   display: 'block',
@@ -485,7 +482,7 @@ export const OverlayAlert = styled('div', {
   top: 0,
   left: 0,
   backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  zIndex: 999,
+  zIndex: 1000,
   backdropFilter: 'blur(5px)', // define o efeito de desfoque
 })
 

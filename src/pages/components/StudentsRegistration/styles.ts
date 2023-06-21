@@ -131,7 +131,7 @@ export const Container = styled('main', {
   maxWidth: 872,
   margin: '$8 auto $4',
   padding: '0 $4',
-  zIndex: 1000,
+  zIndex: 999,
 })
 
 export const Form = styled(Box, {

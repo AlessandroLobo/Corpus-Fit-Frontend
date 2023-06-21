@@ -58,7 +58,7 @@ export default function TrainingSheet(props: TrainingSheetProps) {
 
   const {
     register,
-    // reset,
+    reset,
     handleSubmit,
     // setValue,
     formState: { errors },
@@ -90,11 +90,10 @@ export default function TrainingSheet(props: TrainingSheetProps) {
         workoutType: workoutTypeData,
         routineId: props.routineData.id,
       }
-      // console.log(params)
       await CreateTrainingSheet(params)
       setModalOpen(true)
       setTextModal('Treino cadastrado com sucesso!')
-      // reset()
+      reset()
       // handleSearch()
     } catch (err: any) {
       // handle errors...

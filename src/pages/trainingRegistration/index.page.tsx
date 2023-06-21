@@ -86,7 +86,7 @@ export default function TrainingRegistration() {
             </>
           ) : (
             <>
-              <CaretLeft size={20} />
+              <CaretLeft size={23} />
               <TextVoltar
                 onClick={() =>
                   handleSelectedComponent({

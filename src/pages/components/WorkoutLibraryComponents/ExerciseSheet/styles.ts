@@ -6,7 +6,6 @@ export const Container = styled('main', {
 
   margin: '1.5rem auto $4',
   padding: '0 $4',
-  zIndex: 999,
   // border: '1px solid red',
 
   '@media screen and (max-width: 768px)': {
@@ -409,15 +408,24 @@ export const TbodyResult = styled('tbody', {
   borderSpacing: '0 .7rem',
   borderTopLeftRadius: '6px',
   borderBottomRightRadius: '6px',
-  // border: 'solid 1px red',
 
   td: {
-    height: '40px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingLeft: '1rem',
+    height: '3rem',
+    width: '100%',
     background: '$gray700',
     fontSize: '1rem',
     fontWeight: '400',
     position: 'relative',
-    // border: 'solid 1px red',
+    // border: '1px solid red',
+
+    '@media screen and (max-width: 768px)': {
+      /* Quando a largura da tela for menor ou igual a 768 pixels */
+      maxWidth: '20rem',
+    },
 
     '&:first-child': {
       borderTopLeftRadius: '6px',
@@ -482,6 +490,37 @@ export const TbodyResult = styled('tbody', {
   },
 })
 
+export const TrainerSheetContainer = styled('div', {
+  borderRadius: '6px',
+  width: '100%',
+  // border: '1px solid red',
+
+  '@media screen and (max-width: 768px)': {
+    /* Quando a largura da tela for menor ou igual a 768 pixels */
+    maxWidth: '13rem',
+    // border: '1px solid red',
+  },
+
+  '&:hover': {
+    // backgroundColor: '$gray500',
+    cursor: 'pointer',
+  },
+})
+
+export const TrashContainer = styled('div', {
+  display: 'flex',
+  height: '100%',
+  padding: '1rem',
+  margin: '1rem',
+  borderRadius: '6px',
+  justifyContent: 'flex-end',
+  // border: '1px solid red',
+
+  '&:hover': {
+    // backgroundColor: '$gray500',
+    cursor: 'pointer',
+  },
+})
 export const FormError = styled('div', {
   [`${Text}`]: {
     color: '#ff3111',

@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import {
+  Button,
   ContainerList,
   Table,
   TbodyResult,
@@ -7,12 +8,15 @@ import {
   TextInput,
   TextInputContainer,
   TextInputFindContainer,
+  TrainerSheetContainer,
+  TrashContainer,
   WorkoutRoutineContainer,
 } from './styles'
 
 import WorkoutIco from '../../../../../public/images/Workout.png'
 import React, { useEffect, useState } from 'react'
-import { GetAllRoutine } from '@/pages/api/createWorkout'
+import { DeleteRoutine, GetAllRoutine } from '@/pages/api/createWorkout'
+import { ArrowClockwise, Trash } from '@phosphor-icons/react'
 
 interface ISelectedComponent {
   id: string
@@ -61,6 +65,16 @@ export default function Routines(props: {
     props.handleSelectedComponent(selectedComponent)
   }
 
+  async function handleDelete(id: string) {
+    console.log('handleDelete', id)
+    try {
+      await DeleteRoutine(id)
+      handleSearch()
+    } catch (err: any) {
+      // handle errors...
+    }
+  }
+
   return (
     <ContainerList>
       <TextInputContainer>
@@ -72,6 +86,16 @@ export default function Routines(props: {
             placeholder="Digite o nome ou e-mail"
           />
         </TextInputFindContainer>
+        <div>
+          {' '}
+          <Button
+            onClick={handleSearch}
+            style={{ marginTop: 17, marginBottom: 10, width: '100%' }}
+          >
+            Atualizar dados
+            <ArrowClockwise size={18} />
+          </Button>
+        </div>
       </TextInputContainer>
 
       <Table>
@@ -79,30 +103,38 @@ export default function Routines(props: {
           {workoutRoutine &&
             workoutRoutine.map((workoutRoutine) => (
               <tr key={workoutRoutine.id}>
-                <td onClick={() => handleEdit(workoutRoutine.id)}>
+                <td>
                   <WorkoutRoutineContainer>
-                    <Image
-                      src={WorkoutIco}
-                      alt="logo"
-                      width={50}
-                      style={{
-                        filter: 'invert(1) contrast(0.8)',
-                        transition: 'transform 0.3s ease',
-                        cursor: 'pointer',
-                      }}
-                      onMouseOver={(e) => {
-                        e.currentTarget.style.transform = 'scale(1.1)'
-                      }}
-                      onMouseOut={(e) => {
-                        e.currentTarget.style.transform = 'scale(1)'
-                      }}
-                    />
-
-                    <div>
-                      {workoutRoutine.name}
-                      <br />
-                      {workoutRoutine.objective}
-                    </div>
+                    <TrainerSheetContainer
+                      onClick={() => handleEdit(workoutRoutine.id)}
+                    >
+                      <Image
+                        src={WorkoutIco}
+                        alt="logo"
+                        width={50}
+                        style={{
+                          filter: 'invert(1) contrast(0.8)',
+                          transition: 'transform 0.3s ease',
+                          cursor: 'pointer',
+                        }}
+                        onMouseOver={(e) => {
+                          e.currentTarget.style.transform = 'scale(1.1)'
+                        }}
+                        onMouseOut={(e) => {
+                          e.currentTarget.style.transform = 'scale(1)'
+                        }}
+                      />
+                      <div>
+                        {workoutRoutine.name}
+                        <br />
+                        {workoutRoutine.objective}
+                      </div>
+                    </TrainerSheetContainer>
+                    <TrashContainer
+                      onClick={() => handleDelete(workoutRoutine.id)}
+                    >
+                      <Trash size={28} />
+                    </TrashContainer>
                   </WorkoutRoutineContainer>
                 </td>
               </tr>

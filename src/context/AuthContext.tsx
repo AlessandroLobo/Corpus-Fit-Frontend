@@ -7,6 +7,7 @@ import React, { createContext, useState, useEffect } from 'react'
 type User = {
   name: string
   email: string
+  id: string
 }
 
 type AuthProviderProps = {
@@ -45,7 +46,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           },
         })
 
-        // console.log(response.data) // ou qualquer outra lógica a ser executada com a resposta do servidor
+        // console.log('usuario logado', response.data) // ou qualquer outra lógica a ser executada com a resposta do servidor
         setUser(response.data)
       } catch (error) {
         console.error(error)
@@ -97,10 +98,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       secure: true, // define se o cookie deve ser enviado apenas em conexões HTTPS
     })
     setUser(user)
-
     Router.push('/userDashboard')
   }
-
   return (
     <AuthContext.Provider value={{ user, isAuthenticated, signIn }}>
       {children}

@@ -39,7 +39,6 @@ export const FindPlansGenerate = ({
 }: {
   studentParansId: string
 }) => {
-  console.log('Valor de studentParansId:', studentParansId)
   return axios
     .get(
       `http://localhost:3333/installments/findStudentPlan/${studentParansId}`,

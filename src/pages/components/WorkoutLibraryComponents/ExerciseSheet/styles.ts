@@ -517,7 +517,7 @@ export const TrashContainer = styled('div', {
   // border: '1px solid red',
 
   '&:hover': {
-    // backgroundColor: '$gray500',
+    backgroundColor: '$gray500',
     cursor: 'pointer',
   },
 })

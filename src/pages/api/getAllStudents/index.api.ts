@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios'
 
-interface Student {
+export interface IStudent {
   id: string
   name: string
   email: string
@@ -13,6 +13,7 @@ export const FindStudent = ({
 }: {
   studentParansId: string
 }) => {
+  console.log('studentParansId enviando backend', studentParansId)
   return axios
     .get(`http://localhost:3333/students/findStudent/${studentParansId}`)
     .then((response) => response.data)
@@ -37,7 +38,7 @@ export const GetAllStudents = async (
   email: string,
   limit: number,
   offset: number,
-): Promise<{ students: Student[]; total: number; maxDueDate: string }> => {
+): Promise<{ students: IStudent[]; total: number; maxDueDate: string }> => {
   try {
     const response = await axios.get(
       'http://localhost:3333/students/listStudents',

@@ -3,6 +3,7 @@ import { verify, JwtPayload, VerifyOptions } from 'jsonwebtoken'
 
 interface TokenData {
   user: string
+  id: string
 }
 
 export function validateToken(token: string): TokenData | null {
@@ -11,7 +12,7 @@ export function validateToken(token: string): TokenData | null {
     const decoded = verify(token, process.env.JWT_SECRET!, {
       algorithms: ['HS256'],
     } as VerifyOptions) as JwtPayload
-    return { user: decoded.email } as TokenData
+    return { user: decoded.email, id: decoded.sub } as TokenData
   } catch (err) {
     console.error('Error validating token:', err)
     return null

@@ -85,9 +85,9 @@ export default function Administration({ studentId }: StudentEditProps) {
     handleSearch()
   }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     handleSearch()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [offset])
 
   const handleSearch = async () => {

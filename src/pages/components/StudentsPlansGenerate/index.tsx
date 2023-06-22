@@ -166,6 +166,8 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
       try {
         const data = await FindPlansGenerate({ studentParansId })
 
+        console.log('plangenerate', data)
+
         setPlansGenerate(data.formattedStudentPlans)
 
         const maxDueDateFormat = dayjs(data.maxDueDate)

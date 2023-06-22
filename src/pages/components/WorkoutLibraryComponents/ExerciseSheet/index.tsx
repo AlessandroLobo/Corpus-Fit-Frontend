@@ -240,16 +240,16 @@ export default function ExerciseSheet(props: {
           <TbodyResult>
             {trainings?.map((training) => (
               <tr key={training.id}>
-                <td
-                  onClick={() => handleDelete(training.id)}
-                  style={{
-                    paddingLeft: '1rem',
-                    textAlign: 'left',
-                    textTransform: 'uppercase',
-                  }}
-                >
+                <td>
                   <TrainerSheetContainer>{training.name}</TrainerSheetContainer>
-                  <TrashContainer>
+                  <TrashContainer
+                    onClick={() => handleDelete(training.id)}
+                    style={{
+                      paddingLeft: '1rem',
+                      textAlign: 'left',
+                      textTransform: 'uppercase',
+                    }}
+                  >
                     <Trash size={20} />
                   </TrashContainer>
                 </td>

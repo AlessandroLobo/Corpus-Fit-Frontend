@@ -66,20 +66,9 @@ export default function ExerciseSheet(props: {
 
   const [trainings, setTrainings] = useState<TrainingSheets[]>([])
 
-  // const [exerciseInfo, setExerciseInfo] = useState({
-  //   id: '',
-  //   name: '',
-  //   description: '',
-  //   url: '',
-  //   muscleGroupId: '',
-  // })
-
   const {
     register,
-    // reset,
-    // handleSubmit,
-    // setValue,
-    // getValues,
+
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerFormSchema),
@@ -94,12 +83,10 @@ export default function ExerciseSheet(props: {
     handleSearchExercises()
     handleSearch()
     searchExercisesSelection()
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
-    // console.log('props.selectedComponent', props.selectedComponent)
     setTrainingSheeInfotId(props.selectedComponent.id)
     setSelectedValueName(props.selectedComponent.workoutType)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -130,10 +117,7 @@ export default function ExerciseSheet(props: {
 
   async function handleEdit(id: string) {
     const exerciseInfo = exercises.filter((exercises) => exercises.id === id)[0]
-    console.log('exerciseInfo', exerciseInfo.id)
-    console.log('muscleGroupId', selectedValue)
-    console.log('trainingSheetInfoId--', trainingSheetInfoId)
-    console.log('exerciseInfo.name', exerciseInfo.name)
+
     try {
       const params: ICreateTrainings = {
         name: exerciseInfo.name,

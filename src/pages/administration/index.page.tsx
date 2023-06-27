@@ -144,7 +144,6 @@ export default function Administration({ studentId }: StudentEditProps) {
     setModalOpen(true)
   }
 
-  console.log(createPlan)
   return (
     <Container>
       <ModalInfo isOpen={modalOpen} setIsOpen={setModalOpen}>

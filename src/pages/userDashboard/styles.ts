@@ -59,3 +59,10 @@ export const TextHeader = styled('div', {
   justifyContent: 'center',
   padding: '1rem',
 })
+
+export const Text = styled('text', {
+  display: 'flex',
+  textAlign: 'left',
+  fontSize: '0.95rem',
+  paddingBottom: '0.5rem',
+})

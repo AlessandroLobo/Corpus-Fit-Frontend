@@ -1,7 +1,7 @@
 import { parseCookies } from 'nookies'
 import { validateToken } from '../api/authService'
 import { GetServerSidePropsContext } from 'next'
-import { ButtonCadContainer, Container, TextHeader } from './styles'
+import { ButtonCadContainer, Container, Text, TextHeader } from './styles'
 import { useCallback, useEffect, useState } from 'react'
 import { FindStudent } from '../api/getAllStudents/index.api'
 import { FindPlansGenerate } from '../api/createStudentPLans'
@@ -61,6 +61,7 @@ const UserDashboard = ({ email, id }: Props) => {
   useEffect(() => {
     handleSearch(id)
     FindPlansGenerateFunction()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, handleSearch])
 
   function FindPlansGenerateFunction() {
@@ -105,8 +106,9 @@ const UserDashboard = ({ email, id }: Props) => {
     <Container>
       <ButtonCadContainer>
         <TextHeader>Área do Aluno</TextHeader>
-        <p>Olá seja bem-vindo, {student?.name}!</p>
-        <p>Seu status é: {statusStudent}</p>
+        <Text>Olá seja bem-vindo, {student?.name}!</Text>
+        <Text>Seu status é: {studentActive}</Text>
+        <Text>Data de vencimento do plano: {maxDueDate}</Text>
         {err && <p>Ocorreu um erro: {err}</p>}{' '}
         {/* Renderize a mensagem de erro se existir */}
       </ButtonCadContainer>

@@ -40,6 +40,7 @@ export default function Routines(props: {
   selectedComponent: ISelectedComponent | undefined
   handleSelectedComponent: (selectedComponent: ISelectedComponent) => void
 }) {
+  
   const [workoutRoutine, setWorkoutRoutine] = useState<
     IWorkoutRoutine[] | undefined
   >([])
@@ -83,7 +84,7 @@ export default function Routines(props: {
           <TextInput
             onChange={handleSearch}
             id="search-input"
-            placeholder="Digite o nome ou e-mail"
+            placeholder="Digite o nome da rotina"
           />
         </TextInputFindContainer>
         <div>

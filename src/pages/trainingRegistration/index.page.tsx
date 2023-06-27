@@ -1,4 +1,4 @@
-import { CaretLeft, PersonArmsSpread } from '@phosphor-icons/react'
+import { CaretLeft, PersonArmsSpread, UserPlus } from '@phosphor-icons/react'
 import {
   Form,
   ButtonCad,
@@ -8,7 +8,7 @@ import {
   Container,
   Text,
   TextContainerBack,
-  TextVoltar,
+  TextBack,
 } from './styles'
 import { validateToken } from '../api/authService'
 import { GetServerSidePropsContext } from 'next'
@@ -20,6 +20,7 @@ import React, { useState } from 'react'
 import Routines from '../components/WorkoutLibraryComponents/Routines'
 import Training from '../components/WorkoutLibraryComponents/Training'
 import ExerciseSheet from '../components/WorkoutLibraryComponents/ExerciseSheet'
+import StudentSearchTrainingInference from '../components/WorkoutLibraryComponents/StudentSearchTrainingInference'
 
 interface ISelectedComponent {
   id: string
@@ -32,24 +33,37 @@ export default function TrainingRegistration() {
 
   const [returnComponent, setReturnComponent] = useState<string | null>(null)
 
+  const [createRoutine, setCreateRoutine] = useState(false)
+
+  const [createTrainingInference, setCreateTrainingInference] = useState(false)
+
   const [selectedComponent, setSelectedComponent] =
     useState<ISelectedComponent>(null as any)
 
   function handleWorkoutRoutineRegistration() {
     setModalOpen(true)
+    setCreateRoutine(true)
+    setCreateTrainingInference(false)
+  }
+  function handleTrainingInference() {
+    setModalOpen(true)
+    setCreateRoutine(false)
+    setCreateTrainingInference(true)
   }
 
   function handleSelectedComponent(selectedComponent: ISelectedComponent) {
     setSelectedComponent(selectedComponent)
     setReturnComponent(selectedComponent.workoutRoutineId)
-    // console.log('handleSelectedComponent', selectedComponent)
-    // console.log('returnComponent', returnComponent)
   }
 
   return (
     <Container>
       <ModalInfo isOpen={modalOpen} setIsOpen={setModalOpen}>
-        {modalOpen ? <WorkoutRoutineRegistration /> : null}
+        {createRoutine ? (
+          <WorkoutRoutineRegistration />
+        ) : createTrainingInference ? (
+          <StudentSearchTrainingInference />
+        ) : null}
       </ModalInfo>
 
       <ButtonCadContainer>
@@ -57,7 +71,7 @@ export default function TrainingRegistration() {
           {selectedComponent?.component === 'ExerciseSheet' ? (
             <>
               <CaretLeft size={20} />
-              <TextVoltar
+              <TextBack
                 onClick={() =>
                   handleSelectedComponent({
                     workoutRoutineId: returnComponent ?? '',
@@ -67,12 +81,12 @@ export default function TrainingRegistration() {
                 }
               >
                 Voltar
-              </TextVoltar>
+              </TextBack>
             </>
           ) : selectedComponent?.component === 'Training' ? (
             <>
               <CaretLeft size={20} />
-              <TextVoltar
+              <TextBack
                 onClick={() =>
                   handleSelectedComponent({
                     workoutRoutineId: returnComponent ?? '',
@@ -82,12 +96,12 @@ export default function TrainingRegistration() {
                 }
               >
                 Voltar
-              </TextVoltar>
+              </TextBack>
             </>
           ) : (
             <>
               <CaretLeft size={23} />
-              <TextVoltar
+              <TextBack
                 onClick={() =>
                   handleSelectedComponent({
                     workoutRoutineId: returnComponent ?? '',
@@ -97,7 +111,7 @@ export default function TrainingRegistration() {
                 }
               >
                 Voltar
-              </TextVoltar>
+              </TextBack>
             </>
           )}
         </TextContainerBack>
@@ -106,6 +120,10 @@ export default function TrainingRegistration() {
           <ButtonCad onClick={handleWorkoutRoutineRegistration}>
             <PersonArmsSpread size={50} />
             Adicionar Rotina
+          </ButtonCad>
+          <ButtonCad onClick={handleTrainingInference}>
+            <UserPlus size={50} />
+            Adicionar Treino ao Aluno
           </ButtonCad>
         </ButtonContainer>
         <Line />

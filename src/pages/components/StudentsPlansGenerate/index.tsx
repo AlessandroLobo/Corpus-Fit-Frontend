@@ -125,6 +125,7 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
 
   useEffect(() => {
     FindPlansGenerateFunction()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalOpen])
 
   useEffect(() => {
@@ -365,7 +366,6 @@ const StudentsPlansGenerate = ({ studentParansId }: StudentEditProps) => {
                       required: true,
                     })}
                     value={studentActive || ''}
-                    placeholder="Digite seu nome completo"
                     style={{
                       width: '7rem',
                       textAlign: 'center',

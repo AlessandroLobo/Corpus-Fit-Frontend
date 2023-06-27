@@ -4,7 +4,52 @@ export const Container = styled('main', {
   maxWidth: 872,
   margin: '1.5rem auto $4',
   padding: '0 $4',
+  zIndex: 999,
   // border: '1px solid red',
+
+  '@media screen and (max-width: 768px)': {
+    /* Quando a largura da tela for menor ou igual a 768 pixels */
+    maxWidth: '100%',
+    margin: '2rem auto',
+    padding: '0 $2',
+  },
+})
+
+export const Form = styled(Box, {
+  marginTop: '$6',
+  width: '38rem',
+  minHeight: '40rem',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '$4',
+
+  label: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '$2',
+  },
+
+  '@media screen and (max-width: 768px)': {
+    /* Quando a largura da tela for menor ou igual a 768 pixels */
+    maxWidth: '100%',
+    margin: '2rem auto',
+    padding: '0 $2',
+  },
+})
+
+export const FormHeader = styled(Box, {
+  marginTop: '$6',
+  width: '38rem',
+  minHeight: '9rem',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '$4',
+
+  label: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '$2',
+  },
 
   '@media screen and (max-width: 768px)': {
     /* Quando a largura da tela for menor ou igual a 768 pixels */
@@ -27,39 +72,16 @@ export const TextInfo = styled('div', {
   // border: '1px solid red'
 })
 
-export const TextContainerBack = styled('div', {
-  display: 'flex',
-  textAlign: 'center',
-  alignItems: 'center',
-  width: '5rem',
-  height: '2rem',
-  gap: '0.1rem',
-  justifyContent: 'flex-start',
-  marginBottom: '1rem',
-  // border: '1px solid red',
-
-  '&:hover': {
-    cursor: 'pointer',
-    color: '#00e7f9',
-  },
-})
-
-export const TextBack = styled('span', {
-  display: 'block',
-  textAlign: 'center',
-  justifyContent: 'flex-start',
-  fontWeight: 500,
-  fontSize: '20px',
-  lineHeight: '20px',
-  margin: 0,
-})
-
 export const ButtonCadContainer = styled(Box, {
+  // height: '1rem',
   marginTop: '0rem',
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'space-between',
+  // marginBottom: '4rem',
   flexDirection: 'column',
+  // gap: '$4',
+  // border: 'solid 1px red',
 
   label: {
     display: 'flex',
@@ -68,10 +90,10 @@ export const ButtonCadContainer = styled(Box, {
   },
 
   '@media (max-width: 767px)': {
+    // marginBottom: '2rem',
     flexDirection: 'column',
     marginTop: 0,
-    height: '10rem',
-    // border: 'solid 1px red',
+    border: 'solid 1px red',
   },
 })
 
@@ -83,7 +105,6 @@ export const ButtonContainer = styled('div', {
   justifyContent: 'center',
   flexDirection: 'row',
   gap: '12rem',
-  // border: 'solid 1px red',
 
   label: {
     display: 'flex',
@@ -92,10 +113,7 @@ export const ButtonContainer = styled('div', {
   },
 
   '@media (max-width: 767px)': {
-    display: 'flex',
-    gap: '5rem',
-    // flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: 'row',
     alignItems: 'center',
     marginTop: 0,
     // border: 'solid 1px red',
@@ -119,7 +137,6 @@ export const ButtonCad = styled('button', {
   border: 'none',
   cursor: 'pointer',
   transition: '.2s ease-in-out',
-  // border: 'solid 1px red',
 
   '&:hover': {
     backgroundColor: '$gray600',
@@ -136,55 +153,11 @@ export const ButtonCad = styled('button', {
   },
 })
 
-export const Form = styled(Box, {
-  display: 'flex',
-  marginTop: '$6',
-  paddingLeft: '0.8rem',
-  flexDirection: 'column',
-  gap: '$4',
-  // border: 'solid 1px red',
-
-  label: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '$4',
-  },
-})
-
-export const TextContainer = styled('div', {
-  color: '#00e7f9',
-})
-
-export const WorkoutRoutineContainer = styled('div', {
-  display: 'flex',
-  fontSize: '0.8rem',
-  marginLeft: '0rem',
-  paddingLeft: '0.5rem',
-  width: '49rem',
-  height: '4rem',
-  alignItems: 'center',
-  borderRadius: '6px',
-  backgroundColor: '$gray700',
-  gap: '1rem',
-  // border: 'solid 1px red',
-
-  '&:hover': {
-    backgroundColor: '$gray600',
-    color: '#00e7f9',
-    cursor: 'pointer',
-  },
-
-  '@media screen and (max-width: 768px)': {
-    width: '19.5rem',
-  },
-})
-
 export const ContainerList = styled('div', {
   width: '100%',
   maxWidth: '1120px',
   padding: '0 1.5rem',
   overflowX: 'auto',
-  // border: 'solid 1px red',
 
   '@media screen and (max-width: 768px)': {
     /* Quando a largura da tela for menor ou igual a 768 pixels */
@@ -224,6 +197,33 @@ export const TextInput = styled('input', {
   flexDirection: 'row',
   alignItems: 'center',
   backgroundColor: '$gray700',
+})
+
+export const TextContainerBack = styled('div', {
+  display: 'flex',
+  textAlign: 'center',
+  alignItems: 'center',
+  width: '5rem',
+  height: '2rem',
+  gap: '0.1rem',
+  justifyContent: 'flex-start',
+  marginBottom: '1rem',
+  // border: '1px solid red',
+
+  '&:hover': {
+    cursor: 'pointer',
+    color: '#00e7f9',
+  },
+})
+
+export const TextBack = styled('span', {
+  display: 'block',
+  textAlign: 'center',
+  justifyContent: 'flex-start',
+  fontWeight: 500,
+  fontSize: '20px',
+  lineHeight: '20px',
+  margin: 0,
 })
 
 export const TextInputSelectPagination = styled('input', {

@@ -68,7 +68,6 @@ export default function StudentSearchTrainingInference() {
       LIMIT = 12
     }
     setOffset(0)
-    console.log('LIMIT', LIMIT)
     handleSearch()
   }
 
@@ -95,7 +94,6 @@ export default function StudentSearchTrainingInference() {
 
   function handleEdit(studentParansId: any) {
     setSelectForm(false)
-    console.log('studentParansId', studentParansId)
     setSelectedStudent(studentParansId)
     // setSelectedStudent(studentParansId)
     // setEditingStudent(true)

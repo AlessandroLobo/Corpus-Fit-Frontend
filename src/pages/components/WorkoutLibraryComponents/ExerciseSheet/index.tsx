@@ -106,7 +106,6 @@ export default function ExerciseSheet(props: {
 
     const trainings = data.trainings
     setTrainings(trainings)
-    // console.log('data.trainings', data.trainings)
   }
 
   const handleSearch = async () => {
@@ -142,6 +141,7 @@ export default function ExerciseSheet(props: {
       // handle errors...
     }
   }
+
   const handleSelectChange = (event: any) => {
     setSelectedValue(event.target.value)
   }

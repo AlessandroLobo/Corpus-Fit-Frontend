@@ -11,15 +11,18 @@ import {
   TextInputContainer,
   TextInputFindContainer,
   TrainerSheetContainer,
+  TrashContainer,
   WorkoutRoutineContainer,
 } from './styles'
 import { useEffect, useState } from 'react'
 import WorkoutIco from '../../../../../public/images/Workout.png'
 import { GetAllRoutine } from '@/pages/api/createWorkout'
 import {
+  DeleteStudentRoutine,
   createStudentRoutine,
   getAllStudentRoutines,
 } from '@/pages/api/createStudentRoutine'
+import { Trash } from '@phosphor-icons/react'
 
 interface StudentEditProps {
   studentParansId: string
@@ -83,7 +86,6 @@ export const TrainingInference = ({ studentParansId }: StudentEditProps) => {
 
         setStudent(studentData)
 
-        // console.log('StudanteVindo_Banco', studentData)
       } catch (error) {
         setError(err)
       }
@@ -94,13 +96,12 @@ export const TrainingInference = ({ studentParansId }: StudentEditProps) => {
   useEffect(() => {
     searchStudentRoutineSelection()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [studentParansId])
+  }, [])
 
   const searchStudentRoutineSelection = async () => {
     const data = await getAllStudentRoutines(studentParansId)
 
     setSeletctStudantRoutine(data.studentRoutines)
-    console.log('getAllStudentRoutines', seletctStudantRoutine) // console.log('data.trainings', data.trainings)
   }
 
   async function handleRegister(id: string, name: string) {
@@ -110,12 +111,21 @@ export const TrainingInference = ({ studentParansId }: StudentEditProps) => {
         studentId: studentParansId,
         routineId: id,
       }
-      console.log(params)
       await createStudentRoutine(params)
+      searchStudentRoutineSelection()
     } catch (err: any) {
       // handle errors...
     }
     // searchExercisesSelection()
+  }
+
+  async function handleDelete(id: string) {
+    try {
+      await DeleteStudentRoutine(id)
+      searchStudentRoutineSelection()
+    } catch (err: any) {
+      // handle errors...
+    }
   }
 
   return (
@@ -164,11 +174,11 @@ export const TrainingInference = ({ studentParansId }: StudentEditProps) => {
                           {/* {workoutRoutine.objective} */}
                         </div>
                       </TrainerSheetContainer>
-                      {/* <TrashContainer
-                    onClick={() => handleDelete(workoutRoutine.id)}
-                    >
-                      <Trash size={28} />
-                    </TrashContainer> */}
+                      <TrashContainer
+                        onClick={() => handleDelete(seletctStudantRoutine.id)}
+                      >
+                        <Trash size={28} />
+                      </TrashContainer>
                     </WorkoutRoutineContainer>
                   </td>
                 </tr>

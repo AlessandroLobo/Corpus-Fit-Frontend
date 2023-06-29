@@ -10,9 +10,9 @@ import {
   SetTabsPlans,
 } from './styles'
 
-import { StudentEdit } from '../components/StudentsEdit/index.page'
+import { StudentEdit } from '../StudentsEdit/index.page'
 import { useEffect, useState } from 'react'
-import { StudentsPlansGenerate } from '../components/StudentsPlansGenerate'
+import { StudentsPlansGenerate } from '../StudentsPlansGenerate'
 
 interface PlanGeneratePageProps {
   studentParansId: string

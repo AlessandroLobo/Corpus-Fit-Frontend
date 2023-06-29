@@ -32,7 +32,7 @@ import { GetAllStudents } from '../api/getAllStudents/index.api'
 import { StudentRegistration } from '../components/StudentsRegistration/index.page'
 import Pagination from '../components/Pagination'
 import { PlanRegistration } from '../components/PlanRegistration'
-import { PlanGeneratePage } from '../planGeneratePage'
+import { PlanGeneratePage } from '../components/planGeneratePage'
 import { MuscleGroupRegistration } from '../components/MuscleGroupRegistration'
 import { ExercisesRegistration } from '../components/ExercisesRegistration'
 

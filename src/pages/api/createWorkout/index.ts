@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios'
+import axios, { AxiosError, AxiosError, AxiosError } from 'axios'
 
 export interface ICreateRoutine {
   id: string
@@ -107,10 +107,27 @@ export function DeleteRoutine(id: string) {
     .then((response) => response.data)
     .catch((error: AxiosError) => {
       if (error.response) {
-        console.log(error.response.data)
+        const responseData = error.response.data as Record<string, any> // Realiza a verificação de tipo
+
+        if (
+          error.response.status === 400 &&
+          responseData.error === 'P2003' &&
+          responseData.meta?.field_name === 'routineId'
+        ) {
+          // Erro de chave estrangeira - Restrição falhou
+          const errorMessage =
+            'Erro ao excluir a rotina: a restrição de chave estrangeira falhou.'
+          console.error(errorMessage)
+          throw new Error(errorMessage)
+        }
+
+        // Outros erros de resposta da API
+        console.log(responseData)
       } else if (error.request) {
+        // Erro de requisição sem resposta da API
         console.log(error.request)
       } else {
+        // Erro durante a configuração do Axios ou outros erros
         console.log('Error', error.message)
       }
       console.log(error.config)

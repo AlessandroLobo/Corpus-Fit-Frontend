@@ -40,7 +40,6 @@ export default function Routines(props: {
   selectedComponent: ISelectedComponent | undefined
   handleSelectedComponent: (selectedComponent: ISelectedComponent) => void
 }) {
-  
   const [workoutRoutine, setWorkoutRoutine] = useState<
     IWorkoutRoutine[] | undefined
   >([])
@@ -67,12 +66,14 @@ export default function Routines(props: {
   }
 
   async function handleDelete(id: string) {
-    console.log('handleDelete', id)
     try {
       await DeleteRoutine(id)
       handleSearch()
-    } catch (err: any) {
-      // handle errors...
+    } catch (error: any) {
+      const errorMessage = error.message // Captura a mensagem de erro
+
+      // Lide com o erro conforme necessário, por exemplo, exibindo-a ou realizando outras ações
+      console.log(errorMessage)
     }
   }
 

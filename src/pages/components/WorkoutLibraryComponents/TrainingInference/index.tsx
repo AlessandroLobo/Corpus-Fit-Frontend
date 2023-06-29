@@ -85,7 +85,6 @@ export const TrainingInference = ({ studentParansId }: StudentEditProps) => {
         })
 
         setStudent(studentData)
-
       } catch (error) {
         setError(err)
       }
@@ -116,7 +115,6 @@ export const TrainingInference = ({ studentParansId }: StudentEditProps) => {
     } catch (err: any) {
       // handle errors...
     }
-    // searchExercisesSelection()
   }
 
   async function handleDelete(id: string) {
@@ -144,14 +142,7 @@ export const TrainingInference = ({ studentParansId }: StudentEditProps) => {
                 <tr key={seletctStudantRoutine.id}>
                   <td>
                     <WorkoutRoutineContainer>
-                      <TrainerSheetContainer
-                      // onClick={() =>
-                      //   handleRegister(
-                      //     workoutRoutine.id,
-                      //     workoutRoutine.name,
-                      //   )
-                      // }
-                      >
+                      <TrainerSheetContainer>
                         <Image
                           src={WorkoutIco}
                           alt="logo"
@@ -171,7 +162,6 @@ export const TrainingInference = ({ studentParansId }: StudentEditProps) => {
                         <div>
                           {seletctStudantRoutine.name}
                           <br />
-                          {/* {workoutRoutine.objective} */}
                         </div>
                       </TrainerSheetContainer>
                       <TrashContainer

@@ -52,7 +52,7 @@ export default function Header() {
         <LinkContainer>
           <Link href="/">Home</Link>
           <Link href="/userDashboard">Area do Aluno</Link>
-          <Link href="/">Treinos</Link>
+          <Link href="/studentWorkout">Treinos</Link>
           {user?.email === 'admin@hotmail.com' ? (
             <>
               <Link href="/trainingRegistration">Biblioteca de Treinos</Link>

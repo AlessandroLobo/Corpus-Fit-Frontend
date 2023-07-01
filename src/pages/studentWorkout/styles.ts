@@ -9,23 +9,35 @@ export const Container = styled('main', {
   '@media screen and (max-width: 768px)': {
     /* Quando a largura da tela for menor ou igual a 768 pixels */
     maxWidth: '100%',
-    margin: '2rem auto',
     padding: '0 $2',
+  },
+})
+
+export const FormHeader = styled(Box, {
+  display: 'flex',
+  marginTop: '$6',
+  flexDirection: 'column',
+  gap: '$4',
+  // border: 'solid 1px red',
+
+  '@media (max-width: 767px)': {
+    display: 'flex',
+    flexDirection: 'column',
+    // border: 'solid 1px red',
   },
 })
 
 export const Form = styled(Box, {
   display: 'flex',
-  marginTop: '$6',
-  paddingLeft: '0.8rem',
   flexDirection: 'column',
+  marginTop: '$6',
   gap: '$4',
   // border: 'solid 1px red',
 
-  label: {
+  '@media (max-width: 767px)': {
     display: 'flex',
     flexDirection: 'column',
-    gap: '$4',
+    // border: 'solid 1px red',
   },
 })
 
@@ -125,30 +137,6 @@ export const TextContainer = styled('div', {
   color: '#00e7f9',
 })
 
-export const WorkoutRoutineContainer = styled('div', {
-  display: 'flex',
-  fontSize: '0.8rem',
-  marginLeft: '0rem',
-  paddingLeft: '0.5rem',
-  width: '49rem',
-  height: '4rem',
-  alignItems: 'center',
-  borderRadius: '6px',
-  backgroundColor: '$gray700',
-  gap: '1rem',
-  // border: 'solid 1px red',
-
-  '&:hover': {
-    backgroundColor: '$gray600',
-    color: '#00e7f9',
-    cursor: 'pointer',
-  },
-
-  '@media screen and (max-width: 768px)': {
-    width: '100%',
-  },
-})
-
 export const ContainerList = styled('div', {
   width: '100%',
   maxWidth: '1120px',
@@ -162,26 +150,6 @@ export const ContainerList = styled('div', {
     margin: '$20 auto',
     padding: '0 $2',
     overflowX: 'auto',
-  },
-})
-
-export const TrainerSheetContainer = styled('div', {
-  gap: '1rem',
-  display: 'flex',
-  alignItems: 'center',
-  borderRadius: '6px',
-  width: '100%',
-  // border: '1px solid red',
-
-  '@media screen and (max-width: 768px)': {
-    /* Quando a largura da tela for menor ou igual a 768 pixels */
-    maxWidth: '13rem',
-    // border: '1px solid red',
-  },
-
-  '&:hover': {
-    // backgroundColor: '$gray500',
-    cursor: 'pointer',
   },
 })
 
@@ -290,7 +258,7 @@ export const Thead = styled('thead', {
 
   td: {
     height: '40px',
-    padding: '0.05rem 1rem',
+    // padding: '0.05rem 1rem',
     background: '$gray600',
     verticalAlign: 'middle',
     // border: '1px solid red',
@@ -308,40 +276,45 @@ export const Thead = styled('thead', {
 })
 
 export const Table = styled('table', {
-  paddingTop: '1rem',
+  display: 'flex',
+  flexDirection: 'column',
   margin: '0',
   width: '100%',
   height: '100%',
-  display: 'block',
   // border: 'solid 1px red',
 })
 
 export const TbodyResult = styled('tbody', {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '1rem',
+  alignItems: 'left',
+  justifyContent: 'left',
+  height: '100%',
   width: '100%',
-  borderCollapse: 'separate',
-  borderSpacing: '0 .7rem',
-  borderTopLeftRadius: '6px',
-  borderBottomRightRadius: '6px',
   // border: 'solid 1px red',
 
   td: {
-    width: '100%',
-    height: '40px',
-    background: '$gray700',
+    display: 'flex',
+    height: '100%',
+    width: '25rem%',
+    gap: '2rem',
+    alignItems: 'left',
+    justifyContent: 'left',
+    backgroundColor: '$gray600',
     fontSize: '1rem',
     fontWeight: '400',
-    position: 'relative',
     // border: 'solid 1px red',
 
     '&:first-child': {
-      width: '100%',
+      // width: '100%',
       borderTopLeftRadius: '6px',
       borderBottomLeftRadius: '6px',
       // border: 'solid 1px red',
     },
 
     '&:last-child': {
-      width: '100%',
+      // width: '100%',
       borderTopRightRadius: '6px',
       borderBottomRightRadius: '6px',
       // border: 'solid 1px red',
@@ -356,7 +329,6 @@ export const TbodyResult = styled('tbody', {
       width: '100%',
       height: '100%',
       boxSizing: 'border-box',
-      padding: '10px',
       border: 'none',
       borderRadius: '6px',
       backgroundColor: '$gray700',
@@ -400,8 +372,76 @@ export const TbodyResult = styled('tbody', {
   },
 })
 
-export const NameContainer = styled('div', {
+export const WorkoutRoutineContainer = styled('div', {
+  display: 'flex',
+  direction: 'column',
+  fontSize: '0.8rem',
+  paddingLeft: '0.5rem',
   width: '100%',
+  height: '100%',
+  alignItems: 'center',
+  borderRadius: '6px',
+  backgroundColor: '$gray700',
+  gap: '1rem',
+  // border: 'solid 1px red',
+
+  '&:hover': {
+    backgroundColor: '$gray600',
+    color: '#00e7f9',
+    cursor: 'pointer',
+  },
+
+  '@media screen and (max-width: 768px)': {
+    width: '100%',
+  },
+})
+
+export const TrainerSheetContainer = styled('div', {
+  display: 'flex',
+  direction: 'column',
+  paddingLeft: '0.5rem',
+  paddingTop: '1rem',
+  paddingRight: '1rem',
+  paddingBottom: '1rem',
+  gap: '1rem',
+  alignItems: 'center',
+  borderRadius: '6px',
+  width: '100%',
+  // border: '1px solid red',
+
+  '@media screen and (max-width: 768px)': {
+    /* Quando a largura da tela for menor ou igual a 768 pixels */
+    // Width: '23rem',
+    // border: '1px solid red',
+  },
+
+  '&:hover': {
+    // backgroundColor: '$gray500',
+    cursor: 'pointer',
+  },
+})
+export const NameContainer = styled('div', {
+  display: 'flex',
+  gap: '0.2rem',
+  flexDirection: 'column',
+  width: '100%',
+  // border: '1px solid red',
+})
+
+export const TextRoutineName = styled('div', {
+  fontSize: '1.2rem',
+  color: '#00e7f9',
+  // border: '1px solid red',
+})
+export const TextRoutineObjective = styled('div', {
+  fontSize: '1rem',
+  color: '$gray300',
+  // border: '1px solid red',
+})
+export const TextRoutineobservation = styled('div', {
+  fontSize: '1rem',
+  color: '$gray400',
+  // border: '1px solid red',
 })
 
 export const FormError = styled('div', {

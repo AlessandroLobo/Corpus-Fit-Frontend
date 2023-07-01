@@ -26,7 +26,7 @@ export default function Header() {
 
   const navStyle = {
     overflow: 'hidden',
-    maxHeight: navToggle ? '5.25rem' : '19.8rem',
+    maxHeight: navToggle ? '5.25rem' : '22rem',
     transition: 'max-height 0.5s ease-out',
   }
 

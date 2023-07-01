@@ -2,10 +2,14 @@ import { useEffect, useState } from 'react'
 import {
   Container,
   Form,
+  FormHeader,
   NameContainer,
   Table,
   TbodyResult,
   TextHeader,
+  TextRoutineName,
+  TextRoutineObjective,
+  TextRoutineobservation,
   TrainerSheetContainer,
   WorkoutRoutineContainer,
 } from './styles'
@@ -35,34 +39,44 @@ interface ICreateStudentRoutine {
   name: string
   studentId: string
   routineId: string
+  routine: {
+    createdAt: string
+    id: string
+    name: string
+    objective: string
+    observation: string
+    startDate: string
+    endDate: string
+    studentId: string | null
+    workoutType: string
+    // Outras propriedades do objeto "routine"
+  }
 }
 
 export default function StudentWorkout({ email, id }: Props) {
-  const [studentParansId, setStudentParansId] = useState<string>('')
-
   const [seletctStudantRoutine, setSeletctStudantRoutine] = useState<
     ICreateStudentRoutine[]
   >([])
 
-  useEffect(() => {
-    setStudentParansId(id)
-    searchStudentRoutineSelection()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [studentParansId])
-
   const searchStudentRoutineSelection = async () => {
-    const data = await getAllStudentRoutines(studentParansId)
+    const data = await getAllStudentRoutines(id)
 
     setSeletctStudantRoutine(data.studentRoutines)
     console.log(seletctStudantRoutine)
   }
 
+  useEffect(() => {
+    searchStudentRoutineSelection()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id])
+
   return (
     <Container>
-      <Form>
+      <FormHeader>
         <TextHeader>Area de treino do aluno</TextHeader>
-      </Form>
+      </FormHeader>
       <Form>
+        <TextHeader>Escolha uma rotina para começar</TextHeader>
         <Table>
           <TbodyResult>
             {seletctStudantRoutine?.map((seletctStudantRoutine) => (
@@ -87,7 +101,15 @@ export default function StudentWorkout({ email, id }: Props) {
                         }}
                       />
                       <NameContainer>
-                        {seletctStudantRoutine.name}
+                        <TextRoutineName>
+                          {seletctStudantRoutine.routine.name}
+                        </TextRoutineName>
+                        <TextRoutineObjective>
+                          {seletctStudantRoutine.routine.objective}
+                        </TextRoutineObjective>
+                        <TextRoutineobservation>
+                          {seletctStudantRoutine.routine.observation}
+                        </TextRoutineobservation>
                       </NameContainer>
                     </TrainerSheetContainer>
                   </WorkoutRoutineContainer>

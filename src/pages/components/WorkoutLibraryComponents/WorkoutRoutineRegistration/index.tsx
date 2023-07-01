@@ -113,7 +113,7 @@ export const WorkoutRoutineRegistration = () => {
 
       const params: ICreateRoutine = {
         id: '',
-        name: data.name,
+        name: data.name.toUpperCase(),
         workoutType: data.workoutType,
         objective: data.objective,
         observation: data.observation,
@@ -235,26 +235,6 @@ export const WorkoutRoutineRegistration = () => {
             </FormError>
           )}
         </TextInputContainer>
-
-        {/* <TextDatePickerContainer>
-          <TextInputContainer>
-            <Text>Data de Início:</Text>
-            <DatePickerContainer
-              dateFormat="dd/MM/yyyy"
-              selected={startDate}
-              onChange={(date: Date | null) => setStartDate(date)}
-            />
-          </TextInputContainer>
-          <TextInputContainerDataPiker>
-            <Text>Data Final:</Text>
-            <DatePickerContainer
-              dateFormat="dd/MM/yyyy"
-              selected={endDate}
-              onChange={(date: Date | null) => setEndDate(date)}
-            />
-          </TextInputContainerDataPiker>
-        </TextDatePickerContainer> */}
-
         <TextInputContainer>
           <Text>Obs/Instruções:</Text>
           <TextArea {...register('observation', { required: true })} />

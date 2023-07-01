@@ -11,6 +11,18 @@ interface ICreateStudentRoutineData {
   name: string
   studentId: string
   routineId: string
+  routine: {
+    createdAt: string
+    id: string
+    name: string
+    objective: string
+    observation: string
+    startDate: string
+    endDate: string
+    studentId: string | null
+    workoutType: string
+    // Outras propriedades do objeto "routine"
+  }
 }
 
 interface ApiResponse {

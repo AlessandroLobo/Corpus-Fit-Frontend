@@ -53,10 +53,19 @@ interface ICreateStudentRoutine {
   }
 }
 
+interface ISelectedComponent {
+  id: string
+  component: 'Routines' | 'Training' | 'ExerciseSheet'
+  workoutRoutineId: string
+}
+
 export default function StudentWorkout({ email, id }: Props) {
   const [seletctStudantRoutine, setSeletctStudantRoutine] = useState<
     ICreateStudentRoutine[]
   >([])
+
+  const [selectedComponent, setSelectedComponent] =
+    useState<ISelectedComponent>(null as any)
 
   const searchStudentRoutineSelection = async () => {
     const data = await getAllStudentRoutines(id)
@@ -70,11 +79,17 @@ export default function StudentWorkout({ email, id }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
 
+  function handleSelectedComponent(selectedComponent: ISelectedComponent) {
+    setSelectedComponent(selectedComponent)
+    // setReturnComponent(selectedComponent.workoutRoutineId)
+  }
+
   return (
     <Container>
       <FormHeader>
         <TextHeader>Area de treino do aluno</TextHeader>
       </FormHeader>
+
       <Form>
         <TextHeader>Escolha uma rotina para começar</TextHeader>
         <Table>

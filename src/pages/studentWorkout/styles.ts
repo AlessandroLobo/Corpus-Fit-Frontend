@@ -66,6 +66,33 @@ export const ButtonCadContainer = styled(Box, {
   },
 })
 
+export const TextContainerBack = styled('div', {
+  display: 'flex',
+  textAlign: 'center',
+  alignItems: 'center',
+  width: '5rem',
+  height: '2rem',
+  gap: '0.1rem',
+  justifyContent: 'flex-start',
+  marginBottom: '1rem',
+  // border: '1px solid red',
+
+  '&:hover': {
+    cursor: 'pointer',
+    color: '#00e7f9',
+  },
+})
+
+export const TextBack = styled('span', {
+  display: 'block',
+  textAlign: 'center',
+  justifyContent: 'flex-start',
+  fontWeight: 500,
+  fontSize: '20px',
+  lineHeight: '20px',
+  margin: 0,
+})
+
 export const TextHeader = styled('div', {
   display: 'flex',
   justifyContent: 'center',

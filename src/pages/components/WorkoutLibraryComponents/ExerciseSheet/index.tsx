@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import {
   Container,
   ContainerList,
+  ContainerSheet,
   Form,
   FormError,
   Line,
@@ -13,7 +14,6 @@ import {
   TextInput,
   TextInputContainer,
   TextInputFindContainer,
-  TextTable,
   TextTableExercices,
   Thead,
   TrainerSheetContainer,
@@ -42,8 +42,18 @@ interface ISelectedComponent {
 interface MuscleGroup {
   id: string
   name: string
+  muscleGroupId: string
+  repetitions: string
 }
 
+interface TrainingSheets {
+  id: string
+  name: string
+  muscleGroup: string
+  repetitions: string
+  restTimeSeconds: number
+  weight: number
+}
 const registerFormSchema = z.object({
   muscularGroup: z.string(),
 })
@@ -76,6 +86,7 @@ export default function ExerciseSheet(props: {
 
   useEffect(() => {
     handleSearchExercises()
+    console.log('training', trainings)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedValue])
 
@@ -219,24 +230,50 @@ export default function ExerciseSheet(props: {
           <Thead>
             <tr>
               <td style={{ width: '10%' }}>NOME:</td>
+              <td style={{ width: '10%' }}>Peso:</td>
+              <td style={{ width: '10%' }}>Descanso:</td>
+              <td style={{ width: '10%' }}>Repetições:</td>
+              <td style={{ width: '10%' }}>Salvar:</td>
             </tr>
           </Thead>
           <TbodyResult>
             {trainings?.map((training) => (
               <tr key={training.id}>
                 <td>
-                  <TrainerSheetContainer>{training.name}</TrainerSheetContainer>
-                  <TrashContainer
-                    onClick={() => handleDelete(training.id)}
-                    style={{
-                      paddingLeft: '1rem',
-                      textAlign: 'left',
-                      textTransform: 'uppercase',
-                    }}
-                  >
-                    <Trash size={20} />
-                  </TrashContainer>
+                  <ContainerSheet>
+                    <TrainerSheetContainer>
+                      {training.name}
+                    </TrainerSheetContainer>
+                    <TrashContainer
+                      onClick={() => handleDelete(training.id)}
+                      style={{
+                        textAlign: 'left',
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      <Trash size={25} />
+                    </TrashContainer>
+                  </ContainerSheet>
                 </td>
+                <td style={{ padding: '0', textAlign: 'center' }}>
+                  <TextInput
+                    style={{ padding: '0', textAlign: 'center', fontSize: 18 }}
+                    defaultValue={training.weight}
+                  />
+                </td>
+                <td style={{ padding: '0', textAlign: 'center' }}>
+                  <TextInput
+                    style={{ padding: '0', textAlign: 'center', fontSize: 18 }}
+                    defaultValue={training.restTimeSeconds}
+                  />
+                </td>
+                <td style={{ padding: '0', textAlign: 'center' }}>
+                  <TextInput
+                    style={{ padding: '0', textAlign: 'center', fontSize: 18 }}
+                    defaultValue={training.repetitions}
+                  />
+                </td>
+                <td>Salvar</td>
               </tr>
             ))}
           </TbodyResult>

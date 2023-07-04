@@ -402,23 +402,29 @@ export const Thead = styled('thead', {
   },
 })
 
+export const ContainerSheet = styled('div', {
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+})
+
 export const TbodyResult = styled('tbody', {
   width: '100%',
   borderCollapse: 'separate',
   borderSpacing: '0 .7rem',
   borderTopLeftRadius: '6px',
   borderBottomRightRadius: '6px',
+  // border: '1px solid red',
 
   td: {
-    display: 'flex',
+    // display: 'flex',
+    width: '100%',
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingLeft: '1rem',
-    height: '3rem',
-    width: '100%',
     background: '$gray700',
     fontSize: '1rem',
-    fontWeight: '400',
     position: 'relative',
     // border: '1px solid red',
 
@@ -491,7 +497,11 @@ export const TbodyResult = styled('tbody', {
 })
 
 export const TrainerSheetContainer = styled('div', {
+  display: 'flex',
+  flexDirection: 'row',
   borderRadius: '6px',
+  alignItems: 'center',
+  height: '2rem',
   width: '100%',
   // border: '1px solid red',
 
@@ -509,11 +519,12 @@ export const TrainerSheetContainer = styled('div', {
 
 export const TrashContainer = styled('div', {
   display: 'flex',
-  height: '100%',
-  padding: '1rem',
-  margin: '1rem',
+  width: '2rem',
+  marginLeft: '1rem',
+  marginRight: '1rem',
   borderRadius: '6px',
-  justifyContent: 'flex-end',
+  alignItems: 'center',
+  justifyContent: 'center',
   // border: '1px solid red',
 
   '&:hover': {

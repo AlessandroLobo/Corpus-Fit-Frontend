@@ -13,6 +13,9 @@ import {
   ContainerList,
   Table,
   TbodyResult,
+  TexHead,
+  TexHeadContainer,
+  TexHeadContainerDiv,
   TrainerSheetContainer,
   TrainingSheetContainer,
   TrashContainer,
@@ -27,6 +30,7 @@ import {
 
 interface ISelectedComponent {
   id: string
+  WorkoutName: string
   component: 'Routines' | 'Training' | 'ExerciseSheet'
   workoutRoutineId: string
   workoutType: string
@@ -48,7 +52,7 @@ export default function Training(props: {
 
   const [routineData, setRoutineData] = useState<IRoutineData>()
 
-  const [trainingSheet, settrainingSheet] = useState<ICreateTrainingSheet[]>([])
+  const [trainingSheet, setTrainingSheet] = useState<ICreateTrainingSheet[]>([])
 
   const [modalOpen, setModalOpen] = useState(false)
 
@@ -81,21 +85,22 @@ export default function Training(props: {
     const data = await GetAllTrainingSheet(selectedComponent.workoutRoutineId)
     if (data.trainingSheets.length > 0) {
       setStateListTrainingSheet(true)
-      settrainingSheet(data.trainingSheets)
+      setTrainingSheet(data.trainingSheets)
       console.log(data)
     }
   }
 
-  function handleEdit(id: string, workoutType: string) {
-    const workoutRoutineId = selectWorkoutRoutineId || '' // Valor padrão em caso de undefined
+  function handleEdit(id: string, workoutType: string, name: string) {
+    const WorkoutName = name || ''
+    const workoutRoutineId = selectWorkoutRoutineId || ''
     const selectedComponent: ISelectedComponent = {
+      WorkoutName,
       workoutRoutineId,
       workoutType,
       id,
       component: 'ExerciseSheet',
     }
     props.handleSelectedComponent(selectedComponent)
-    console.log(trainingSheet.workoutType)
   }
 
   async function handleDelete(id: string) {
@@ -117,9 +122,13 @@ export default function Training(props: {
       <ModalInfo isOpen={modalOpen} setIsOpen={setModalOpen}>
         {routineData ? <TrainingSheet routineData={routineData} /> : null}
       </ModalInfo>
-      <div>Treinos</div>
-      <div>{routineData?.name}</div>
-      <div>{routineData?.objective}</div>
+      <TexHeadContainerDiv>
+        <TexHeadContainer>
+          <TexHead>{routineData?.name}</TexHead>
+          <TexHead>{routineData?.objective}</TexHead>
+        </TexHeadContainer>
+      </TexHeadContainerDiv>
+
       {!stateListTrainingSheet ? (
         <div>
           {' '}
@@ -163,7 +172,8 @@ export default function Training(props: {
                             trainingSheet.id
                               ? handleEdit(
                                 trainingSheet.id || '',
-                                trainingSheet.workoutType || '', // Valor padrão em caso de undefined
+                                trainingSheet.name || '',
+                                trainingSheet.workoutType || '',
                               )
                               : undefined
                           }

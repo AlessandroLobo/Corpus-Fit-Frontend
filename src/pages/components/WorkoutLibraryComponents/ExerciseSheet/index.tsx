@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Container,
   ContainerList,
@@ -10,12 +10,17 @@ import {
   Table,
   TableExercices,
   TbodyResult,
+  TbodyResultUp,
+  TexHead,
+  TexHeadContainer,
+  TexHeadContainerDiv,
   Text,
   TextInput,
   TextInputContainer,
   TextInputFindContainer,
   TextTableExercices,
   Thead,
+  TheadUp,
   TrainerSheetContainer,
   TrashContainer,
 } from './styles'
@@ -29,11 +34,13 @@ import {
   DeleteTraining,
   GetAllTraining,
   ICreateTrainings,
+  UpdateTraining,
 } from '@/pages/api/createTraining'
 import { Plus, Trash } from '@phosphor-icons/react'
 
 interface ISelectedComponent {
   id: string
+  WorkoutName: string
   component: 'Routines' | 'Training' | 'ExerciseSheet'
   workoutRoutineId: string
   workoutType: string
@@ -50,10 +57,19 @@ interface TrainingSheets {
   id: string
   name: string
   muscleGroup: string
-  repetitions: string
+  repetitions: number
   restTimeSeconds: number
   weight: number
 }
+
+export interface Exercises {
+  id: string
+  name: string
+  description?: string
+  url?: string
+  muscleGroupId?: string
+}
+
 const registerFormSchema = z.object({
   muscularGroup: z.string(),
 })
@@ -72,9 +88,37 @@ export default function ExerciseSheet(props: {
 
   const [trainingSheetInfoId, setTrainingSheeInfotId] = useState('')
 
+  const [selectedValueWorkoutType, setSelectedValueWorkoutType] = useState('')
+
   const [selectedValueName, setSelectedValueName] = useState('')
 
   const [trainings, setTrainings] = useState<TrainingSheets[]>([])
+
+  // Defina o estado para cada valor do campo
+  const [repetitions, setRepetitions] = useState<number>(
+    trainings[0]?.repetitions || 0,
+  )
+  const [restTimeSeconds, setRestTimeSeconds] = useState<number>(
+    trainings[0]?.restTimeSeconds || 0,
+  )
+  const [weight, setWeight] = useState<number>(trainings[0]?.weight || 0)
+
+  // Funções de tratamento para atualizar os valores dos campos
+  const handleRepetitionsChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setRepetitions(Number(event.target.value))
+  }
+
+  const handleRestTimeSecondsChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setRestTimeSeconds(Number(event.target.value))
+  }
+
+  const handleWeightChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setWeight(Number(event.target.value))
+  }
 
   const {
     register,
@@ -86,7 +130,6 @@ export default function ExerciseSheet(props: {
 
   useEffect(() => {
     handleSearchExercises()
-    console.log('training', trainings)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedValue])
 
@@ -99,7 +142,9 @@ export default function ExerciseSheet(props: {
 
   useEffect(() => {
     setTrainingSheeInfotId(props.selectedComponent.id)
-    setSelectedValueName(props.selectedComponent.workoutType)
+    setSelectedValueWorkoutType(props.selectedComponent.workoutType)
+    setSelectedValueName(props.selectedComponent.WorkoutName)
+    console.log('selected', props.selectedComponent)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -125,11 +170,12 @@ export default function ExerciseSheet(props: {
     setMuscleGroups(muscleGroups)
   }
 
-  async function handleEdit(id: string) {
+  async function handleCreate(id: string) {
     const exerciseInfo = exercises.filter((exercises) => exercises.id === id)[0]
 
     try {
       const params: ICreateTrainings = {
+        id,
         name: exerciseInfo.name,
         muscleGroupId: selectedValue,
         exerciseId: exerciseInfo.id,
@@ -140,6 +186,24 @@ export default function ExerciseSheet(props: {
       handleSearch()
     } catch (err: any) {
       // handle errors...
+    }
+    searchExercisesSelection()
+  }
+
+  async function handleUpdate(id: string) {
+    try {
+      const params: ICreateTrainings = {
+        id,
+        repetitions,
+        restTimeSeconds,
+        weight,
+      }
+      await UpdateTraining(params)
+      console.log('parametros', params)
+
+      handleSearch()
+    } catch (err: any) {
+      // Tratar erros...
     }
     searchExercisesSelection()
   }
@@ -160,6 +224,12 @@ export default function ExerciseSheet(props: {
   return (
     <Container>
       <Form>
+        <TexHeadContainerDiv>
+          <TexHeadContainer>
+            <TexHead>{selectedValueName}</TexHead>
+            <TexHead>{selectedValueWorkoutType}</TexHead>
+          </TexHeadContainer>
+        </TexHeadContainerDiv>
         <TextInputContainer>
           <Text>Grupo Muscular:</Text>
           <Select
@@ -194,32 +264,34 @@ export default function ExerciseSheet(props: {
             </TextInputFindContainer>
           </TextInputContainer>
           <Table>
-            <Thead>
+            <TheadUp>
               <tr>
                 <td style={{ width: '10%' }}>NOME:</td>
               </tr>
-            </Thead>
-            <TbodyResult>
+            </TheadUp>
+            <TbodyResultUp>
               {exercises?.map((exercise) => (
                 <tr key={exercise.id}>
                   <td
-                    onClick={() => handleEdit(exercise.id)}
+                    onClick={() => handleCreate(exercise.id)}
                     style={{
                       paddingLeft: '1rem',
                       textAlign: 'left',
                       textTransform: 'uppercase',
                     }}
                   >
-                    <TrainerSheetContainer>
-                      {exercise.name}
-                    </TrainerSheetContainer>
-                    <TrashContainer>
-                      <Plus size={20} />
-                    </TrashContainer>
+                    <ContainerSheet>
+                      <TrainerSheetContainer>
+                        {exercise.name}
+                      </TrainerSheetContainer>
+                      <TrashContainer>
+                        <Plus size={20} />
+                      </TrashContainer>
+                    </ContainerSheet>
                   </td>
                 </tr>
               ))}
-            </TbodyResult>
+            </TbodyResultUp>
           </Table>
         </ContainerList>
         <Line />
@@ -259,21 +331,24 @@ export default function ExerciseSheet(props: {
                   <TextInput
                     style={{ padding: '0', textAlign: 'center', fontSize: 18 }}
                     defaultValue={training.weight}
+                    onChange={handleWeightChange}
                   />
                 </td>
                 <td style={{ padding: '0', textAlign: 'center' }}>
                   <TextInput
                     style={{ padding: '0', textAlign: 'center', fontSize: 18 }}
                     defaultValue={training.restTimeSeconds}
+                    onChange={handleRestTimeSecondsChange}
                   />
                 </td>
                 <td style={{ padding: '0', textAlign: 'center' }}>
                   <TextInput
                     style={{ padding: '0', textAlign: 'center', fontSize: 18 }}
                     defaultValue={training.repetitions}
+                    onChange={handleRepetitionsChange}
                   />
                 </td>
-                <td>Salvar</td>
+                <td onClick={() => handleUpdate(training.id)}>Salvar</td>
               </tr>
             ))}
           </TbodyResult>

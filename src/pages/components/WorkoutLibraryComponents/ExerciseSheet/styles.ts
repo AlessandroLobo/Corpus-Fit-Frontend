@@ -363,6 +363,20 @@ export const Text = styled('div', {
   // border: 'solid 1px red',
 })
 
+export const TexHeadContainerDiv = styled('div', {
+  display: 'flex',
+  justifyContent: 'center',
+})
+
+export const TexHeadContainer = styled(Box, {
+  width: '15rem',
+  backgroundColor: '$gray700',
+})
+
+export const TexHead = styled('div', {
+  textAlign: 'center',
+})
+
 export const TextTableExercices = styled('div', {
   textAlign: 'left',
   // border: 'solid 1px red',
@@ -374,6 +388,109 @@ export const Line = styled('div', {
   flexGrow: '1',
   height: '1px',
   backgroundColor: '$gray500',
+})
+
+export const TheadUp = styled('thead', {
+  width: '100%',
+  borderCollapse: 'separate',
+  borderSpacing: '0 .5rem',
+  borderTopLeftRadius: '6px',
+  borderBottomRightRadius: '6px',
+
+  td: {
+    height: '40px',
+    padding: '0.05rem 1rem',
+    background: '$gray600',
+    verticalAlign: 'middle',
+    // border: '1px solid red',
+
+    '&:first-child': {
+      borderTopLeftRadius: '6px',
+      borderBottomLeftRadius: '6px',
+    },
+
+    '&:last-child': {
+      borderTopRightRadius: '6px',
+      borderBottomRightRadius: '6px',
+    },
+  },
+})
+
+export const TbodyResultUp = styled('tbody', {
+  width: '100%',
+  borderCollapse: 'separate',
+  borderSpacing: '0 .7rem',
+  borderTopLeftRadius: '6px',
+  borderBottomRightRadius: '6px',
+
+  td: {
+    height: '40px',
+    background: '$gray700',
+    fontSize: '1rem',
+    fontWeight: '400',
+    position: 'relative',
+
+    '&:first-child': {
+      borderTopLeftRadius: '6px',
+      borderBottomLeftRadius: '6px',
+    },
+
+    '&:last-child': {
+      borderTopRightRadius: '6px',
+      borderBottomRightRadius: '6px',
+    },
+
+    '&:hover': {
+      color: '#00e7f9',
+      cursor: 'pointer',
+    },
+
+    input: {
+      width: '100%',
+      height: '100%',
+      boxSizing: 'border-box',
+      padding: '10px',
+      border: 'none',
+      borderRadius: '6px',
+      backgroundColor: '$gray700',
+      color: '$gray100',
+      fontSize: '14px',
+
+      '&:focus': {
+        outline: 'none',
+        boxShadow: '0 0 0 2px $colors$ignite500',
+      },
+
+      '&:hover': {
+        color: '#00e7f9',
+        cursor: 'pointer',
+      },
+    },
+  },
+
+  'tr:nth-child(even) td': {
+    color: '$gray300',
+    backgroundColor: '$gray600',
+
+    '&:hover': {
+      color: '#00e7f9',
+      cursor: 'pointer',
+    },
+
+    input: {
+      backgroundColor: '$gray600',
+      color: '#00e7f9',
+
+      '&:focus': {
+        boxShadow: '0 0 0 2px $colors$ignite500',
+      },
+
+      '&:hover': {
+        color: '#00e7f9',
+        cursor: 'pointer',
+      },
+    },
+  },
 })
 
 export const Thead = styled('thead', {

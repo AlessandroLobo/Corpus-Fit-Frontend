@@ -300,6 +300,20 @@ export const Text = styled('div', {
   paddingBottom: '$4',
 })
 
+export const TexHeadContainerDiv = styled('div', {
+  display: 'flex',
+  justifyContent: 'center',
+})
+
+export const TexHeadContainer = styled(Box, {
+  width: '15rem',
+  backgroundColor: '$gray700',
+})
+
+export const TexHead = styled('div', {
+  textAlign: 'center',
+})
+
 export const Line = styled('div', {
   margin: '1rem',
   color: '$gray100',

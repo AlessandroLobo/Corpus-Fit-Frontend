@@ -3,6 +3,7 @@ import {
   Container,
   ContainerList,
   ContainerSheet,
+  ContainerSheetSave,
   Form,
   FormError,
   Line,
@@ -36,7 +37,7 @@ import {
   ICreateTrainings,
   UpdateTraining,
 } from '@/pages/api/createTraining'
-import { Plus, Trash } from '@phosphor-icons/react'
+import { FloppyDisk, Plus, Trash } from '@phosphor-icons/react'
 
 interface ISelectedComponent {
   id: string
@@ -95,30 +96,17 @@ export default function ExerciseSheet(props: {
   const [trainings, setTrainings] = useState<TrainingSheets[]>([])
 
   // Defina o estado para cada valor do campo
-  const [repetitions, setRepetitions] = useState<number>(
-    trainings[0]?.repetitions || 0,
+  const [tweight, setTWeight] = useState<number | undefined>(
+    trainings[0]?.weight,
   )
-  const [restTimeSeconds, setRestTimeSeconds] = useState<number>(
-    trainings[0]?.restTimeSeconds || 0,
+
+  const [restTimeSeconds, setRestTimeSeconds] = useState<number | undefined>(
+    trainings[0]?.restTimeSeconds,
   )
-  const [weight, setWeight] = useState<number>(trainings[0]?.weight || 0)
 
-  // Funções de tratamento para atualizar os valores dos campos
-  const handleRepetitionsChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setRepetitions(Number(event.target.value))
-  }
-
-  const handleRestTimeSecondsChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setRestTimeSeconds(Number(event.target.value))
-  }
-
-  const handleWeightChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setWeight(Number(event.target.value))
-  }
+  const [repetitions, setRepetitions] = useState<number | undefined>(
+    trainings[0]?.repetitions,
+  )
 
   const {
     register,
@@ -144,7 +132,6 @@ export default function ExerciseSheet(props: {
     setTrainingSheeInfotId(props.selectedComponent.id)
     setSelectedValueWorkoutType(props.selectedComponent.workoutType)
     setSelectedValueName(props.selectedComponent.WorkoutName)
-    console.log('selected', props.selectedComponent)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -190,21 +177,53 @@ export default function ExerciseSheet(props: {
     searchExercisesSelection()
   }
 
+  // Funções de tratamento para atualizar os valores dos campos
+  const handleWeight = (inputValue: number) => {
+    setTWeight(inputValue)
+    // setInputId(trainingId)
+    console.log('inputValue handle', inputValue)
+  }
+
+  const handleRestTimeSeconds = (inputValue: number) => {
+    setRestTimeSeconds(inputValue)
+    // setInputId(trainingId)
+    console.log('inputValue handle', inputValue)
+  }
+
+  const handleRepetitions = (inputValue: number) => {
+    setRepetitions(inputValue)
+    // setInputId(trainingId)
+    console.log('inputValue handle', inputValue)
+  }
+
   async function handleUpdate(id: string) {
+    console.log('handleupdate', tweight, restTimeSeconds, repetitions, id)
     try {
-      const params: ICreateTrainings = {
-        id,
-        repetitions,
-        restTimeSeconds,
-        weight,
+      const params: ICreateTrainings = {}
+
+      if (tweight !== undefined) {
+        params.weight = tweight
       }
-      await UpdateTraining(params)
-      console.log('parametros', params)
+
+      if (restTimeSeconds !== undefined) {
+        params.restTimeSeconds = restTimeSeconds
+      }
+
+      if (repetitions !== undefined) {
+        params.repetitions = repetitions
+      }
+
+      if (Object.keys(params).length > 0) {
+        params.id = id
+        await UpdateTraining(params)
+        console.log('params', params)
+      }
 
       handleSearch()
     } catch (err: any) {
       // Tratar erros...
     }
+
     searchExercisesSelection()
   }
 
@@ -327,28 +346,47 @@ export default function ExerciseSheet(props: {
                     </TrashContainer>
                   </ContainerSheet>
                 </td>
+
                 <td style={{ padding: '0', textAlign: 'center' }}>
                   <TextInput
                     style={{ padding: '0', textAlign: 'center', fontSize: 18 }}
                     defaultValue={training.weight}
-                    onChange={handleWeightChange}
+                    onChange={(event) => {
+                      const inputValue = parseFloat(event.target.value)
+                      handleWeight(inputValue)
+                    }}
                   />
                 </td>
                 <td style={{ padding: '0', textAlign: 'center' }}>
                   <TextInput
                     style={{ padding: '0', textAlign: 'center', fontSize: 18 }}
                     defaultValue={training.restTimeSeconds}
-                    onChange={handleRestTimeSecondsChange}
+                    onChange={(event) => {
+                      const inputValue = parseFloat(event.target.value)
+                      handleRestTimeSeconds(inputValue)
+                    }}
                   />
                 </td>
                 <td style={{ padding: '0', textAlign: 'center' }}>
                   <TextInput
-                    style={{ padding: '0', textAlign: 'center', fontSize: 18 }}
+                    style={{
+                      padding: '0',
+                      textAlign: 'center',
+                      fontSize: 18,
+                    }}
                     defaultValue={training.repetitions}
-                    onChange={handleRepetitionsChange}
+                    onChange={(event) => {
+                      const inputValue = parseFloat(event.target.value)
+                      handleRepetitions(inputValue)
+                    }}
                   />
                 </td>
-                <td onClick={() => handleUpdate(training.id)}>Salvar</td>
+                <td onClick={() => handleUpdate(training.id)}>
+                  <ContainerSheetSave>
+                    Salvar
+                    <FloppyDisk size={20} />
+                  </ContainerSheetSave>
+                </td>
               </tr>
             ))}
           </TbodyResult>

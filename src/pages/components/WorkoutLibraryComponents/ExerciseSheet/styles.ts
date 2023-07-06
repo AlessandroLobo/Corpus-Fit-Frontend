@@ -525,6 +525,23 @@ export const ContainerSheet = styled('div', {
   alignItems: 'center',
 })
 
+export const ContainerSheetSave = styled('div', {
+  display: 'flex',
+  gap: '0.3rem',
+  paddingRight: '0.5rem',
+  paddingLeft: '0.8rem',
+  borderRadius: '6px',
+  flexDirection: 'row',
+  alignItems: 'center',
+  // border: '1px solid red',
+
+  '&:hover': {
+    backgroundColor: '$gray500',
+    color: '#00e7f9',
+    cursor: 'pointer',
+  },
+})
+
 export const TbodyResult = styled('tbody', {
   width: '100%',
   borderCollapse: 'separate',

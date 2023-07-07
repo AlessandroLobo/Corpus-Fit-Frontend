@@ -28,8 +28,11 @@ import {
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { GetAllExercises } from '@/pages/api/createExercises'
-import { GetAllMuscleGroup } from '@/pages/api/createMuscleGroup'
+import { GetAllExercises, IcreateExercises } from '@/pages/api/createExercises'
+import {
+  GetAllMuscleGroup,
+  IcreateMuscleGroup,
+} from '@/pages/api/createMuscleGroup'
 import {
   CreateTrainings,
   DeleteTraining,
@@ -45,22 +48,6 @@ interface ISelectedComponent {
   component: 'Routines' | 'Training' | 'ExerciseSheet'
   workoutRoutineId: string
   workoutType: string
-}
-
-interface MuscleGroup {
-  id: string
-  name: string
-  muscleGroupId: string
-  repetitions: string
-}
-
-interface TrainingSheets {
-  id: string
-  name: string
-  muscleGroup: string
-  repetitions: number
-  restTimeSeconds: number
-  weight: number
 }
 
 export interface Exercises {
@@ -81,9 +68,9 @@ export default function ExerciseSheet(props: {
   selectedComponent: ISelectedComponent
   handleSelectedComponent: (selectedComponent: ISelectedComponent) => void
 }) {
-  const [muscleGroups, setMuscleGroups] = useState<MuscleGroup[]>([])
+  const [muscleGroups, setMuscleGroups] = useState<IcreateMuscleGroup[]>([])
 
-  const [exercises, setExercises] = useState<Exercises[]>([])
+  const [exercises, setExercises] = useState<IcreateExercises[]>([])
 
   const [selectedValue, setSelectedValue] = useState('')
 
@@ -93,19 +80,19 @@ export default function ExerciseSheet(props: {
 
   const [selectedValueName, setSelectedValueName] = useState('')
 
-  const [trainings, setTrainings] = useState<TrainingSheets[]>([])
+  const [trainings, setTrainings] = useState<ICreateTrainings[]>([])
 
   // Defina o estado para cada valor do campo
   const [tweight, setTWeight] = useState<number | undefined>(
-    trainings[0]?.weight,
+    trainings[0]?.weight ?? undefined,
   )
 
   const [restTimeSeconds, setRestTimeSeconds] = useState<number | undefined>(
-    trainings[0]?.restTimeSeconds,
+    trainings[0]?.restTimeSeconds ?? undefined,
   )
 
   const [repetitions, setRepetitions] = useState<number | undefined>(
-    trainings[0]?.repetitions,
+    trainings[0]?.repetitions ?? undefined,
   )
 
   const {
@@ -199,7 +186,7 @@ export default function ExerciseSheet(props: {
   async function handleUpdate(id: string) {
     console.log('handleupdate', tweight, restTimeSeconds, repetitions, id)
     try {
-      const params: ICreateTrainings = {}
+      const params: ICreateTrainings = { id }
 
       if (tweight !== undefined) {
         params.weight = tweight
@@ -292,7 +279,7 @@ export default function ExerciseSheet(props: {
               {exercises?.map((exercise) => (
                 <tr key={exercise.id}>
                   <td
-                    onClick={() => handleCreate(exercise.id)}
+                    onClick={() => handleCreate(exercise.id || '')}
                     style={{
                       paddingLeft: '1rem',
                       textAlign: 'left',
@@ -324,7 +311,7 @@ export default function ExerciseSheet(props: {
               <td style={{ width: '10%' }}>Peso:</td>
               <td style={{ width: '10%' }}>Descanso:</td>
               <td style={{ width: '10%' }}>Repetições:</td>
-              <td style={{ width: '10%' }}>Salvar:</td>
+              <td style={{ width: '5%', textAlign: 'center' }}>Salvar:</td>
             </tr>
           </Thead>
           <TbodyResult>

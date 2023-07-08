@@ -82,6 +82,10 @@ export default function ExerciseSheet(props: {
 
   const [trainings, setTrainings] = useState<ICreateTrainings[]>([])
 
+  const [saveEnabled, setSaveEnabled] = useState(false)
+
+  const [saveInputId, setSaveInputId] = useState('')
+
   // Defina o estado para cada valor do campo
   const [tweight, setTWeight] = useState<number | undefined>(
     trainings[0]?.weight ?? undefined,
@@ -165,21 +169,24 @@ export default function ExerciseSheet(props: {
   }
 
   // Funções de tratamento para atualizar os valores dos campos
-  const handleWeight = (inputValue: number) => {
+  const handleWeight = (inputValue: number, inputId: string) => {
     setTWeight(inputValue)
-    // setInputId(trainingId)
+    console.log('inputValue', inputValue, inputId)
+    // setSaveEnabled(true)
     console.log('inputValue handle', inputValue)
   }
 
-  const handleRestTimeSeconds = (inputValue: number) => {
+  const handleRestTimeSeconds = (inputValue: number, inputId: string) => {
     setRestTimeSeconds(inputValue)
-    // setInputId(trainingId)
+    console.log('inputValue', inputValue, inputId)
+    // setSaveEnabled(true)
     console.log('inputValue handle', inputValue)
   }
 
-  const handleRepetitions = (inputValue: number) => {
+  const handleRepetitions = (inputValue: number, inputId: string) => {
     setRepetitions(inputValue)
-    // setInputId(trainingId)
+    console.log('inputValue', inputValue, inputId)
+    // setSaveEnabled(true)
     console.log('inputValue handle', inputValue)
   }
 
@@ -212,6 +219,8 @@ export default function ExerciseSheet(props: {
     }
 
     searchExercisesSelection()
+    setSaveEnabled(false)
+    setSaveInputId('')
   }
 
   async function handleDelete(id: string) {
@@ -309,8 +318,8 @@ export default function ExerciseSheet(props: {
             <tr>
               <td style={{ width: '10%' }}>NOME:</td>
               <td style={{ width: '10%' }}>Peso:</td>
-              <td style={{ width: '10%' }}>Descanso:</td>
-              <td style={{ width: '10%' }}>Repetições:</td>
+              <td style={{ width: '10%' }}>Desc:</td>
+              <td style={{ width: '10%' }}>Rep:</td>
               <td style={{ width: '5%', textAlign: 'center' }}>Salvar:</td>
             </tr>
           </Thead>
@@ -338,20 +347,35 @@ export default function ExerciseSheet(props: {
                   <TextInput
                     style={{ padding: '0', textAlign: 'center', fontSize: 18 }}
                     defaultValue={training.weight}
+                    onClick={(event) => {
+                      const inputId = event.currentTarget.id
+                      setSaveInputId(inputId)
+                    }}
                     onChange={(event) => {
                       const inputValue = parseFloat(event.target.value)
-                      handleWeight(inputValue)
+                      const inputId = event.currentTarget.id // E também aqui
+                      setSaveInputId(inputId)
+                      handleWeight(inputValue, inputId)
                     }}
+                    id={training.id}
                   />
                 </td>
                 <td style={{ padding: '0', textAlign: 'center' }}>
                   <TextInput
                     style={{ padding: '0', textAlign: 'center', fontSize: 18 }}
                     defaultValue={training.restTimeSeconds}
+                    onClick={(event) => {
+                      const inputId = event.currentTarget.id
+                      setSaveInputId(inputId)
+                      setSaveInputId(inputId)
+                    }}
                     onChange={(event) => {
                       const inputValue = parseFloat(event.target.value)
-                      handleRestTimeSeconds(inputValue)
+                      const inputId = event.target.id
+                      setSaveInputId(inputId)
+                      handleRestTimeSeconds(inputValue, inputId)
                     }}
+                    id={training.id}
                   />
                 </td>
                 <td style={{ padding: '0', textAlign: 'center' }}>
@@ -362,18 +386,40 @@ export default function ExerciseSheet(props: {
                       fontSize: 18,
                     }}
                     defaultValue={training.repetitions}
+                    onClick={(event) => {
+                      const inputId = event.currentTarget.id
+                      setSaveInputId(inputId)
+                    }}
                     onChange={(event) => {
                       const inputValue = parseFloat(event.target.value)
-                      handleRepetitions(inputValue)
+                      const inputId = training.id
+                      handleRepetitions(inputValue, inputId)
                     }}
+                    id={training.id}
                   />
                 </td>
-                <td onClick={() => handleUpdate(training.id)}>
-                  <ContainerSheetSave>
-                    Salvar
-                    <FloppyDisk size={20} />
-                  </ContainerSheetSave>
-                </td>
+
+                {saveEnabled || saveInputId === training.id ? (
+                  <td onClick={() => handleUpdate(training.id)}>
+                    <ContainerSheetSave>
+                      Salvar
+                      <FloppyDisk size={20} />
+                    </ContainerSheetSave>
+                  </td>
+                ) : (
+                  <td
+                    onClick={() => handleUpdate(training.id)}
+                    style={{
+                      pointerEvents: saveEnabled ? 'auto' : 'none',
+                      color: saveEnabled ? 'white' : 'gray',
+                    }}
+                  >
+                    <ContainerSheetSave>
+                      Salvar
+                      <FloppyDisk size={20} />
+                    </ContainerSheetSave>
+                  </td>
+                )}
               </tr>
             ))}
           </TbodyResult>

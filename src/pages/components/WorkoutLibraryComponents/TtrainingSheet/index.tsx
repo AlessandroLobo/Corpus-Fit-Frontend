@@ -43,6 +43,7 @@ const registerFormSchema = z.object({
   tipo: z.string().optional(),
   selectWeek: z.string().optional(),
   name: z.string().min(3, 'O nome deve ter pelo menos 3 caracteres'),
+  duration: z.union([z.number(), z.string()]).optional(),
 })
 
 type RegisterFormData = z.infer<typeof registerFormSchema>
@@ -55,6 +56,10 @@ export default function TrainingSheet(props: TrainingSheetProps) {
   const [textMOdal, setTextModal] = useState('')
 
   const [workoutTypeSelect, setWorkoutTypeSelect] = useState(false)
+
+  const [durationValue, setDurationValue] = useState<number | undefined>(
+    undefined,
+  )
 
   const {
     register,
@@ -76,7 +81,7 @@ export default function TrainingSheet(props: TrainingSheetProps) {
   }, [props.routineData.workoutType])
 
   async function handleRegister(data: RegisterFormData) {
-    // console.log('Data', data)
+    console.log('Data', data)
     let workoutTypeData = ''
     // verifica qual campo foi preenchido input ou select
     if (data.tipo !== undefined && data.tipo !== '') {
@@ -86,9 +91,10 @@ export default function TrainingSheet(props: TrainingSheetProps) {
     }
     try {
       const params: ICreateTrainingSheet = {
-        name: data.name.toUpperCase(),
-        workoutType: workoutTypeData,
         routineId: props.routineData.id,
+        name: data.name.toUpperCase(),
+        duration: durationValue,
+        workoutType: workoutTypeData,
       }
       await CreateTrainingSheet(params)
       setModalOpen(true)
@@ -163,6 +169,25 @@ export default function TrainingSheet(props: TrainingSheetProps) {
           {errors.name && (
             <FormError>
               <Text>{errors.name?.message}</Text>
+            </FormError>
+          )}
+        </TextInputContainer>
+        <TextInputContainer>
+          <Text>Duração:</Text>
+          <TextInput
+            {...register('duration', {
+              required: true,
+            })}
+            placeholder="Digite a duração da rotina"
+            style={{ width: '100%' }}
+            onBlur={(event) => {
+              const parsedValue = parseInt(event.target.value)
+              setDurationValue(isNaN(parsedValue) ? undefined : parsedValue)
+            }}
+          />
+          {errors.duration && (
+            <FormError>
+              <Text>{errors.duration?.message}</Text>
             </FormError>
           )}
         </TextInputContainer>

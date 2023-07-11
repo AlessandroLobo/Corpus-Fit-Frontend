@@ -65,7 +65,7 @@ export default function RoutineSelectionScreen(props: {
     const data = await getAllStudentRoutines(props.id)
 
     setSeletctStudantRoutine(data.studentRoutines)
-    console.log(seletctStudantRoutine)
+    console.log('data routineSelection', seletctStudantRoutine)
   }
 
   useEffect(() => {
@@ -80,16 +80,18 @@ export default function RoutineSelectionScreen(props: {
       component: 'TrainingSelectionScreen',
     }
     props.handleSelectedComponent(selectedComponent)
+    handleSelectedComponent(selectedComponent)
+    // console.log('selectComponent in workoutRoutineId', id)
   }
 
   function handleSelectedComponent(selectedComponent: ISelectedComponent) {
     setSelectedComponent(selectedComponent)
-    setReturnComponent(selectedComponent.workoutRoutineId)
+    // setReturnComponent(selectedComponent.workoutRoutineId)
   }
 
   return (
     <ContainerList>
-      <TextHeader> uma rotina para começar </TextHeader>
+      <TextHeader>Selecione uma rotina para começar </TextHeader>
       <Table>
         <TbodyResult>
           {seletctStudantRoutine?.map((seletctStudantRoutine) => (
@@ -97,7 +99,7 @@ export default function RoutineSelectionScreen(props: {
               <td>
                 <WorkoutRoutineContainer>
                   <TrainerSheetContainer
-                    onClick={() => handleEdit(seletctStudantRoutine.id)}
+                    onClick={() => handleEdit(seletctStudantRoutine.routineId)}
                   >
                     <Image
                       src={WorkoutIco}

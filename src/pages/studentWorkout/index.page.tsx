@@ -35,7 +35,7 @@ export default function StudentWorkout({ email, id }: Props) {
 
   function handleSelectedComponent(selectedComponent: ISelectedComponent) {
     setSelectedComponent(selectedComponent)
-    console.log(selectedComponent)
+    // console.log('SelectComponent em studentworkout', selectedComponent)
   }
   return (
     <Container>
@@ -88,15 +88,16 @@ export default function StudentWorkout({ email, id }: Props) {
             </>
           )}
         </TextContainerBack>
-      </ButtonCadContainer>
-      <FormHeader>
         <TextHeader>Area de treino do aluno</TextHeader>
-      </FormHeader>
+      </ButtonCadContainer>
 
       <Form>
         {selectedComponent &&
           selectedComponent.component === 'TrainingSelectionScreen' ? (
-          <TrainingSelectionScreen />
+          <TrainingSelectionScreen
+            selectedComponent={selectedComponent}
+            handleSelectedComponent={handleSelectedComponent}
+          />
         ) : (
           <RoutineSelectionScreen
             email={email}

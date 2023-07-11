@@ -1,10 +1,7 @@
 import axios, { AxiosError } from 'axios'
 
-export interface ICreateTrainingSheet {
-  id?: string
-  name: string
-  workoutType?: string
-  routineId: string
+export interface ICreateExercise {
+  url?: string
 }
 
 export interface ICreateTrainings {
@@ -16,6 +13,15 @@ export interface ICreateTrainings {
   repetitions?: number
   restTimeSeconds?: number
   weight?: number
+  exercise?: ICreateExercise // Alteração na tipagem aqui
+}
+export interface ICreateTrainingSheet {
+  id?: string
+  name: string
+  workoutType?: string
+  duration?: number
+  routineId: string
+  Training?: ICreateTrainings[]
 }
 
 interface ApiResponse {
@@ -30,12 +36,14 @@ interface ApiResponseTraining {
 export function CreateTrainingSheet({
   name,
   workoutType,
+  duration,
   routineId,
 }: ICreateTrainingSheet) {
   return axios
     .post('http://localhost:3333/workout/createTrainingSheet', {
       name,
       workoutType,
+      duration,
       routineId,
     })
     .then((response) => response.data)
@@ -92,6 +100,7 @@ export function CreateTrainings({
 }
 
 export const GetAllTrainingSheet = async (id: any): Promise<ApiResponse> => {
+  console.log('id api', id)
   try {
     const response = await axios.get(
       'http://localhost:3333/workout/listTrainingSheet',

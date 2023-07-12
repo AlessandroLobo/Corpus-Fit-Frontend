@@ -95,6 +95,10 @@ export default function ExerciseSheet(props: {
     trainings[0]?.restTimeSeconds ?? undefined,
   )
 
+  const [sets, setsSet] = useState<number | undefined>(
+    trainings[0]?.sets ?? undefined,
+  )
+
   const [repetitions, setRepetitions] = useState<number | undefined>(
     trainings[0]?.repetitions ?? undefined,
   )
@@ -137,7 +141,6 @@ export default function ExerciseSheet(props: {
 
   const searchExercisesSelection = async () => {
     const data = await GetAllTraining(props.selectedComponent.id)
-
     const trainings = data.trainings
     setTrainings(trainings)
   }
@@ -171,27 +174,30 @@ export default function ExerciseSheet(props: {
   // Funções de tratamento para atualizar os valores dos campos
   const handleWeight = (inputValue: number, inputId: string) => {
     setTWeight(inputValue)
-    console.log('inputValue', inputValue, inputId)
-    // setSaveEnabled(true)
-    console.log('inputValue handle', inputValue)
+    // console.log('inputValue', inputValue, inputId)
+    // console.log('inputValue handle', inputValue)
   }
 
   const handleRestTimeSeconds = (inputValue: number, inputId: string) => {
     setRestTimeSeconds(inputValue)
-    console.log('inputValue', inputValue, inputId)
-    // setSaveEnabled(true)
-    console.log('inputValue handle', inputValue)
+    // console.log('inputValue', inputValue, inputId)
+    // console.log('inputValue handle', inputValue)
+  }
+
+  const handleSets = (inputValue: number, inputId: string) => {
+    setsSet(inputValue)
+    // console.log('inputValue', inputValue, inputId)
+    // console.log('inputValue handle', inputValue)
   }
 
   const handleRepetitions = (inputValue: number, inputId: string) => {
     setRepetitions(inputValue)
-    console.log('inputValue', inputValue, inputId)
-    // setSaveEnabled(true)
-    console.log('inputValue handle', inputValue)
+    // console.log('inputValue', inputValue, inputId)
+    // console.log('inputValue handle', inputValue)
   }
 
   async function handleUpdate(id: string) {
-    console.log('handleupdate', tweight, restTimeSeconds, repetitions, id)
+    console.log('handleupdate', tweight, restTimeSeconds, sets, repetitions, id)
     try {
       const params: ICreateTrainings = { id }
 
@@ -201,6 +207,10 @@ export default function ExerciseSheet(props: {
 
       if (restTimeSeconds !== undefined) {
         params.restTimeSeconds = restTimeSeconds
+      }
+
+      if (sets !== undefined) {
+        params.sets = sets
       }
 
       if (repetitions !== undefined) {
@@ -319,6 +329,7 @@ export default function ExerciseSheet(props: {
               <td style={{ width: '10%' }}>NOME:</td>
               <td style={{ width: '10%' }}>Peso:</td>
               <td style={{ width: '10%' }}>Desc:</td>
+              <td style={{ width: '10%' }}>Series:</td>
               <td style={{ width: '10%' }}>Rep:</td>
               <td style={{ width: '5%', textAlign: 'center' }}>Salvar:</td>
             </tr>
@@ -374,6 +385,26 @@ export default function ExerciseSheet(props: {
                       const inputId = event.target.id
                       setSaveInputId(inputId)
                       handleRestTimeSeconds(inputValue, inputId)
+                    }}
+                    id={training.id}
+                  />
+                </td>
+                <td style={{ padding: '0', textAlign: 'center' }}>
+                  <TextInput
+                    style={{
+                      padding: '0',
+                      textAlign: 'center',
+                      fontSize: 18,
+                    }}
+                    defaultValue={training.sets}
+                    onClick={(event) => {
+                      const inputId = event.currentTarget.id
+                      setSaveInputId(inputId)
+                    }}
+                    onChange={(event) => {
+                      const inputValue = parseFloat(event.target.value)
+                      const inputId = training.id
+                      handleSets(inputValue, inputId)
                     }}
                     id={training.id}
                   />

@@ -2,14 +2,16 @@ import { styled, Box } from '@ignite-ui/react'
 
 export const Container = styled('main', {
   maxWidth: 872,
-  margin: '1.5rem auto $4',
+  paddingTop: '1rem',
   padding: '0 $4',
+  borderRadius: '10px',
+  border: 'solid 1px $gray600',
   // border: '1px solid red',
 
   '@media screen and (max-width: 768px)': {
     /* Quando a largura da tela for menor ou igual a 768 pixels */
     maxWidth: '100%',
-    padding: '0 $2',
+    // padding: '0 $2',
   },
 })
 
@@ -27,12 +29,16 @@ export const FormHeader = styled(Box, {
   },
 })
 
-export const Form = styled(Box, {
+export const Form = styled('div', {
   display: 'flex',
+  width: '100%',
+  paddingTop: '0.4rem',
+  paddingBottom: '1.5rem',
+  alignItems: 'center',
   flexDirection: 'column',
-  marginTop: '$6',
+  borderRadius: '10px',
   gap: '$4',
-  // border: 'solid 1px red',
+  // border: 'solid 1px $gray600',
 
   '@media (max-width: 767px)': {
     display: 'flex',
@@ -42,14 +48,11 @@ export const Form = styled(Box, {
 })
 
 export const ButtonCadContainer = styled(Box, {
-  // height: '1rem',
   marginTop: '0rem',
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'space-between',
-  // marginBottom: '4rem',
   flexDirection: 'column',
-  // gap: '$4',
   // border: 'solid 1px red',
 
   label: {
@@ -66,15 +69,93 @@ export const ButtonCadContainer = styled(Box, {
   },
 })
 
+export const TextCurrentTraining = styled('div', {
+  display: 'flex',
+  fontSize: '1rem',
+  paddingTop: '1rem',
+  justifyContent: 'center',
+  color: '#00e7f9',
+  magin: '0',
+  // border: 'solid 1px red',
+})
+
 export const TextHeader = styled('div', {
   display: 'flex',
+  gap: '1.5rem',
+  fontSize: '1.2rem',
   justifyContent: 'center',
-  padding: '1rem',
+
+  // border: 'solid 1px red',
+})
+
+export const LineHeader = styled('div', {
+  borderLeft: 'solid 1px $gray400',
+  height: '3.3rem',
+  // border: 'solid 1px red',
+})
+
+export const TextHeaderInfo = styled('div', {
+  display: 'flex',
+  fontSize: '1rem',
+  gap: '1.5rem',
+  justifyContent: 'center',
+  marginBottom: '0.2rem',
+  color: '$gray100',
+  // border: 'solid 1px red',
+})
+
+export const TextContainerHeader = styled('div', {
+  textAlign: 'center',
+  color: '#00e7f9',
+})
+
+export const ButtonSelectTraining = styled('button', {
+  backgroundColor: '$gray800',
+  color: '$gray100',
+  border: 'none',
+  width: '100%',
+  justifyContent: 'space-between',
+})
+
+// export const ContainerTraining = styled('div', {
+//   justifyContent: 'center',
+//   alignItems: 'center',
+//   textAlign: 'left',
+//   border: 'solid 1px red',
+// })
+
+export const TextTrainingContainer = styled('div', {
+  display: 'flex',
+  gap: '0.4rem',
+  textAlign: 'left',
+  fontSize: '0.9rem',
+  // border: 'solid 1px red',
+})
+
+export const TextTrainingTitle = styled('div', {
+  display: 'flex',
+  width: '16.5rem',
+  fontSize: '1.8rem',
+  // border: 'solid 1px red',
+})
+
+export const TextTrainingName = styled('div', {
+  display: 'flex',
+  width: '100%',
+  fontSize: '0.9rem',
+  // border: 'solid 1px red',
+})
+
+export const TextTraining = styled('div', {
+  display: 'flex',
+  color: '#00e7f9',
+  // width: '100%',
+  // border: 'solid 1px red',
 })
 
 export const ButtonContainer = styled('div', {
   height: '5rem',
-  marginTop: '0rem',
+  margin: '0',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -131,10 +212,6 @@ export const ButtonCad = styled('button', {
     fontSize: '0rem',
     maxWidth: '6rem',
   },
-})
-
-export const TextContainer = styled('div', {
-  color: '#00e7f9',
 })
 
 export const ContainerList = styled('div', {
@@ -218,8 +295,9 @@ export const Button = styled('button', {
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'center',
-  padding: '12px 24px',
-  borderRadius: '4px',
+  padding: '12px ',
+  maxWidth: '17rem',
+  borderRadius: '10px',
   backgroundColor: '#007bff',
   color: '#fff',
   fontSize: '16px',

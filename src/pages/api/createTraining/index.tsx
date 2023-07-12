@@ -10,7 +10,9 @@ export interface ICreateTrainings {
   muscleGroupId?: string
   exerciseId?: string
   trainingSheetId?: string
+  duration?: number
   repetitions?: number
+  sets?: number
   restTimeSeconds?: number
   weight?: number
   exercise?: ICreateExercise // Alteração na tipagem aqui
@@ -136,6 +138,7 @@ export const GetAllTraining = async (id: any): Promise<ApiResponseTraining> => {
 
 export function UpdateTraining({
   id,
+  sets,
   repetitions,
   restTimeSeconds,
   weight,
@@ -143,6 +146,7 @@ export function UpdateTraining({
   return axios
     .put('http://localhost:3333/workout/updateTrainings', {
       id,
+      sets,
       repetitions,
       restTimeSeconds,
       weight,
